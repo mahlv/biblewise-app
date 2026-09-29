@@ -3,20 +3,30 @@
   "version": "1.0.0",
   "main": "index.ts",
   "dependencies": {
+    "convex": "^1.46.0",
     "expo": "~57.0.26",
     "expo-status-bar": "~57.0.1",
     "react": "19.2.3",
     "react-native": "0.86.3"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/react": "~19.2.2",
+    "jest": "^30.5.2",
+    "jest-expo": "^57.0.5",
+    "react-test-renderer": "19.2.3",
     "typescript": "~6.0.3"
   },
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "convex:dev": "convex dev",
+    "convex:seed": "convex run seed:popularBiblia",
+    "typecheck": "tsc --noEmit",
+    "test:smoke": "node --no-warnings --experimental-strip-types scripts/smoke.ts",
+    "test": "jest"
   },
   "private": true
 }

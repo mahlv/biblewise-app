@@ -1,3 +1,11 @@
+# O binario do esbuild vem do pacote opcional @esbuild/win32-x64, que o pnpm ja
+# instalou. O postinstall do esbuild (`node install.js`) so valida esse binario,
+# entao recusamos a execucao: mantem a protecao de supply-chain sem perder nada.
+# Recusar com `false` tambem silencia o ERR_PNPM_IGNORED_BUILDS do strictDepBuilds.
+allowBuilds:
+  '@parcel/watcher': set this to true or false
+  esbuild: false
+  unrs-resolver: set this to true or false
 minimumReleaseAgeExclude:
   - expo-constants@57.0.20
   - expo-modules-core@57.0.20
