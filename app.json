@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "biblewise-app",
-    "slug": "biblewise-app",
+    "slug": "biblewise",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,6 +28,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "782ea83a-5982-471a-af28-b0d78514d9ac"
+      }
+    },
+    "owner": "mahlv"
   }
 }
