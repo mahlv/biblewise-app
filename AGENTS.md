@@ -28,7 +28,9 @@ pnpm exec convex dev --once  # push functions/schema to the DEV deployment + reg
 
 Run lint, typecheck (app + convex) and tests before declaring any task done.
 
-pnpm supply-chain policy: `pnpm-workspace.yaml` enforces `minimumReleaseAge` and `allowBuilds`. Never add entries to `minimumReleaseAgeExclude` or flip `allowBuilds` to work around an install failure — pin an older, mature version instead or ask the user. (`expo-router` is pinned to `57.0.22` for this reason; `expo-doctor` reports it as a patch mismatch.)
+pnpm supply-chain policy: `pnpm-workspace.yaml` enforces `minimumReleaseAge` and `allowBuilds`. Never add entries to `minimumReleaseAgeExclude` or flip `allowBuilds` to work around an install failure — pin an older, mature version instead (and retry the SDK-recommended one later) or ask the user.
+
+Development build (Android): `expo-dev-client` is installed and `eas.json` has a `development` profile (internal APK, pnpm 12.8.1). Build with `eas build --platform android --profile development`; rebuild only after adding a native library, changing `app.json`/plugins, or upgrading the SDK. Then run `pnpm start` (dev-client mode) and open the project from the installed app. Android package: `com.mahlv.biblewise`.
 
 ## Language conventions
 
