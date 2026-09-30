@@ -2,10 +2,11 @@
 # instalou. O postinstall do esbuild (`node install.js`) so valida esse binario,
 # entao recusamos a execucao: mantem a protecao de supply-chain sem perder nada.
 # Recusar com `false` tambem silencia o ERR_PNPM_IGNORED_BUILDS do strictDepBuilds.
+# Mesmo raciocinio para o unrs-resolver (via eslint-config-expo): o binario vem
+# de @unrs/resolver-binding-win32-x64-msvc e o postinstall e so um fallback.
 allowBuilds:
-  '@parcel/watcher': set this to true or false
   esbuild: false
-  unrs-resolver: set this to true or false
+  unrs-resolver: false
 minimumReleaseAgeExclude:
   - expo-constants@57.0.20
   - expo-modules-core@57.0.20

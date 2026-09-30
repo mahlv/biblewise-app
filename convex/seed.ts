@@ -152,24 +152,29 @@ export const criarUsuarioDeTeste = mutation({
   args: {},
   returns: v.object({ criado: v.boolean(), userId: v.id('users') }),
   handler: async (ctx) => {
-    const tokenIdentifier = 'teste|pastor-local';
+    // Fixed id (not a UUID) so the seed is idempotent and never collides with
+    // a real device-generated `anonymousId`.
+    const anonymousId = 'test-local-pastor';
 
     const existente = await ctx.db
       .query('users')
-      .withIndex('by_tokenIdentifier', (q) => q.eq('tokenIdentifier', tokenIdentifier))
+      .withIndex('by_anonymous_id', (q) => q.eq('anonymousId', anonymousId))
       .unique();
 
     if (existente) {
       return { criado: false, userId: existente._id };
     }
 
+    const now = Date.now();
     const userId = await ctx.db.insert('users', {
-      tokenIdentifier,
-      nome: 'Pastor de Teste',
+      anonymousId,
+      onboardingCompleted: true,
+      name: 'Pastor de Teste',
       email: 'pastor@exemplo.com.br',
-      papel: 'pastor',
-      plano: 'igreja',
-      criadoEm: Date.now(),
+      role: 'pastor',
+      plan: 'church',
+      createdAt: now,
+      updatedAt: now,
     });
 
     // Zera o contador do mês corrente para o usuário de teste. É a mesma

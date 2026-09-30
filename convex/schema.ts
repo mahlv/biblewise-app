@@ -1,5 +1,13 @@
 import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
+import { AGE_RANGES, DENOMINATIONS } from '../lib/onboardingOptions';
+
+/** Accepted age ranges — the same list shown in onboarding. */
+export const ageRangeValidator = v.union(...AGE_RANGES.map((ageRange) => v.literal(ageRange)));
+/** Accepted denominations — the same list shown in onboarding. */
+export const denominationValidator = v.union(
+  ...DENOMINATIONS.map((denomination) => v.literal(denomination)),
+);
 
 /**
  * Esquema do banco do Biblewise.
@@ -17,34 +25,44 @@ import { v } from 'convex/values';
  */
 export default defineSchema({
   // ---------------------------------------------------------------------------
-  // Usuários (fiéis, pastores e administradores de igreja)
+  // Users (members, pastors and church admins)
   // ---------------------------------------------------------------------------
+  /**
+   * One document per person, from the first anonymous use to the Clerk account.
+   *
+   * Anonymous-first flow: onboarding creates the document with only an
+   * `anonymousId` (UUID generated on the device). When the user signs in, the
+   * same document receives `clerkId` — nothing is migrated or duplicated. That
+   * is why profile/account fields (`name`, `role`, `plan`...) are optional: they
+   * do not exist for anonymous users. Missing `role` = `member`; missing
+   * `plan` = `free`.
+   */
   users: defineTable({
-    /**
-     * Identificador canônico e estável do provedor de autenticação (Clerk).
-     * É o campo usado para ligar a sessão ao documento — nunca o `subject`.
-     */
-    tokenIdentifier: v.string(),
-    nome: v.string(),
+    /** UUID generated on the device and stored in AsyncStorage. */
+    anonymousId: v.string(),
+    /** Clerk user id; set when the account is linked (future step). */
+    clerkId: v.optional(v.string()),
+    ageRange: v.optional(ageRangeValidator),
+    denomination: v.optional(denominationValidator),
+    onboardingCompleted: v.boolean(),
+    name: v.optional(v.string()),
     email: v.optional(v.string()),
-    /** Permissões dentro do app; `membro` é o padrão do freemium. */
-    papel: v.union(
-      v.literal('membro'),
-      v.literal('pastor'),
-      v.literal('admin_igreja'),
+    /** In-app permissions; missing means `member`. */
+    role: v.optional(
+      v.union(v.literal('member'), v.literal('pastor'), v.literal('church_admin')),
     ),
-    /** Plano de assinatura que libera os recursos pagos. */
-    plano: v.union(
-      v.literal('gratuito'),
-      v.literal('premium'),
-      v.literal('igreja'),
+    /** Subscription plan; missing means `free`. */
+    plan: v.optional(
+      v.union(v.literal('free'), v.literal('premium'), v.literal('church')),
     ),
-    /** Igreja vinculada (obrigatória para pastores no plano Igreja). */
-    igrejaId: v.optional(v.id('churches')),
-    criadoEm: v.number(),
+    /** Linked church (required for pastors on the Church plan). */
+    churchId: v.optional(v.id('churches')),
+    createdAt: v.number(),
+    updatedAt: v.number(),
   })
-    .index('by_tokenIdentifier', ['tokenIdentifier'])
-    .index('by_igrejaId', ['igrejaId']),
+    .index('by_anonymous_id', ['anonymousId'])
+    .index('by_clerk_id', ['clerkId'])
+    .index('by_church_id', ['churchId']),
 
   // ---------------------------------------------------------------------------
   // Igrejas (plano Igreja / white-label)

@@ -14,7 +14,11 @@
  * Este arquivo é verificado por `tsc` na execução, via type stripping.
  */
 import { BIBLE_BOOKS, parseBibleReference } from '../lib/bibleReference.ts';
-import { TOTAL_CAPITULOS, VERSICULOS_INICIAIS } from '../convex/seedData.ts';
+import { TOTAL_CAPITULOS, VERSICULOS_INICIAIS } from '../convex/data/seedData.ts';
+
+// The only Node global this script uses. Declared locally so the editor can
+// type-check it without adding `@types/node` (the script must run with no installs).
+declare const process: { exitCode?: number };
 
 let falhas = 0;
 

@@ -132,7 +132,9 @@ export const iniciarGravacao = internalMutation({
     if (!usuario) throw new Error('Usuário não encontrado.');
 
     const jaGravados = await lerContador(ctx, chave);
-    if (usuario.plano === 'gratuito' && jaGravados >= LIMITE_PLANO_GRATUITO) {
+    // Missing plan (anonymous / no subscription) means `free`.
+    const plan = usuario.plan ?? 'free';
+    if (plan === 'free' && jaGravados >= LIMITE_PLANO_GRATUITO) {
       throw new Error(
         `O plano gratuito permite ${LIMITE_PLANO_GRATUITO} cultos por mês. Assine o Premium para gravar sem limite.`,
       );
@@ -141,7 +143,7 @@ export const iniciarGravacao = internalMutation({
     const sermonId = await ctx.db.insert('sermons', {
       titulo,
       pregador,
-      igrejaId: args.igrejaId ?? usuario.igrejaId,
+      igrejaId: args.igrejaId ?? usuario.churchId,
       autorId: args.autorId,
       dataCulto: args.dataCulto,
       status: 'gravando',
@@ -252,7 +254,7 @@ export const aprovarResumo = internalMutation({
     // Somente pastor ou admin da igreja publicam oficialmente.
     const revisor = await ctx.db.get('users', args.aprovadoPor);
     if (!revisor) throw new Error('Usuário revisor não encontrado.');
-    if (revisor.papel !== 'pastor' && revisor.papel !== 'admin_igreja') {
+    if (revisor.role !== 'pastor' && revisor.role !== 'church_admin') {
       throw new Error('Apenas pastores ou administradores podem aprovar um resumo.');
     }
 

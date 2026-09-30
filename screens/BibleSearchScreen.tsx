@@ -16,6 +16,13 @@ import { VerseCard, VerseCardLoading, VerseCardVazio } from '../components/Verse
 /** Intervalo de atualização do relógio do app (1 minuto). */
 const INTERVALO_RELOGIO_MS = 60_000;
 
+/** Local start of day (midnight, in ms) for the given instant. */
+function startOfDay(timestamp: number): number {
+  const date = new Date(timestamp);
+  date.setHours(0, 0, 0, 0);
+  return date.getTime();
+}
+
 /**
  * Relógio estável para alimentar as queries.
  *
@@ -24,15 +31,17 @@ const INTERVALO_RELOGIO_MS = 60_000;
  * que muda a cada render recria a assinatura, o que dispara `setState` dentro
  * do hook e provoca "Too many re-renders" (loop infinito de renderização).
  *
- * Este hook guarda o instante em estado e o atualiza por intervalo, então os
+ * Este hook guarda o INÍCIO DO DIA em estado e confere por intervalo, então os
  * argumentos ficam estáveis entre renders e as queries só são refeitas quando a
- * data realmente vira (o que também evita tráfego desnecessário).
+ * data realmente vira (o que também evita tráfego desnecessário). Como o valor
+ * é o mesmo durante o dia todo, o `setState` do intervalo faz bail-out e não
+ * provoca re-render.
  */
 function useRelogioEstavel(): number {
-  const [agora, setAgora] = useState(() => Date.now());
+  const [agora, setAgora] = useState(() => startOfDay(Date.now()));
 
   useEffect(() => {
-    const id = setInterval(() => setAgora(Date.now()), INTERVALO_RELOGIO_MS);
+    const id = setInterval(() => setAgora(startOfDay(Date.now())), INTERVALO_RELOGIO_MS);
     return () => clearInterval(id);
   }, []);
 
@@ -205,7 +214,8 @@ const styles = StyleSheet.create({
   },
   conteudo: {
     padding: 20,
-    paddingTop: 72,
+    // A área segura agora é tratada pela Home (SafeAreaView).
+    paddingTop: 24,
     gap: 14,
     alignItems: 'stretch',
   },

@@ -8,6 +8,7 @@ Backend serverless: banco, queries, mutations e (em breve) actions com IA.
 | --- | --- |
 | `schema.ts` | Tabelas e índices: `users`, `churches`, `books`, `verses`, `dailyPicks`, `counters`, `sermons`, `phrases`, `stories` |
 | `bible.ts` | Queries de leitura: busca por referência, capítulo, versículo do dia, frase do dia, autocomplete |
+| `users.ts` | Usuário anônimo do onboarding (`createAnonymousUser`, `getUserByAnonymousId`); vínculo com Clerk é TODO |
 | `sermons.ts` | Fluxo de gravação de culto (interno) e queries públicas do feed |
 | `seed.ts` | Carga inicial idempotente + usuário de teste + limpeza |
 | `data/seedData.ts` | Dados das Escrituras usados no seed |
@@ -85,11 +86,12 @@ Antes de qualquer deploy de produção:
    `ctx.auth.getUserIdentity()` sempre devolve `null`.
 2. **Promover as mutations de sermão a públicas**, trocando os argumentos
    `autorId`/`aprovadoPor` por identidade derivada de `ctx.auth.getUserIdentity()`
-   (`tokenIdentifier`), nunca por argumento do cliente.
-3. **Proteger as mutations de seed**, hoje abertas de propósito para o setup local.
-4. **Trocar a config do app para `ConvexProviderWithAuth`** — `ConvexProvider`
+   (gravada em `users.clerkId` no vínculo da conta), nunca por argumento do cliente.
+3. **Rate limit em `users.createAnonymousUser`** — é pública e sem sessão.
+4. **Proteger as mutations de seed**, hoje abertas de propósito para o setup local.
+5. **Trocar a config do app para `ConvexProviderWithAuth`** — `ConvexProvider`
    puro não envia token, então as queries autenticadas falhariam.
-5. **Tirar a transcrição do documento.** Hoje ela é um campo de `sermons`; um
+6. **Tirar a transcrição do documento.** Hoje ela é um campo de `sermons`; um
    culto longo pode se aproximar do limite de 1MB por documento. O certo é mover
    para o File Storage e guardar o `Id<'_storage'>`.
 

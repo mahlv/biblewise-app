@@ -10,22 +10,37 @@ Expo ships breaking changes every SDK release. APIs you remember are likely rena
 
 ## Commands
 
-Use `bunx` instead of `npx` if the project uses bun (`bun.lock` present).
+Requires **Node `^22.13.0`** (or `^20.19.4` / `^24.3.0`), the range declared by `react-native@0.86`. On older Node 22 releases `jest` crashes at startup with `ERR_REQUIRE_ESM` (chalk@5); `NODE_OPTIONS=--experimental-require-module` is only a temporary workaround.
+
+This project uses **pnpm** (`pnpm-lock.yaml`). Prefix Expo commands with `pnpm` (e.g. `pnpm expo install`).
 
 ```bash
-npx expo install <package>  # ALWAYS use instead of npm/yarn/pnpm/bun add — resolves SDK-compatible versions
-npx expo start              # start the dev server
-npx expo lint               # lint
-npx tsc --noEmit            # typecheck
-npx expo-doctor             # diagnose dependency and config issues
-npx expo install --fix      # fix incompatible package versions
+pnpm expo install <package>  # ALWAYS use instead of pnpm add — resolves SDK-compatible versions
+pnpm start                   # start the dev server
+pnpm lint                    # lint (expo lint)
+pnpm typecheck               # typecheck the app (tsc --noEmit)
+pnpm exec tsc --noEmit -p convex   # typecheck the Convex backend
+pnpm test                    # jest (jest-expo/ios preset, tests in test/)
+pnpm dlx expo-doctor@latest  # diagnose dependency and config issues
+pnpm expo install --fix      # fix incompatible package versions
+pnpm exec convex dev --once  # push functions/schema to the DEV deployment + regenerate convex/_generated
 ```
 
-Run lint and typecheck before declaring any task done.
+Run lint, typecheck (app + convex) and tests before declaring any task done.
+
+pnpm supply-chain policy: `pnpm-workspace.yaml` enforces `minimumReleaseAge` and `allowBuilds`. Never add entries to `minimumReleaseAgeExclude` or flip `allowBuilds` to work around an install failure — pin an older, mature version instead or ask the user. (`expo-router` is pinned to `57.0.22` for this reason; `expo-doctor` reports it as a patch mismatch.)
+
+## Language conventions
+
+- **English for ALL code**: files, folders, components, functions, variables, style keys, types, routes, Convex tables/fields/enum values, comments, test names and developer-facing error messages.
+- **Portuguese for user-facing strings only**: labels, buttons, titles, placeholders, accessibility labels, error messages shown on screen.
+- Legacy code written before this rule (`convex/bible.ts`, `convex/sermons.ts`, `convex/seed.ts`, the non-`users` tables in `convex/schema.ts`, `screens/`, `components/VerseCard.tsx`, `lib/bibleReference.ts`, `test/BibleSearchScreen.test.tsx`) still uses Portuguese identifiers and is pending migration. Renaming its Convex fields requires wiping/reseeding or migrating the existing data.
 
 ## Navigation & Routing
 
-- Use **Expo Router** for all navigation. Routes live in `src/app/` — every file there is a screen, `_layout.tsx` files define navigators. Keep non-route code (components, hooks, utils) outside `src/app/`.
+- Use **Expo Router** for all navigation. Routes live in `app/` at the repo root (the repo is flat: `components/`, `hooks/`, `lib/`, `theme/`, `screens/`, `convex/`) — every file in `app/` is a screen, `_layout.tsx` files define navigators. Keep non-route code outside `app/`.
+- Route groups: `(onboarding)` (welcome → age → denomination) and `(tabs)` (main area, `/home`). The root `app/_layout.tsx` guards them with `Stack.Protected` based on the onboarding flag in AsyncStorage (`hooks/useOnboarding.tsx`); `app/index.tsx` redirects.
+- Design tokens live in `theme/tokens.ts`; fonts (EB Garamond / Plus Jakarta Sans) are loaded in `app/_layout.tsx` — use `fonts.*` family names, not `fontWeight`.
 - Import `Link`, `router`, and `useLocalSearchParams` from `expo-router`.
 - Docs: https://docs.expo.dev/router/introduction.md
 
