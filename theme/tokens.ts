@@ -42,6 +42,8 @@ export const brandGradient = {
  * Each weight is its own family in React Native (do not combine with `fontWeight`).
  */
 export const fonts = {
+  verse: 'EBGaramond_400Regular',
+  verseItalic: 'EBGaramond_400Regular_Italic',
   titleMedium: 'EBGaramond_500Medium',
   titleSemiBold: 'EBGaramond_600SemiBold',
   titleBold: 'EBGaramond_700Bold',
