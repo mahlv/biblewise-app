@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { readBiblePreferences, savePosition, saveThemeId, saveVersionCode } from '../lib/biblePreferences';
+import { readBiblePreferences, readHighlights, saveHighlights, savePosition, saveThemeId, saveVersionCode } from '../lib/biblePreferences';
 
 jest.mock('@react-native-async-storage/async-storage', () =>
-  require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
+  jest.requireActual('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );
 
 describe('biblePreferences', () => {
@@ -23,6 +23,16 @@ describe('biblePreferences', () => {
       themeId: 'slate',
       position: { bookId: 18, chapter: 23 },
     });
+  });
+
+  it('round-trips highlights and drops invalid entries', async () => {
+    expect(await readHighlights()).toEqual({});
+    await saveHighlights({ '0:1': [2, 5] });
+    expect(await readHighlights()).toEqual({ '0:1': [2, 5] });
+    await AsyncStorage.setItem('@biblewise/verseHighlights', JSON.stringify({ '0:1': [2, 'x', 3.5], '1:1': 'bad' }));
+    expect(await readHighlights()).toEqual({ '0:1': [2] });
+    await AsyncStorage.setItem('@biblewise/verseHighlights', '[1,2]');
+    expect(await readHighlights()).toEqual({});
   });
 
   it('ignores a corrupted position', async () => {

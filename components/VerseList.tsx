@@ -6,6 +6,8 @@ interface Props {
   verses: Verse[];
   theme: BibleTheme;
   selectedVerse: number | null;
+  /** Verses marked with the highlighter. */
+  highlightedVerses?: number[];
   onToggleVerse: (verse: number) => void;
   onLongPressVerse?: (verse: number) => void;
   /** Reports each verse's y offset (relative to the list) so the screen can scroll to one. */
@@ -13,11 +15,12 @@ interface Props {
 }
 
 /** Verses with a small superscript number. Tapping toggles selection. */
-export function VerseList({ verses, theme, selectedVerse, onToggleVerse, onLongPressVerse, onVerseLayout }: Props) {
+export function VerseList({ verses, theme, selectedVerse, highlightedVerses = [], onToggleVerse, onLongPressVerse, onVerseLayout }: Props) {
   return (
     <View style={styles.list}>
       {verses.map((verse) => {
         const selected = verse.number === selectedVerse;
+        const highlighted = highlightedVerses.includes(verse.number);
         return (
           <Pressable
             key={verse.number}
@@ -27,7 +30,7 @@ export function VerseList({ verses, theme, selectedVerse, onToggleVerse, onLongP
             accessibilityRole="button"
             accessibilityState={{ selected }}
             accessibilityLabel={`Versículo ${verse.number}. ${verse.text}`}
-            style={[styles.row, selected && { backgroundColor: theme.verseHighlight, borderLeftColor: theme.accent }]}
+            style={[styles.row, highlighted && styles.highlighted, selected && { backgroundColor: theme.verseHighlight, borderLeftColor: theme.accent }]}
           >
             <Text style={[styles.text, { color: theme.text }, selected && styles.selectedText]}>
               <Text style={[styles.number, { color: theme.accent }]}>{verse.number}</Text>
@@ -51,6 +54,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
   },
   text: { fontFamily: fonts.verse, fontSize: 18, lineHeight: 30 },
+  highlighted: { backgroundColor: 'rgba(247, 240, 82, 0.45)' },
   selectedText: { fontFamily: fonts.titleMedium },
   number: { fontFamily: fonts.bodySemiBold, fontSize: 11 },
 });

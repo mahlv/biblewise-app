@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { requireOptionalNativeModule } from 'expo';
 import { ScrollView, Share, StyleSheet, Text, View } from 'react-native';
-import * as Clipboard from 'expo-clipboard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BibleSearchBar } from '../../components/BibleSearchBar';
 import { BibleTopBar } from '../../components/BibleTopBar';
@@ -12,6 +12,7 @@ import { VerseList } from '../../components/VerseList';
 import { VerseSelectionToolbar } from '../../components/VerseSelectionToolbar';
 import { VersionPickerSheet } from '../../components/VersionPickerSheet';
 import { useBible } from '../../hooks/useBible';
+import { readHighlights, saveHighlights, type VerseHighlights } from '../../lib/biblePreferences';
 import { useToast } from '../../hooks/useToast';
 import { clampPosition, getAdjacentChapter, loadVersion, parseReference } from '../../lib/bibleLoader';
 import { colors, fonts, radius, spacing } from '../../theme/tokens';
@@ -28,6 +29,12 @@ export default function BibleScreen() {
   const [query, setQuery] = useState('');
   const [searchError, setSearchError] = useState<string | null>(null);
   const [selectedVerse, setSelectedVerse] = useState<number | null>(null);
+
+  const [highlights, setHighlights] = useState<VerseHighlights>({});
+
+  useEffect(() => {
+    readHighlights().then(setHighlights);
+  }, []);
 
   const scrollRef = useRef<ScrollView>(null);
   const verseOffsets = useRef(new Map<number, number>());
@@ -85,12 +92,33 @@ export default function BibleScreen() {
   const handleCopy = async () => {
     const text = verseText();
     if (!text) return;
+    // Builds made before expo-clipboard was added lack the native module.
+    if (!requireOptionalNativeModule('ExpoClipboard')) {
+      toast('Copiar exige o app atualizado (nova build)');
+      return;
+    }
     try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const Clipboard = require('expo-clipboard') as typeof import('expo-clipboard');
       await Clipboard.setStringAsync(text);
       toast('Versículo copiado');
     } catch {
       toast('Não foi possível copiar agora');
     }
+  };
+
+  const chapterKey = `${safePosition.bookId}:${safePosition.chapter}`;
+  const highlightedVerses = highlights[chapterKey] ?? [];
+
+  const handleHighlight = () => {
+    if (selectedVerse === null) return;
+    const already = highlightedVerses.includes(selectedVerse);
+    const updated = already ? highlightedVerses.filter((verse) => verse !== selectedVerse) : [...highlightedVerses, selectedVerse];
+    const next = { ...highlights, [chapterKey]: updated };
+    if (updated.length === 0) delete next[chapterKey];
+    setHighlights(next);
+    void saveHighlights(next);
+    toast(already ? 'Destaque removido' : 'Versículo destacado');
   };
 
   const handleShare = async () => {
@@ -144,7 +172,7 @@ export default function BibleScreen() {
               <VerseSelectionToolbar
                 verse={selectedVerse}
                 onCopy={handleCopy}
-                onHighlight={() => toast('Destaques em breve')}
+                onHighlight={handleHighlight}
                 onNote={() => toast('Notas em breve')}
                 onShare={handleShare}
               />
@@ -155,6 +183,7 @@ export default function BibleScreen() {
             verses={chapter.verses}
             theme={theme}
             selectedVerse={selectedVerse}
+            highlightedVerses={highlightedVerses}
             onToggleVerse={(verse) => setSelectedVerse((current) => (current === verse ? null : verse))}
             onVerseLayout={(verse, y) => verseOffsets.current.set(verse, y)}
           />
