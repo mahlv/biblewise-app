@@ -9,6 +9,27 @@ export const denominationValidator = v.union(
   ...DENOMINATIONS.map((denomination) => v.literal(denomination)),
 );
 
+/** Meeting types selectable in the processing sheet. */
+export const MEETING_TYPES = ['celebration', 'bible_school', 'youth_service', 'prayer'] as const;
+
+/** AI summary of a recorded message. */
+export const recordingSummaryValidator = v.object({
+  title: v.string(),
+  theme: v.string(),
+  centralPoints: v.array(v.object({ title: v.string(), description: v.string() })),
+  scripturesCited: v.array(v.object({ reference: v.string(), text: v.string() })),
+  practicalTopics: v.array(v.string()),
+  impactQuote: v.string(),
+});
+
+export const recordingStatusValidator = v.union(
+  v.literal('uploading'),
+  v.literal('transcribing'),
+  v.literal('summarizing'),
+  v.literal('completed'),
+  v.literal('failed'),
+);
+
 /**
  * Esquema do banco do Biblewise.
  *
@@ -281,4 +302,30 @@ export default defineSchema({
       'ordem',
     ])
     .index('by_ordem', ['ordem']),
+
+  // ---------------------------------------------------------------------------
+  // Recordings: recorded messages with AI transcript and summary
+  // ---------------------------------------------------------------------------
+  recordings: defineTable({
+    userId: v.id('users'),
+    anonymousId: v.string(),
+    title: v.optional(v.string()),
+    status: recordingStatusValidator,
+    /** Stage-based progress, 0-100 (the speech API reports none). */
+    progress: v.number(),
+    audioStorageId: v.id('_storage'),
+    durationSeconds: v.number(),
+    transcript: v.optional(v.string()),
+    summary: v.optional(recordingSummaryValidator),
+    /** User-safe failure reason; the audio is kept so the pipeline can be retried. */
+    error: v.optional(v.string()),
+    church: v.optional(v.string()),
+    preacher: v.optional(v.string()),
+    meetingType: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_user', ['userId'])
+    .index('by_anonymous_id', ['anonymousId'])
+    .index('by_status', ['status']),
 });

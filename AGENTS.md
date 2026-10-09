@@ -32,6 +32,8 @@ pnpm supply-chain policy: `pnpm-workspace.yaml` enforces `minimumReleaseAge` and
 
 Development build (Android): `expo-dev-client` is installed and `eas.json` has a `development` profile (internal APK, pnpm 12.8.1). Build with `eas build --platform android --profile development`; rebuild only after adding a native library, changing `app.json`/plugins, or upgrading the SDK. Then run `pnpm start` (dev-client mode) and open the project from the installed app. Android package: `com.mahlv.biblewise`.
 
+Recorder pipeline: Convex env vars `GROQ_API_KEY` (Whisper) and `DEEPSEEK_API_KEY` (summary) must be set per deployment with `npx convex env set` (never commit them). `expo-audio`, `expo-keep-awake` and `expo-file-system` are native, so changes to them need a new EAS development build.
+
 ## Language conventions
 
 - **English for ALL code**: files, folders, components, functions, variables, style keys, types, routes, Convex tables/fields/enum values, comments, test names and developer-facing error messages.

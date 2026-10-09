@@ -10,6 +10,7 @@
 
 import type * as bible from "../bible.js";
 import type * as data_seedData from "../data/seedData.js";
+import type * as recordings from "../recordings.js";
 import type * as seed from "../seed.js";
 import type * as sermons from "../sermons.js";
 import type * as users from "../users.js";
@@ -23,6 +24,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   bible: typeof bible;
   "data/seedData": typeof data_seedData;
+  recordings: typeof recordings;
   seed: typeof seed;
   sermons: typeof sermons;
   users: typeof users;

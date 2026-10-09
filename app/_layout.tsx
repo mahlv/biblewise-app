@@ -14,6 +14,7 @@ import { PlusJakartaSans_500Medium } from '@expo-google-fonts/plus-jakarta-sans/
 import { PlusJakartaSans_600SemiBold } from '@expo-google-fonts/plus-jakarta-sans/600SemiBold';
 import { PlusJakartaSans_700Bold } from '@expo-google-fonts/plus-jakarta-sans/700Bold';
 import { BibleProvider } from '../hooks/useBible';
+import { ToastProvider } from '../hooks/useToast';
 import { OnboardingProvider, useOnboarding } from '../hooks/useOnboarding';
 import { colors } from '../theme/tokens';
 
@@ -54,7 +55,9 @@ export default function RootLayout() {
         <OnboardingProvider>
           <BibleProvider>
             <StatusBar style="dark" />
-            <RootNavigator />
+            <ToastProvider>
+              <RootNavigator />
+            </ToastProvider>
           </BibleProvider>
         </OnboardingProvider>
       </SafeAreaProvider>
@@ -98,6 +101,8 @@ function RootNavigator() {
       </Stack.Protected>
       <Stack.Protected guard={completed}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="recording" options={{ presentation: 'fullScreenModal', gestureEnabled: false, animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="diary/[id]" />
       </Stack.Protected>
     </Stack>
   );
