@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, useWindowDimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { useMutation, useQuery } from 'convex/react';
@@ -7,6 +7,12 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { api } from '../../convex/_generated/api';
 import type { Id } from '../../convex/_generated/dataModel';
 import { ProgressBar } from '../../components/ProgressBar';
+import { QuoteCard } from '../../components/QuoteCard';
+import { QuoteShareSheet } from '../../components/QuoteShareSheet';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useEffect, useState } from 'react';
+import { DEFAULT_QUOTE_STYLE, formatQuoteDate, type QuoteStyle } from '../../lib/quoteStyle';
+import { readQuoteStyle, saveQuoteStyle } from '../../lib/quoteStylePreferences';
 import { useOnboarding } from '../../hooks/useOnboarding';
 import { MEETING_TYPE_OPTIONS, formatClock, statusLabel } from '../../lib/recordingSummary';
 import { colors, fonts, radius, shadow, spacing } from '../../theme/tokens';
@@ -21,6 +27,19 @@ export default function RecordingDetailScreen() {
 
   const player = useAudioPlayer(recording?.audioUrl ? { uri: recording.audioUrl } : null);
   const playerStatus = useAudioPlayerStatus(player);
+
+  const { width: screenWidth } = useWindowDimensions();
+  const [quoteStyle, setQuoteStyle] = useState<QuoteStyle>(DEFAULT_QUOTE_STYLE);
+  const [quoteSheetOpen, setQuoteSheetOpen] = useState(false);
+
+  useEffect(() => {
+    readQuoteStyle().then(setQuoteStyle);
+  }, []);
+
+  const changeQuoteStyle = (next: QuoteStyle) => {
+    setQuoteStyle(next);
+    void saveQuoteStyle(next);
+  };
 
   const goBack = () => (router.canGoBack() ? router.back() : router.replace('/diary'));
 
@@ -138,9 +157,22 @@ export default function RecordingDetailScreen() {
               </Section>
             ) : null}
 
-            <View style={styles.quote}>
-              <MaterialCommunityIcons name="format-quote-open" size={26} color={colors.primary} />
-              <Text style={styles.quoteText}>{summary.impactQuote}</Text>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Frase de Impacto</Text>
+              <Text style={styles.sectionSubtitle}>Para inspirar seus círculos de fé</Text>
+              <QuoteCard
+                quote={summary.impactQuote}
+                attribution={recording.preacher}
+                dateLabel={formatQuoteDate(recording.createdAt)}
+                style={quoteStyle}
+                width={screenWidth - spacing.xl * 2}
+              />
+              <Pressable onPress={() => setQuoteSheetOpen(true)} accessibilityRole="button" accessibilityLabel="Customizar arte e compartilhar">
+                <LinearGradient colors={['#E8265E', '#7B3FA8', '#0051D4']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.quoteButton}>
+                  <MaterialCommunityIcons name="palette-outline" size={18} color={colors.onPrimary} />
+                  <Text style={styles.quoteButtonText}>Customizar Arte & Compartilhar</Text>
+                </LinearGradient>
+              </Pressable>
             </View>
 
             {summary.practicalTopics.length > 0 ? (
@@ -156,6 +188,17 @@ export default function RecordingDetailScreen() {
           </>
         ) : null}
       </ScrollView>
+      {summary ? (
+        <QuoteShareSheet
+          visible={quoteSheetOpen}
+          onClose={() => setQuoteSheetOpen(false)}
+          quote={summary.impactQuote}
+          attribution={recording.preacher}
+          dateLabel={formatQuoteDate(recording.createdAt)}
+          style={quoteStyle}
+          onChangeStyle={changeQuoteStyle}
+        />
+      ) : null}
     </SafeAreaView>
   );
 }
@@ -193,8 +236,9 @@ const styles = StyleSheet.create({
   body: { fontFamily: fonts.body, fontSize: 14, lineHeight: 21, color: colors.onSurfaceVariant },
   reference: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.primary },
   verse: { fontFamily: fonts.verse, fontSize: 16, lineHeight: 24, color: colors.onSurface },
-  quote: { backgroundColor: colors.selectedContainer, borderRadius: radius.lg, padding: spacing.lg, gap: spacing.sm, marginTop: spacing.md },
-  quoteText: { fontFamily: fonts.titleMedium, fontSize: 20, lineHeight: 28, color: colors.onSurface },
+  sectionSubtitle: { fontFamily: fonts.body, fontSize: 13, color: colors.onSurfaceVariant, marginBottom: spacing.xs },
+  quoteButton: { height: 52, borderRadius: radius.pill, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
+  quoteButtonText: { fontFamily: fonts.bodySemiBold, fontSize: 14, color: colors.onPrimary },
   topic: { flexDirection: 'row', gap: spacing.sm, alignItems: 'flex-start' },
   topicText: { flex: 1 },
 });

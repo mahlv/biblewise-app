@@ -33,6 +33,15 @@
           "enableBackgroundRecording": true,
           "enableBackgroundPlayback": true
         }
+      ],
+      "expo-sharing",
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Permita que o BibleWise acesse suas fotos.",
+          "savePhotosPermission": "Permita que o BibleWise salve as artes das frases na sua galeria.",
+          "isAccessMediaLocationEnabled": false
+        }
       ]
     ],
     "experiments": {
