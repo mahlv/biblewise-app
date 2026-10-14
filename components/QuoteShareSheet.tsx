@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
-import { requireOptionalNativeModule } from 'expo';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BottomSheet } from './BottomSheet';
@@ -29,8 +28,19 @@ interface Props {
 const EXPORT_WIDTH = 1080;
 const UPDATE_MESSAGE = 'Atualize o app (nova build) para compartilhar a arte';
 
+/** True when the error means a native module is missing from this build. */
+const isMissingModule = (error: unknown) => /cannot find native module|could not be found|is undefined|null is not an object|undefined is not an object/i.test(String(error instanceof Error ? error.message : error));
+
+/** Ensures a local path is a file:// URI, as the sharing and gallery modules expect. */
+const toFileUri = (uri: string) => (uri.startsWith('file://') ? uri : `file://${uri}`);
+
+/** Logs the real cause in development so Metro shows it. */
+const logError = (label: string, error: unknown) => {
+  if (__DEV__) console.warn(label, error);
+};
+
 /** Customize the quote art (background, font, size, format) and share or save it as an image. */
-export function QuoteShareSheet({ visible, onClose, quote, attribution, dateLabel, style, onChangeStyle }: Props) {
+function QuoteShareContent({ onClose, quote, attribution, dateLabel, style, onChangeStyle }: Omit<Props, 'visible'>) {
   const toast = useToast();
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
   const cardRef = useRef<View>(null);
@@ -42,36 +52,29 @@ export function QuoteShareSheet({ visible, onClose, quote, attribution, dateLabe
 
   const update = (patch: Partial<QuoteStyle>) => onChangeStyle({ ...style, ...patch });
 
-  /** Renders the card to a PNG in the cache. Native modules are loaded lazily so older builds don't crash. */
-  const capture = async (): Promise<string | null> => {
-    if (!requireOptionalNativeModule('RNViewShot')) {
-      toast(UPDATE_MESSAGE);
-      return null;
-    }
+  /** Renders the card to a PNG in the cache. The native module is loaded lazily so older builds don't crash on import. */
+  const capture = async (): Promise<string> => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { captureRef } = require('react-native-view-shot') as typeof import('react-native-view-shot');
-    return await captureRef(cardRef, { format: 'png', quality: 1, result: 'tmpfile', width: EXPORT_WIDTH });
+    const uri = await captureRef(cardRef, { format: 'png', quality: 1, result: 'tmpfile', width: EXPORT_WIDTH });
+    return toFileUri(uri);
   };
 
   const handleShare = async () => {
     if (busy) return;
     setBusy('share');
     try {
-      if (!requireOptionalNativeModule('ExpoSharing')) {
-        toast(UPDATE_MESSAGE);
-        return;
-      }
-      const uri = await capture();
-      if (!uri) return;
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const Sharing = require('expo-sharing') as typeof import('expo-sharing');
       if (!(await Sharing.isAvailableAsync())) {
         toast('Compartilhamento indisponível neste aparelho');
         return;
       }
+      const uri = await capture();
       await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: 'Compartilhar frase', UTI: 'public.png' });
-    } catch {
-      toast('Não foi possível compartilhar agora');
+    } catch (error) {
+      logError('Quote share failed', error);
+      toast(isMissingModule(error) ? UPDATE_MESSAGE : 'Não foi possível compartilhar agora');
     } finally {
       setBusy(null);
     }
@@ -81,10 +84,6 @@ export function QuoteShareSheet({ visible, onClose, quote, attribution, dateLabe
     if (busy) return;
     setBusy('save');
     try {
-      if (!requireOptionalNativeModule('ExpoMediaLibrary')) {
-        toast(UPDATE_MESSAGE);
-        return;
-      }
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const MediaLibrary = require('expo-media-library') as typeof import('expo-media-library');
       // Write-only access is enough to save an image.
@@ -94,18 +93,18 @@ export function QuoteShareSheet({ visible, onClose, quote, attribution, dateLabe
         return;
       }
       const uri = await capture();
-      if (!uri) return;
       await MediaLibrary.saveToLibraryAsync(uri);
       toast('Imagem salva na galeria');
-    } catch {
-      toast('Não foi possível salvar a imagem');
+    } catch (error) {
+      logError('Quote save failed', error);
+      toast(isMissingModule(error) ? UPDATE_MESSAGE : 'Não foi possível salvar a imagem');
     } finally {
       setBusy(null);
     }
   };
 
   return (
-    <BottomSheet visible={visible} onClose={onClose} heightRatio={0.94}>
+    <>
       <View style={styles.header}>
         <Text style={styles.title}>Customizar Arte</Text>
         <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Fechar" style={styles.close}>
@@ -171,6 +170,15 @@ export function QuoteShareSheet({ visible, onClose, quote, attribution, dateLabe
           <Text style={styles.secondaryText}>Baixar</Text>
         </Pressable>
       </View>
+    </>
+  );
+}
+
+/** Sheet wrapper: the content is a child so its toasts render inside the Modal. */
+export function QuoteShareSheet({ visible, ...rest }: Props) {
+  return (
+    <BottomSheet visible={visible} onClose={rest.onClose} heightRatio={0.94}>
+      <QuoteShareContent {...rest} />
     </BottomSheet>
   );
 }

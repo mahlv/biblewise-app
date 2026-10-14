@@ -44,10 +44,6 @@ export function QuoteCard({ quote, attribution, dateLabel, style, width, capture
   return (
     <View ref={captureRef} collapsable={false} style={{ width, height, borderRadius: unit(32), overflow: 'hidden' }}>
       <LinearGradient colors={background.colors} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
-      {/* Soft decorative glows (plain circles, no blur dependency). */}
-      <View style={[styles.glow, { top: -unit(60), right: -unit(40), width: unit(220), height: unit(220), borderRadius: unit(110), backgroundColor: background.chip }]} />
-      <View style={[styles.glow, { bottom: -unit(80), left: -unit(60), width: unit(260), height: unit(260), borderRadius: unit(130), backgroundColor: background.chip, opacity: 0.6 }]} />
-
       <View style={[styles.datePill, { top: unit(18), right: unit(18), paddingHorizontal: unit(14), paddingVertical: unit(5), borderRadius: unit(14), backgroundColor: background.chip }]}>
         <Text style={{ fontFamily: fonts.bodySemiBold, fontSize: unit(11), letterSpacing: unit(1), color: background.muted }}>{dateLabel}</Text>
       </View>
@@ -70,7 +66,6 @@ export function QuoteCard({ quote, attribution, dateLabel, style, width, capture
 }
 
 const styles = StyleSheet.create({
-  glow: { position: 'absolute' },
   datePill: { position: 'absolute' },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   brand: { position: 'absolute', flexDirection: 'row', alignItems: 'center' },

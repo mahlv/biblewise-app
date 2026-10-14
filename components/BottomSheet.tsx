@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Animated, Dimensions, Easing, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { ToastProvider } from '../hooks/useToast';
 import { colors, radius } from '../theme/tokens';
 
 interface Props {
@@ -39,7 +40,8 @@ export function BottomSheet({ visible, onClose, children, heightRatio = 0.88 }: 
         </Animated.View>
         <Animated.View style={[styles.sheet, { height, transform: [{ translateY }] }]}>
           <View style={styles.handle} />
-          {children}
+          {/* The Modal draws above the app, so toasts need their own host inside it. */}
+          <ToastProvider>{children}</ToastProvider>
         </Animated.View>
       </View>
     </Modal>
