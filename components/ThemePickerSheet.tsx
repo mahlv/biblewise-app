@@ -17,7 +17,7 @@ interface Props {
 
 const COMING_SOON = 'Disponível em breve';
 
-function ThemePickerContent({ appliedThemeId, onApply, onClose }: Omit<Props, 'visible'>) {
+export function ThemePickerSheet({ visible, appliedThemeId, onApply, onClose }: Props) {
   const toast = useToast();
   const [pendingId, setPendingId] = useState(appliedThemeId);
 
@@ -38,7 +38,7 @@ function ThemePickerContent({ appliedThemeId, onApply, onClose }: Omit<Props, 'v
   };
 
   return (
-    <>
+    <BottomSheet visible={visible} onClose={close} heightRatio={0.92}>
       <View style={styles.header}>
         <MaterialCommunityIcons name="book-open-page-variant" size={20} color={colors.primary} />
         <View style={styles.headerTexts}>
@@ -98,15 +98,6 @@ function ThemePickerContent({ appliedThemeId, onApply, onClose }: Omit<Props, 'v
           <Text style={styles.trial}>✨ Experimentar Premium por 7 dias grátis</Text>
         </Pressable>
       </View>
-    </>
-  );
-}
-
-/** Sheet wrapper: the content is a child so its toasts render inside the Modal. */
-export function ThemePickerSheet({ visible, ...rest }: Props) {
-  return (
-    <BottomSheet visible={visible} onClose={rest.onClose} heightRatio={0.92}>
-      <ThemePickerContent {...rest} />
     </BottomSheet>
   );
 }
