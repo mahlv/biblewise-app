@@ -84,6 +84,7 @@ export const getUserByAnonymousId = query({
       _id: v.id('users'),
       ageRange: v.union(ageRangeValidator, v.null()),
       denomination: v.union(denominationValidator, v.null()),
+      name: v.union(v.string(), v.null()),
       onboardingCompleted: v.boolean(),
       createdAt: v.number(),
     }),
@@ -101,6 +102,7 @@ export const getUserByAnonymousId = query({
       _id: user._id,
       ageRange: user.ageRange ?? null,
       denomination: user.denomination ?? null,
+      name: user.name ?? null,
       onboardingCompleted: user.onboardingCompleted,
       createdAt: user.createdAt,
     };

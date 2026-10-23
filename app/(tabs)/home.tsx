@@ -1,96 +1,100 @@
-import { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useMemo } from 'react';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
+import { useQuery } from 'convex/react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { BrandLogo } from '../../components/BrandLogo';
+import { api } from '../../convex/_generated/api';
+import { DailyQuoteCard } from '../../components/home/DailyQuoteCard';
+import { HomeHeader } from '../../components/home/HomeHeader';
+import { QuickAccessGrid } from '../../components/home/QuickAccessGrid';
+import { RecentMemoryCard } from '../../components/home/RecentMemoryCard';
+import { WidgetBanner } from '../../components/home/WidgetBanner';
+import { useBible } from '../../hooks/useBible';
 import { useOnboarding } from '../../hooks/useOnboarding';
-import { BibleSearchScreen } from '../../screens/BibleSearchScreen';
-import { colors, fonts, radius, spacing } from '../../theme/tokens';
+import { useToast } from '../../hooks/useToast';
+import { useVerseMark } from '../../hooks/useVerseMark';
+import { getDailyVerse } from '../../lib/dailyVerse';
+import { colors, fonts, spacing } from '../../theme/tokens';
 
-/**
- * Temporary Home ("em construção").
- *
- * Keeps the existing verse search reachable and offers "Refazer onboarding"
- * for testing: it only clears the local flag; the `anonymousId` is preserved,
- * so redoing the flow updates the same Convex user.
- */
+// TODO(notifications): replace with real unread state once a notification system exists.
+const HAS_UNREAD_NOTIFICATIONS = true;
+
+/** Home dashboard: daily verse, quick access, latest recording and widget banner. */
 export default function HomeScreen() {
-  const { reset, anonymousId } = useOnboarding();
-  const [resetting, setResetting] = useState(false);
+  const { anonymousId, reset } = useOnboarding();
+  const { versionCode } = useBible();
+  const toast = useToast();
 
-  const handleReset = async () => {
-    setResetting(true);
-    // The root layout guard takes the user back to Welcome.
-    await reset();
-  };
+  const user = useQuery(api.users.getUserByAnonymousId, anonymousId ? { anonymousId } : 'skip');
+  const latestRecording = useQuery(api.recordings.getLatestRecording, anonymousId ? { anonymousId } : 'skip');
+
+  const dailyVerse = useMemo(() => getDailyVerse(versionCode), [versionCode]);
+  const [favorite, toggleFavorite] = useVerseMark('favorites', dailyVerse?.key);
+  const [bookmarked, toggleBookmark] = useVerseMark('bookmarks', dailyVerse?.key);
 
   return (
     <SafeAreaView style={styles.screen} edges={['top']}>
-      <View style={styles.notice}>
-        <BrandLogo size={32} />
-        <View style={styles.noticeTexts}>
-          <Text style={styles.noticeTitle}>Home em construção</Text>
-          <Text style={styles.noticeDetail} numberOfLines={1}>
-            Usuário anônimo: {anonymousId ?? '—'}
-          </Text>
-        </View>
-        <Pressable
-          onPress={handleReset}
-          disabled={resetting}
-          accessibilityRole="button"
-          accessibilityLabel="Refazer onboarding"
-          style={({ pressed }) => [styles.resetButton, (pressed || resetting) && styles.pressed]}
-        >
-          <Text style={styles.resetButtonText}>Refazer onboarding</Text>
-        </Pressable>
-      </View>
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <HomeHeader
+          name={user?.name ?? null}
+          hasUnreadNotifications={HAS_UNREAD_NOTIFICATIONS}
+          onPressBell={() => toast('Em breve')}
+          onPressAvatar={() => toast('Em breve')}
+          // Dev-only shortcut to redo onboarding (replaces the old temporary button).
+          onLongPressAvatar={__DEV__ ? () => void reset() : undefined}
+        />
 
-      <BibleSearchScreen />
+        {dailyVerse ? (
+          <DailyQuoteCard
+            quote={dailyVerse.text}
+            reference={dailyVerse.reference}
+            favorite={favorite}
+            bookmarked={bookmarked}
+            onToggleFavorite={toggleFavorite}
+            onToggleBookmark={toggleBookmark}
+          />
+        ) : null}
+
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Acesso Rápido</Text>
+            <Text style={styles.sectionHint}>3 atalhos</Text>
+          </View>
+          <QuickAccessGrid
+            onOpenBible={() => router.push('/bible')}
+            onOpenRecording={() => router.push('/recording')}
+            onOpenDiary={() => router.push('/diary')}
+          />
+        </View>
+
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Últimas Memórias</Text>
+            <Pressable onPress={() => router.push('/diary')} accessibilityRole="link" accessibilityLabel="Ver tudo">
+              <Text style={styles.sectionLink}>Ver tudo</Text>
+            </Pressable>
+          </View>
+          <RecentMemoryCard
+            recording={latestRecording}
+            onOpen={(id) => router.push({ pathname: '/diary/[id]', params: { id } })}
+            onRecord={() => router.push('/recording')}
+            onMore={() => toast('Em breve')}
+          />
+        </View>
+
+        <WidgetBanner onAdjust={() => Alert.alert('Em breve', 'O widget na tela inicial estará disponível em breve.')} />
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  notice: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-    marginHorizontal: spacing.xl,
-    marginTop: spacing.sm,
-    padding: spacing.md,
-    borderRadius: radius.md,
-    backgroundColor: colors.surfaceContainerLowest,
-    borderWidth: 1,
-    borderColor: colors.outlineVariant,
-  },
-  noticeTexts: {
-    flex: 1,
-  },
-  noticeTitle: {
-    fontFamily: fonts.titleSemiBold,
-    fontSize: 18,
-    color: colors.onSurface,
-  },
-  noticeDetail: {
-    fontFamily: fonts.body,
-    fontSize: 11,
-    color: colors.outline,
-  },
-  resetButton: {
-    backgroundColor: colors.primary,
-    borderRadius: radius.pill,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  pressed: {
-    opacity: 0.7,
-  },
-  resetButtonText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 12,
-    color: colors.onPrimary,
-  },
+  screen: { flex: 1, backgroundColor: colors.background },
+  // Bottom padding keeps the last card clear of the tab bar and the floating mic button.
+  content: { paddingHorizontal: spacing.xl, paddingTop: spacing.md, paddingBottom: 150, gap: spacing.xxl },
+  section: { gap: spacing.md },
+  sectionHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  sectionTitle: { fontFamily: fonts.bodyBold, fontSize: 20, color: colors.onSurface },
+  sectionHint: { fontFamily: fonts.body, fontSize: 12, color: colors.outline },
+  sectionLink: { fontFamily: fonts.bodySemiBold, fontSize: 13, color: colors.primary },
 });

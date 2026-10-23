@@ -214,6 +214,44 @@ export const listUserRecordings = query({
   },
 });
 
+/** Most recent recording of the device, for the Home "Últimas Memórias" card. */
+export const getLatestRecording = query({
+  args: { anonymousId: v.string() },
+  returns: v.union(
+    v.object({
+      _id: v.id('recordings'),
+      title: v.optional(v.string()),
+      status: recordingStatusValidator,
+      durationSeconds: v.number(),
+      preacher: v.optional(v.string()),
+      church: v.optional(v.string()),
+      meetingType: v.optional(v.string()),
+      keyPoints: v.array(v.string()),
+      createdAt: v.number(),
+    }),
+    v.null(),
+  ),
+  handler: async (ctx, args) => {
+    const row = await ctx.db
+      .query('recordings')
+      .withIndex('by_anonymous_id', (q) => q.eq('anonymousId', args.anonymousId))
+      .order('desc')
+      .first();
+    if (!row) return null;
+    return {
+      _id: row._id,
+      title: row.summary?.title ?? row.title,
+      status: row.status,
+      durationSeconds: row.durationSeconds,
+      preacher: row.preacher,
+      church: row.church,
+      meetingType: row.meetingType,
+      keyPoints: (row.summary?.centralPoints ?? []).slice(0, 3).map((point) => point.title),
+      createdAt: row.createdAt,
+    };
+  },
+});
+
 export const retryRecording = mutation({
   args: { anonymousId: v.string(), recordingId: v.id('recordings') },
   returns: v.null(),
