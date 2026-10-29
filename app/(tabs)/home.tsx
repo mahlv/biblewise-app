@@ -39,7 +39,8 @@ export default function HomeScreen() {
           name={user?.name ?? null}
           hasUnreadNotifications={HAS_UNREAD_NOTIFICATIONS}
           onPressBell={() => toast('Em breve')}
-          onPressAvatar={() => toast('Em breve')}
+          imageUrl={user?.profileImageUrl ?? null}
+          onPressAvatar={() => router.push('/profile/edit')}
           // Dev-only shortcut to redo onboarding (replaces the old temporary button).
           onLongPressAvatar={__DEV__ ? () => void reset() : undefined}
         />

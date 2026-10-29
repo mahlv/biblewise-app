@@ -68,6 +68,12 @@ export default defineSchema({
     onboardingCompleted: v.boolean(),
     name: v.optional(v.string()),
     email: v.optional(v.string()),
+    country: v.optional(v.string()),
+    city: v.optional(v.string()),
+    /** Free-text church name (distinct from the `churchId` relation). */
+    churchName: v.optional(v.string()),
+    /** Avatar in Convex File Storage (Id, never the URL). */
+    profileImageId: v.optional(v.id('_storage')),
     /** In-app permissions; missing means `member`. */
     role: v.optional(
       v.union(v.literal('member'), v.literal('pastor'), v.literal('church_admin')),

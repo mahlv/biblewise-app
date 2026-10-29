@@ -103,6 +103,7 @@ function RootNavigator() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="recording" options={{ presentation: 'fullScreenModal', gestureEnabled: false, animation: 'slide_from_bottom' }} />
         <Stack.Screen name="diary/[id]" />
+        <Stack.Screen name="profile/edit" />
       </Stack.Protected>
     </Stack>
   );

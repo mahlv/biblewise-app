@@ -36,6 +36,12 @@
       ],
       "expo-sharing",
       [
+        "expo-image-picker",
+        {
+          "photosPermission": "Permita que o BibleWise acesse suas fotos para escolher a foto do perfil."
+        }
+      ],
+      [
         "expo-media-library",
         {
           "photosPermission": "Permita que o BibleWise acesse suas fotos.",

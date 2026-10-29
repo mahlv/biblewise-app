@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { brandGradient, colors, fonts, spacing } from '../../theme/tokens';
@@ -6,6 +6,8 @@ import { brandGradient, colors, fonts, spacing } from '../../theme/tokens';
 interface Props {
   /** User name from Convex; the greeting drops it when missing. */
   name: string | null;
+  /** Profile picture URL; initials are shown when missing. */
+  imageUrl?: string | null;
   hasUnreadNotifications: boolean;
   onPressBell: () => void;
   onPressAvatar: () => void;
@@ -23,7 +25,7 @@ function initialsOf(name: string): string {
 }
 
 /** Date, greeting, notification bell and avatar. */
-export function HomeHeader({ name, hasUnreadNotifications, onPressBell, onPressAvatar, onLongPressAvatar }: Props) {
+export function HomeHeader({ name, imageUrl, hasUnreadNotifications, onPressBell, onPressAvatar, onLongPressAvatar }: Props) {
   const firstName = name?.trim().split(/\s+/)[0];
   const initials = name?.trim() ? initialsOf(name) : '';
 
@@ -47,19 +49,23 @@ export function HomeHeader({ name, hasUnreadNotifications, onPressBell, onPressA
         accessibilityRole="button"
         accessibilityLabel="Perfil"
       >
-        <LinearGradient
-          colors={brandGradient.colors}
-          locations={brandGradient.locations}
-          start={brandGradient.start}
-          end={brandGradient.end}
-          style={styles.avatar}
-        >
-          {initials ? (
-            <Text style={styles.initials}>{initials}</Text>
-          ) : (
-            <MaterialCommunityIcons name="account" size={22} color={colors.onPrimary} />
-          )}
-        </LinearGradient>
+        {imageUrl ? (
+          <Image source={{ uri: imageUrl }} style={styles.avatar} />
+        ) : (
+          <LinearGradient
+            colors={brandGradient.colors}
+            locations={brandGradient.locations}
+            start={brandGradient.start}
+            end={brandGradient.end}
+            style={styles.avatar}
+          >
+            {initials ? (
+              <Text style={styles.initials}>{initials}</Text>
+            ) : (
+              <MaterialCommunityIcons name="account" size={22} color={colors.onPrimary} />
+            )}
+          </LinearGradient>
+        )}
       </Pressable>
     </View>
   );
