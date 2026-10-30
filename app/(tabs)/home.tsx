@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable,ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useQuery } from 'convex/react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,11 +8,12 @@ import { DailyQuoteCard } from '../../components/home/DailyQuoteCard';
 import { HomeHeader } from '../../components/home/HomeHeader';
 import { QuickAccessGrid } from '../../components/home/QuickAccessGrid';
 import { RecentMemoryCard } from '../../components/home/RecentMemoryCard';
-import { WidgetBanner } from '../../components/home/WidgetBanner';
+import { WidgetBanner, type WidgetStatus } from '../../components/home/WidgetBanner';
 import { useBible } from '../../hooks/useBible';
 import { useOnboarding } from '../../hooks/useOnboarding';
 import { useToast } from '../../hooks/useToast';
 import { useVerseMark } from '../../hooks/useVerseMark';
+import { useWidgetSettings } from '../../hooks/useWidgetSettings';
 import { getDailyVerse } from '../../lib/dailyVerse';
 import { colors, fonts, spacing } from '../../theme/tokens';
 
@@ -27,6 +28,9 @@ export default function HomeScreen() {
 
   const user = useQuery(api.users.getUserByAnonymousId, anonymousId ? { anonymousId } : 'skip');
   const latestRecording = useQuery(api.recordings.getLatestRecording, anonymousId ? { anonymousId } : 'skip');
+
+  const { settings: widgetSettings, placed: widgetPlaced } = useWidgetSettings();
+  const widgetStatus: WidgetStatus = !widgetSettings.enabled ? 'paused' : widgetPlaced === false ? 'not_added' : 'active';
 
   const dailyVerse = useMemo(() => getDailyVerse(versionCode), [versionCode]);
   const [favorite, toggleFavorite] = useVerseMark('favorites', dailyVerse?.key);
@@ -83,7 +87,7 @@ export default function HomeScreen() {
           />
         </View>
 
-        <WidgetBanner onAdjust={() => Alert.alert('Em breve', 'O widget na tela inicial estará disponível em breve.')} />
+        <WidgetBanner status={widgetStatus} onAdjust={() => router.push('/widget/settings')} />
       </ScrollView>
     </SafeAreaView>
   );

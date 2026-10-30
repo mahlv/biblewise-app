@@ -7,7 +7,9 @@ import WidgetKit
 private let appGroup = "group.com.mahlv.biblewise"
 private let quotesKey = "widgetQuotes"
 private let offsetKey = "widgetQuoteOffset"
+private let settingsKey = "widgetSettings"
 private let bibleURL = URL(string: "biblewise://bible")!
+private let settingsURL = URL(string: "biblewise://widget/settings")!
 
 private let slotLength: TimeInterval = 12 * 3600
 private let firstSlotHour: TimeInterval = 6 * 3600
@@ -36,6 +38,50 @@ private func loadQuotes() -> [Quote] {
     !quotes.isEmpty
   else { return [fallbackQuote] }
   return quotes
+}
+
+// MARK: - Settings (written by lib/widgetSync.ts; colors are absent for the automatic look)
+
+struct WidgetSettings: Codable {
+  var enabled: Int?
+  var fontDesign: String?
+  var fontWeight: String?
+  var fontItalic: Int?
+  var from: String?
+  var to: String?
+  var text: String?
+  var muted: String?
+  var button: String?
+  var buttonIcon: String?
+  var secondaryButton: String?
+  var secondaryIcon: String?
+
+  var isEnabled: Bool { enabled != 0 }
+  var hasCustomColors: Bool { from != nil && to != nil }
+}
+
+private func loadSettings() -> WidgetSettings {
+  guard
+    let data = UserDefaults(suiteName: appGroup)?.data(forKey: settingsKey),
+    let settings = try? JSONDecoder().decode(WidgetSettings.self, from: data)
+  else { return WidgetSettings() }
+  return settings
+}
+
+extension Color {
+  /// Parses "#RRGGBB"; falls back to the given color when malformed or missing.
+  init(hex: String?, fallback: Color) {
+    guard let hex = hex?.trimmingCharacters(in: CharacterSet(charactersIn: "#")),
+          hex.count == 6, let value = UInt32(hex, radix: 16) else {
+      self = fallback
+      return
+    }
+    self.init(
+      red: Double((value >> 16) & 0xFF) / 255,
+      green: Double((value >> 8) & 0xFF) / 255,
+      blue: Double(value & 0xFF) / 255
+    )
+  }
 }
 
 // MARK: - Rotation (same formula as getSlotNumber in lib/widgetQuotes.ts)
@@ -88,11 +134,12 @@ struct NextQuoteIntent: AppIntent {
 struct QuoteEntry: TimelineEntry {
   let date: Date
   let quote: Quote
+  let settings: WidgetSettings
 }
 
 struct QuoteProvider: TimelineProvider {
   func placeholder(in context: Context) -> QuoteEntry {
-    QuoteEntry(date: Date(), quote: fallbackQuote)
+    QuoteEntry(date: Date(), quote: fallbackQuote, settings: WidgetSettings())
   }
 
   func getSnapshot(in context: Context, completion: @escaping (QuoteEntry) -> Void) {
@@ -102,12 +149,13 @@ struct QuoteProvider: TimelineProvider {
   /// One entry now plus the next few scheduled rotations; the system reloads at the end of the last one.
   func getTimeline(in context: Context, completion: @escaping (Timeline<QuoteEntry>) -> Void) {
     let quotes = loadQuotes()
+    let settings = loadSettings()
     let now = Date()
-    var entries = [QuoteEntry(date: now, quote: quote(in: quotes, slot: slotNumber(for: now), offset: manualOffset(slot: slotNumber(for: now))))]
+    var entries = [QuoteEntry(date: now, quote: quote(in: quotes, slot: slotNumber(for: now), offset: manualOffset(slot: slotNumber(for: now))), settings: settings)]
 
     var start = nextSlotStart(after: now)
     for _ in 0..<4 {
-      entries.append(QuoteEntry(date: start, quote: quote(in: quotes, slot: slotNumber(for: start), offset: 0)))
+      entries.append(QuoteEntry(date: start, quote: quote(in: quotes, slot: slotNumber(for: start), offset: 0), settings: settings))
       start = nextSlotStart(after: start)
     }
     completion(Timeline(entries: entries, policy: .after(start)))
@@ -116,7 +164,7 @@ struct QuoteProvider: TimelineProvider {
   private func currentEntry() -> QuoteEntry {
     let now = Date()
     let slot = slotNumber(for: now)
-    return QuoteEntry(date: now, quote: quote(in: loadQuotes(), slot: slot, offset: manualOffset(slot: slot)))
+    return QuoteEntry(date: now, quote: quote(in: loadQuotes(), slot: slot, offset: manualOffset(slot: slot)), settings: loadSettings())
   }
 }
 
@@ -126,19 +174,51 @@ struct QuoteWidgetView: View {
   @Environment(\.widgetFamily) private var family
   let entry: QuoteEntry
 
-  private var quoteFont: Font {
-    switch family {
-    case .systemSmall: return .system(size: 15, design: .serif).italic()
-    case .systemMedium: return .system(size: 18, design: .serif).italic()
-    default: return .system(size: 24, design: .serif).italic()
+  private var settings: WidgetSettings { entry.settings }
+  /// Custom background chosen in the app; otherwise the automatic light/dark asset colors.
+  private var custom: Bool { settings.hasCustomColors }
+
+  private var textColor: Color { custom ? Color(hex: settings.text, fallback: .primary) : Color("quoteText") }
+  private var mutedColor: Color { custom ? Color(hex: settings.muted, fallback: .secondary) : Color("authorText") }
+  private var buttonColor: Color { custom ? Color(hex: settings.button, fallback: Color("brand")) : Color("brand") }
+  private var buttonIconColor: Color { custom ? Color(hex: settings.buttonIcon, fallback: .white) : .white }
+  private var secondaryButtonColor: Color {
+    custom ? Color(hex: settings.secondaryButton, fallback: .white) : Color.white.opacity(0.85)
+  }
+  private var secondaryIconColor: Color {
+    custom ? Color(hex: settings.secondaryIcon, fallback: Color("brand")) : Color("brand")
+  }
+
+  private var fontDesign: Font.Design { settings.fontDesign == "default" ? .default : .serif }
+  private var fontWeight: Font.Weight {
+    switch settings.fontWeight {
+    case "medium": return .medium
+    case "semibold": return .semibold
+    case "bold": return .bold
+    default: return .regular
     }
+  }
+  /// Italic serif is the default look (matches the app's "Itálica" font).
+  private var isItalic: Bool { settings.fontItalic.map { $0 == 1 } ?? true }
+
+  private var quoteSize: CGFloat {
+    switch family {
+    case .systemSmall: return 15
+    case .systemMedium: return 18
+    default: return 24
+    }
+  }
+
+  private var quoteFont: Font {
+    let font = Font.system(size: quoteSize, weight: fontWeight, design: fontDesign)
+    return isItalic ? font.italic() : font
   }
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
       Text("“\(entry.quote.text)”")
         .font(quoteFont)
-        .foregroundColor(Color("quoteText"))
+        .foregroundColor(textColor)
         .minimumScaleFactor(0.7)
         .lineLimit(family == .systemLarge ? 9 : (family == .systemMedium ? 4 : 7))
 
@@ -147,7 +227,7 @@ struct QuoteWidgetView: View {
       HStack(spacing: 8) {
         Text(entry.quote.author)
           .font(.system(size: family == .systemSmall ? 11 : 12, weight: .semibold))
-          .foregroundColor(Color("authorText"))
+          .foregroundColor(mutedColor)
           .lineLimit(1)
 
         Spacer(minLength: 0)
@@ -157,9 +237,9 @@ struct QuoteWidgetView: View {
             Button(intent: NextQuoteIntent()) {
               Image(systemName: "arrow.clockwise")
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(Color("brand"))
+                .foregroundColor(secondaryIconColor)
                 .frame(width: 36, height: 36)
-                .background(Circle().fill(Color.white.opacity(0.85)))
+                .background(Circle().fill(secondaryButtonColor))
             }
             .buttonStyle(.plain)
             .accessibilityLabel("Próxima frase")
@@ -168,9 +248,9 @@ struct QuoteWidgetView: View {
           Link(destination: bibleURL) {
             Image(systemName: "book.fill")
               .font(.system(size: 15, weight: .semibold))
-              .foregroundColor(.white)
+              .foregroundColor(buttonIconColor)
               .frame(width: 36, height: 36)
-              .background(Circle().fill(Color("brand")))
+              .background(Circle().fill(buttonColor))
           }
           .accessibilityLabel("Abrir a Bíblia")
         }
@@ -178,6 +258,32 @@ struct QuoteWidgetView: View {
     }
     .padding(family == .systemSmall ? 12 : 16)
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+    .containerBackground(
+      LinearGradient(
+        colors: custom
+          ? [Color(hex: settings.from, fallback: Color("cardTop")), Color(hex: settings.to, fallback: Color("cardBottom"))]
+          : [Color("cardTop"), Color("cardBottom")],
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+      ),
+      for: .widget
+    )
+  }
+}
+
+/// Shown while the widget is turned off in the app; tapping opens the widget settings.
+struct PausedWidgetView: View {
+  var body: some View {
+    VStack(spacing: 4) {
+      Text("Widget pausado")
+        .font(.system(size: 14, weight: .bold))
+        .foregroundColor(Color("quoteText"))
+      Text("Toque para ativar")
+        .font(.system(size: 12))
+        .foregroundColor(Color("authorText"))
+    }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .widgetURL(settingsURL)
     .containerBackground(
       LinearGradient(
         colors: [Color("cardTop"), Color("cardBottom")],
@@ -196,7 +302,11 @@ struct QuoteWidget: Widget {
 
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: kind, provider: QuoteProvider()) { entry in
-      QuoteWidgetView(entry: entry)
+      if entry.settings.isEnabled {
+        QuoteWidgetView(entry: entry)
+      } else {
+        PausedWidgetView()
+      }
     }
     .configurationDisplayName("Biblewise")
     .description("Versículos e frases inspiradoras, atualizados duas vezes ao dia.")

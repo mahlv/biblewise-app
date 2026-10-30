@@ -3,6 +3,7 @@
 
 import { FlexWidget, SvgWidget, TextWidget, type ColorProp } from 'react-native-android-widget';
 import { WIDGET_BIBLE_URL, type WidgetQuote } from '../lib/widgetQuotes';
+import type { WidgetLook } from '../lib/widgetStyle';
 
 export type WidgetSize = 'small' | 'medium' | 'large';
 export type WidgetTheme = 'light' | 'dark';
@@ -10,28 +11,6 @@ export type WidgetTheme = 'light' | 'dark';
 /** Click action handled by `widgetTaskHandler` to show the next quote. */
 export const REFRESH_ACTION = 'REFRESH';
 
-const PALETTES = {
-  light: {
-    gradient: { from: '#FFF3F0', to: '#FFDDE3' },
-    quote: '#3A0A00',
-    author: '#906F70',
-    button: '#B90039',
-    buttonIcon: '#FFFFFF',
-    secondaryButton: '#FFFFFF',
-    secondaryIcon: '#B90039',
-  },
-  dark: {
-    gradient: { from: '#3A1A14', to: '#1F0F0C' },
-    quote: '#FFF3F0',
-    author: '#D9B8BA',
-    button: '#EF2D56',
-    buttonIcon: '#FFFFFF',
-    secondaryButton: '#4A2A24',
-    secondaryIcon: '#FFD9DF',
-  },
-} as const;
-
-const QUOTE_FONT = 'EBGaramond_400Regular_Italic';
 const AUTHOR_FONT = 'PlusJakartaSans_600SemiBold';
 
 // Material "menu_book" and "refresh" glyphs (24x24 viewBox).
@@ -81,16 +60,16 @@ function RoundButton({ svg, background, clickAction, clickActionData, label }: B
 interface Props {
   quote: WidgetQuote;
   size: WidgetSize;
-  theme: WidgetTheme;
+  look: WidgetLook;
+  /** Quote font: family name of a TTF bundled by the config plugin. */
+  fontFamily: string;
 }
 
 /**
  * Small: quote + author. Medium: adds the Bible button. Large: adds the refresh button.
  * Tapping anywhere else opens the app.
  */
-export function QuoteWidget({ quote, size, theme }: Props) {
-  const palette = PALETTES[theme];
-
+export function QuoteWidget({ quote, size, look, fontFamily }: Props) {
   return (
     <FlexWidget
       clickAction="OPEN_APP"
@@ -99,7 +78,7 @@ export function QuoteWidget({ quote, size, theme }: Props) {
         height: 'match_parent',
         padding: size === 'small' ? 12 : 16,
         borderRadius: 24,
-        backgroundGradient: { ...palette.gradient, orientation: 'TL_BR' },
+        backgroundGradient: { from: look.from, to: look.to, orientation: 'TL_BR' },
         flexDirection: 'column',
         justifyContent: 'space-between',
       }}
@@ -109,9 +88,9 @@ export function QuoteWidget({ quote, size, theme }: Props) {
         maxLines={QUOTE_MAX_LINES[size]}
         truncate="END"
         style={{
-          fontFamily: QUOTE_FONT,
+          fontFamily,
           fontSize: QUOTE_FONT_SIZE[size],
-          color: palette.quote,
+          color: look.text,
         }}
       />
 
@@ -122,22 +101,22 @@ export function QuoteWidget({ quote, size, theme }: Props) {
           text={quote.author}
           maxLines={1}
           truncate="END"
-          style={{ fontFamily: AUTHOR_FONT, fontSize: size === 'small' ? 11 : 12, color: palette.author }}
+          style={{ fontFamily: AUTHOR_FONT, fontSize: size === 'small' ? 11 : 12, color: look.muted }}
         />
 
         {size === 'small' ? null : (
           <FlexWidget style={{ flexDirection: 'row', alignItems: 'center', flexGap: 8 }}>
             {size === 'large' ? (
               <RoundButton
-                svg={refreshIcon(palette.secondaryIcon)}
-                background={palette.secondaryButton}
+                svg={refreshIcon(look.secondaryIcon)}
+                background={look.secondaryButton}
                 clickAction={REFRESH_ACTION}
                 label="Próxima frase"
               />
             ) : null}
             <RoundButton
-              svg={bookIcon(palette.buttonIcon)}
-              background={palette.button}
+              svg={bookIcon(look.buttonIcon)}
+              background={look.button}
               clickAction="OPEN_URI"
               clickActionData={{ uri: WIDGET_BIBLE_URL }}
               label="Abrir a Bíblia"

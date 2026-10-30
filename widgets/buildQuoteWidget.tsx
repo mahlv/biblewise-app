@@ -2,7 +2,10 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { WidgetInfo, WidgetRepresentation } from 'react-native-android-widget';
+import { readWidgetSettings } from '../lib/widgetSettings';
 import { getQuoteForDate, getSlotNumber } from '../lib/widgetQuotes';
+import { getWidgetBackground, getWidgetFont } from '../lib/widgetStyle';
+import { PausedWidget } from './PausedWidget';
 import { QuoteWidget, getWidgetSize } from './QuoteWidget';
 
 export const WIDGET_NAME = 'BiblewiseQuote';
@@ -34,14 +37,21 @@ export async function advanceOffset(date = new Date()): Promise<void> {
   );
 }
 
-/** Builds the light and dark versions of the widget for the current quote. */
+/** Builds the light and dark versions of the widget from the saved settings. */
 export async function buildQuoteWidget(info: Pick<WidgetInfo, 'width' | 'height'>): Promise<WidgetRepresentation> {
+  const settings = await readWidgetSettings();
+  if (!settings.enabled) {
+    return { light: <PausedWidget theme="light" />, dark: <PausedWidget theme="dark" /> };
+  }
+
   const now = new Date();
   const quote = getQuoteForDate(now, await readOffset(getSlotNumber(now)));
   const size = getWidgetSize(info.width, info.height);
+  const background = getWidgetBackground(settings.backgroundId);
+  const { family } = getWidgetFont(settings.fontId);
 
   return {
-    light: <QuoteWidget quote={quote} size={size} theme="light" />,
-    dark: <QuoteWidget quote={quote} size={size} theme="dark" />,
+    light: <QuoteWidget quote={quote} size={size} look={background.light} fontFamily={family} />,
+    dark: <QuoteWidget quote={quote} size={size} look={background.dark ?? background.light} fontFamily={family} />,
   };
 }

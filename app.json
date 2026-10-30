@@ -58,7 +58,9 @@
             }
           ],
           "fonts": [
+            "./node_modules/@expo-google-fonts/eb-garamond/500Medium/EBGaramond_500Medium.ttf",
             "./node_modules/@expo-google-fonts/eb-garamond/400Regular_Italic/EBGaramond_400Regular_Italic.ttf",
+            "./node_modules/@expo-google-fonts/eb-garamond/700Bold/EBGaramond_700Bold.ttf",
             "./node_modules/@expo-google-fonts/plus-jakarta-sans/600SemiBold/PlusJakartaSans_600SemiBold.ttf"
           ]
         }

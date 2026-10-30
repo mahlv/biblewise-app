@@ -13,6 +13,8 @@ export const WIDGET_QUOTES: readonly WidgetQuote[] = quotesData as WidgetQuote[]
 
 /** Deep link opened by the widget's Bible button. Resolves to the Bible tab. */
 export const WIDGET_BIBLE_URL = 'biblewise://bible';
+/** Deep link opened by the paused widget (lets the user turn it back on). */
+export const WIDGET_SETTINGS_URL = 'biblewise://widget/settings';
 
 const HOUR_MS = 60 * 60 * 1000;
 /** Quotes rotate twice a day, at 06:00 and 18:00 local time. */
@@ -26,6 +28,14 @@ const FIRST_SLOT_HOUR = 6;
 export function getSlotNumber(date: Date): number {
   const localMs = date.getTime() - date.getTimezoneOffset() * 60 * 1000;
   return Math.floor((localMs - FIRST_SLOT_HOUR * HOUR_MS) / SLOT_MS);
+}
+
+/** When the current quote started showing, e.g. "hoje às 06:00" (rotations happen at 06:00 and 18:00). */
+export function getLastRotationLabel(date: Date): string {
+  const hour = date.getHours();
+  if (hour >= 18) return 'hoje às 18:00';
+  if (hour >= FIRST_SLOT_HOUR) return 'hoje às 06:00';
+  return 'ontem às 18:00';
 }
 
 /** The quote for the slot of `date`; `offset` moves forward manually (the Refresh button). */
