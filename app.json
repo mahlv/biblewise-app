@@ -8,7 +8,11 @@
     "userInterfaceStyle": "light",
     "scheme": "biblewise",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mahlv.biblewise",
+      "entitlements": {
+        "com.apple.security.application-groups": ["group.com.mahlv.biblewise"]
+      }
     },
     "android": {
       "package": "com.mahlv.biblewise",
@@ -35,6 +39,30 @@
         }
       ],
       "expo-sharing",
+      [
+        "react-native-android-widget",
+        {
+          "widgets": [
+            {
+              "name": "BiblewiseQuote",
+              "label": "Biblewise",
+              "description": "Versículos e frases inspiradoras, atualizados duas vezes ao dia.",
+              "minWidth": "110dp",
+              "minHeight": "110dp",
+              "targetCellWidth": 2,
+              "targetCellHeight": 2,
+              "maxResizeWidth": "320dp",
+              "maxResizeHeight": "320dp",
+              "resizeMode": "horizontal|vertical",
+              "updatePeriodMillis": 21600000
+            }
+          ],
+          "fonts": [
+            "./node_modules/@expo-google-fonts/eb-garamond/400Regular_Italic/EBGaramond_400Regular_Italic.ttf",
+            "./node_modules/@expo-google-fonts/plus-jakarta-sans/600SemiBold/PlusJakartaSans_600SemiBold.ttf"
+          ]
+        }
+      ],
       [
         "expo-image-picker",
         {

@@ -16,6 +16,7 @@ import { PlusJakartaSans_700Bold } from '@expo-google-fonts/plus-jakarta-sans/70
 import { BibleProvider } from '../hooks/useBible';
 import { ToastProvider } from '../hooks/useToast';
 import { OnboardingProvider, useOnboarding } from '../hooks/useOnboarding';
+import { syncWidget } from '../lib/widgetSync';
 import { colors } from '../theme/tokens';
 
 /**
@@ -85,6 +86,11 @@ function RootNavigator() {
   useEffect(() => {
     if (isReady) SplashScreen.hideAsync();
   }, [isReady]);
+
+  // Refresh the home-screen widget once per launch (cheap; only after onboarding).
+  useEffect(() => {
+    if (isReady && completed) void syncWidget();
+  }, [isReady, completed]);
 
   if (!isReady) return null;
 
