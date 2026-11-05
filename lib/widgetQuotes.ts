@@ -1,6 +1,6 @@
 import quotesData from '../assets/widget/quotes.json';
 
-export type WidgetQuoteType = 'bible' | 'philosopher';
+export type WidgetQuoteType = 'bible' | 'quote';
 
 export interface WidgetQuote {
   id: string;

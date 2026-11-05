@@ -219,7 +219,7 @@ struct QuoteWidgetView: View {
       Text("“\(entry.quote.text)”")
         .font(quoteFont)
         .foregroundColor(textColor)
-        .minimumScaleFactor(0.7)
+        .minimumScaleFactor(0.6)
         .lineLimit(family == .systemLarge ? 9 : (family == .systemMedium ? 4 : 7))
 
       Spacer(minLength: 0)

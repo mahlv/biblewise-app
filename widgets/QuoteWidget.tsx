@@ -91,6 +91,8 @@ export function QuoteWidget({ quote, size, look, fontFamily }: Props) {
           fontFamily,
           fontSize: QUOTE_FONT_SIZE[size],
           color: look.text,
+          // Shrink instead of cutting the text on small launcher grids.
+          adjustsFontSizeToFit: size !== 'large',
         }}
       />
 

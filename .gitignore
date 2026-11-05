@@ -43,3 +43,6 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# copyrighted source book used to pick widget content (not shipped, not published)
+assets/widget/pdf/
