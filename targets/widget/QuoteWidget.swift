@@ -215,16 +215,24 @@ struct QuoteWidgetView: View {
   }
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 8) {
+    VStack(spacing: 8) {
+      // Equal spacers above and below center the quote in the free space.
+      Spacer(minLength: 0)
+
       Text("“\(entry.quote.text)”")
         .font(quoteFont)
         .foregroundColor(textColor)
+        .multilineTextAlignment(.center)
         .minimumScaleFactor(0.6)
         .lineLimit(family == .systemLarge ? 9 : (family == .systemMedium ? 4 : 7))
+        .frame(maxWidth: .infinity, alignment: .center)
 
       Spacer(minLength: 0)
 
       HStack(spacing: 8) {
+        // The small family has no buttons, so its author line is centered too.
+        if family == .systemSmall { Spacer(minLength: 0) }
+
         Text(entry.quote.author)
           .font(.system(size: family == .systemSmall ? 11 : 12, weight: .semibold))
           .foregroundColor(mutedColor)

@@ -65,14 +65,19 @@ export default function WidgetSettingsScreen() {
               end={{ x: 1, y: 1 }}
               style={[styles.preview, previewSize === 'small' ? styles.previewSmall : styles.previewMedium, !settings.enabled && styles.previewPaused]}
             >
-              <Text
-                numberOfLines={previewSize === 'small' ? 6 : 4}
-                style={[styles.previewQuote, { color: look.text, fontFamily: font.family, fontSize: previewSize === 'small' ? 14 : 17 }]}
-              >
-                “{quote.text}”
-              </Text>
+              <View style={styles.previewBody}>
+                <Text
+                  numberOfLines={previewSize === 'small' ? 6 : 4}
+                  style={[styles.previewQuote, { color: look.text, fontFamily: font.family, fontSize: previewSize === 'small' ? 14 : 17 }]}
+                >
+                  “{quote.text}”
+                </Text>
+              </View>
               <View style={styles.previewFooter}>
-                <Text numberOfLines={1} style={[styles.previewAuthor, { color: look.muted }]}>
+                <Text
+                  numberOfLines={1}
+                  style={[styles.previewAuthor, { color: look.muted }, previewSize === 'small' && { textAlign: 'center' }]}
+                >
                   {quote.author}
                 </Text>
                 {previewSize === 'medium' ? (
@@ -205,7 +210,8 @@ const styles = StyleSheet.create({
   previewSmall: { width: 160, height: 160 },
   previewMedium: { width: '100%', height: 160 },
   previewPaused: { opacity: 0.4 },
-  previewQuote: { lineHeight: 22 },
+  previewBody: { flex: 1, justifyContent: 'center' },
+  previewQuote: { lineHeight: 22, textAlign: 'center' },
   previewFooter: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: spacing.sm },
   previewAuthor: { flex: 1, fontFamily: fonts.bodySemiBold, fontSize: 11 },
   previewButton: { width: 32, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center' },

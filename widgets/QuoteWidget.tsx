@@ -80,24 +80,32 @@ export function QuoteWidget({ quote, size, look, fontFamily }: Props) {
         borderRadius: 24,
         backgroundGradient: { from: look.from, to: look.to, orientation: 'TL_BR' },
         flexDirection: 'column',
-        justifyContent: 'space-between',
       }}
     >
-      <TextWidget
-        text={`“${quote.text}”`}
-        maxLines={QUOTE_MAX_LINES[size]}
-        truncate="END"
-        style={{
-          fontFamily,
-          fontSize: QUOTE_FONT_SIZE[size],
-          color: look.text,
-          // Shrink instead of cutting the text on small launcher grids.
-          adjustsFontSizeToFit: size !== 'large',
-        }}
-      />
+      {/* Takes all the free height and centers the quote inside it. */}
+      <FlexWidget style={{ width: 'match_parent', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <TextWidget
+          text={`“${quote.text}”`}
+          maxLines={QUOTE_MAX_LINES[size]}
+          truncate="END"
+          style={{
+            fontFamily,
+            fontSize: QUOTE_FONT_SIZE[size],
+            color: look.text,
+            textAlign: 'center',
+            // Shrink instead of cutting the text on small launcher grids.
+            adjustsFontSizeToFit: size !== 'large',
+          }}
+        />
+      </FlexWidget>
 
       <FlexWidget
-        style={{ width: 'match_parent', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
+        style={{
+          width: 'match_parent',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: size === 'small' ? 'center' : 'space-between',
+        }}
       >
         <TextWidget
           text={quote.author}
