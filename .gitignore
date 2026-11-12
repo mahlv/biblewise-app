@@ -46,3 +46,6 @@ yarn-error.*
 
 # copyrighted source book used to pick widget content (not shipped, not published)
 assets/widget/pdf/
+
+# per-book Bible sources (130 MB); regenerate assets/bible-data/*.bible with scripts/build-bible-versions.mjs
+assets/bible-versions/bible versions multiple languages/

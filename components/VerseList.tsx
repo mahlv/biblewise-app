@@ -8,6 +8,8 @@ interface Props {
   selectedVerse: number | null;
   /** Verses marked with the highlighter. */
   highlightedVerses?: number[];
+  /** Right-to-left text (Arabic). */
+  rtl?: boolean;
   onToggleVerse: (verse: number) => void;
   onLongPressVerse?: (verse: number) => void;
   /** Reports each verse's y offset (relative to the list) so the screen can scroll to one. */
@@ -15,7 +17,7 @@ interface Props {
 }
 
 /** Verses with a small superscript number. Tapping toggles selection. */
-export function VerseList({ verses, theme, selectedVerse, highlightedVerses = [], onToggleVerse, onLongPressVerse, onVerseLayout }: Props) {
+export function VerseList({ verses, theme, selectedVerse, highlightedVerses = [], rtl = false, onToggleVerse, onLongPressVerse, onVerseLayout }: Props) {
   return (
     <View style={styles.list}>
       {verses.map((verse) => {
@@ -32,7 +34,7 @@ export function VerseList({ verses, theme, selectedVerse, highlightedVerses = []
             accessibilityLabel={`Versículo ${verse.number}. ${verse.text}`}
             style={[styles.row, highlighted && styles.highlighted, selected && { backgroundColor: theme.verseHighlight, borderLeftColor: theme.accent }]}
           >
-            <Text style={[styles.text, { color: theme.text }, selected && styles.selectedText]}>
+            <Text style={[styles.text, { color: theme.text }, rtl && styles.rtl, selected && styles.selectedText]}>
               <Text style={[styles.number, { color: theme.accent }]}>{verse.number}</Text>
               {'  '}
               {verse.text}
@@ -54,6 +56,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
   },
   text: { fontFamily: fonts.verse, fontSize: 18, lineHeight: 30 },
+  rtl: { writingDirection: 'rtl', textAlign: 'right' },
   highlighted: { backgroundColor: 'rgba(247, 240, 82, 0.45)' },
   selectedText: { fontFamily: fonts.titleMedium },
   number: { fontFamily: fonts.bodySemiBold, fontSize: 11 },

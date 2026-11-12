@@ -204,6 +204,41 @@ export interface ParsedBibleReference {
   referencia: string;
 }
 
+/** Texto digitado dividido em livro (ainda sem resolver), capítulo e versículos opcionais. */
+export interface SplitReference {
+  livroBruto: string;
+  capitulo: number;
+  versiculoInicial?: number;
+  versiculoFinal?: number;
+}
+
+/**
+ * Separa "João 3:16-17" em livro / capítulo / versículos, sem decidir qual é o livro.
+ * Independe do idioma, então também serve para os nomes de livros das outras versões.
+ */
+export function splitReference(input: string): SplitReference | null {
+  if (!input) return null;
+
+  // Regex tolerante: livro (com número opcional) + capítulo + versículo/intervalo opcional.
+  const match = input
+    .trim()
+    .match(/^\s*([1-3]?\s*[^\d\s][^\d]*?)\s*(\d{1,3})(?:\s*[:.\s]\s*(\d{1,3})(?:\s*[-–a]\s*(\d{1,3}))?)?\s*$/);
+  if (!match) return null;
+
+  const [, livroBruto, capituloBruto, versiculoBruto, versiculoFinalBruto] = match;
+
+  const capitulo = Number(capituloBruto);
+  if (!Number.isInteger(capitulo) || capitulo < 1) return null;
+
+  const versiculoInicial = versiculoBruto ? Number(versiculoBruto) : undefined;
+  const versiculoFinal = versiculoFinalBruto ? Number(versiculoFinalBruto) : versiculoInicial;
+
+  if (versiculoInicial !== undefined && (!Number.isInteger(versiculoInicial) || versiculoInicial < 1)) return null;
+  if (versiculoInicial !== undefined && versiculoFinal !== undefined && (!Number.isInteger(versiculoFinal) || versiculoFinal < versiculoInicial)) return null;
+
+  return { livroBruto: livroBruto ?? '', capitulo, versiculoInicial, versiculoFinal };
+}
+
 /**
  * Interpreta uma string digitada pelo usuário e devolve a referência estruturada.
  *
@@ -216,29 +251,16 @@ export interface ParsedBibleReference {
  * Retorna `null` quando a entrada não é uma referência válida.
  */
 export function parseBibleReference(input: string): ParsedBibleReference | null {
-  if (!input) return null;
+  const partes = splitReference(input);
+  if (!partes) return null;
 
-  // Regex tolerante: livro (com número opcional) + capítulo + versículo/intervalo opcional.
-  const match = input
-    .trim()
-    .match(/^\s*([1-3]?\s*[^\d\s][^\d]*?)\s*(\d{1,3})(?:\s*[:.\s]\s*(\d{1,3})(?:\s*[-–a]\s*(\d{1,3}))?)?\s*$/);
-
-  if (!match) return null;
-
-  const [, livroBruto, capituloBruto, versiculoBruto, versiculoFinalBruto] = match;
-
-  const livro = findBook(livroBruto ?? '');
+  const livro = findBook(partes.livroBruto);
   if (!livro) return null;
 
-  const capitulo = Number(capituloBruto);
-  if (!Number.isInteger(capitulo) || capitulo < 1) return null;
-
+  const { capitulo } = partes;
   // Sem versículo informado: busca a partir do primeiro versículo do capítulo.
-  const versiculoInicial = versiculoBruto ? Number(versiculoBruto) : 1;
-  const versiculoFinal = versiculoFinalBruto ? Number(versiculoFinalBruto) : versiculoInicial;
-
-  if (!Number.isInteger(versiculoInicial) || versiculoInicial < 1) return null;
-  if (!Number.isInteger(versiculoFinal) || versiculoFinal < versiculoInicial) return null;
+  const versiculoInicial = partes.versiculoInicial ?? 1;
+  const versiculoFinal = partes.versiculoFinal ?? versiculoInicial;
 
   const referencia =
     versiculoFinal > versiculoInicial

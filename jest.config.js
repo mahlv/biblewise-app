@@ -8,8 +8,14 @@
  * Usamos o preset de uma plataforma (`ios`) em vez de `universal` de propósito:
  * o universal roda cada teste 4x (web/node/ios/android) e, para a tela, o
  * comportamento de renderização é idêntico — 4x o tempo sem ganho de cobertura.
+ *
+ * Os arquivos `.bible` (versões da Bíblia carregadas sob demanda) viram o próprio
+ * caminho do arquivo; os testes leem esse caminho com `expo-asset`/`File` simulados.
  */
 module.exports = {
   preset: 'jest-expo/ios',
   testMatch: ['<rootDir>/test/**/*.test.ts', '<rootDir>/test/**/*.test.tsx'],
+  transform: {
+    '\.bible$': '<rootDir>/test/bibleAssetTransformer.js',
+  },
 };

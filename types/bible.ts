@@ -10,6 +10,16 @@ export interface BibleVersionMeta {
   name: string;
   /** BCP-47 language tag, e.g. "pt-BR". */
   language: string;
+  /** Year of the translation, shown in the picker. */
+  year?: number;
+  /** Text direction; defaults to left-to-right. */
+  direction?: 'rtl';
+  /** `ot` = Old Testament only (no New Testament books). */
+  scope?: 'ot';
+  /** `vulgate` = Psalms use the Vulgate/Septuagint numbering (differs from most Bibles). */
+  numbering?: 'vulgate';
+  /** True when the version also contains deuterocanonical books (listed after the Old Testament). */
+  deuterocanon?: boolean;
 }
 
 export interface Verse {
@@ -61,4 +71,6 @@ export interface ReadingPosition {
 
 export interface ParsedReference extends ReadingPosition {
   verse?: number;
+  /** The book is a real book, but the selected version does not contain it. */
+  bookMissing?: boolean;
 }

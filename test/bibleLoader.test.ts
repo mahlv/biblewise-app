@@ -3,7 +3,8 @@ import { BIBLE_THEMES, getTheme } from '../constants/bibleThemes';
 
 describe('bibleLoader', () => {
   it('lists the registered versions without loading them', () => {
-    expect(loadAllVersions().map((version) => version.code)).toEqual(['TB-PT', 'BLIVRE-PT']);
+    // The first two are the inline Portuguese versions; the others are loaded on demand (see bibleVersions.test.ts).
+    expect(loadAllVersions().map((version) => version.code).slice(0, 2)).toEqual(['TB-PT', 'BLIVRE-PT']);
   });
 
   it('normalizes a version into 66 books', () => {

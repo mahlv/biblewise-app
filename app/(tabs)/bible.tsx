@@ -22,7 +22,7 @@ type Sheet = 'version' | 'book' | 'theme' | null;
 
 /** Bible reading tab. */
 export default function BibleScreen() {
-  const { ready, versions, versionCode, theme, position, setVersionCode, setThemeId, setPosition } = useBible();
+  const { ready, versions, versionCode, theme, position, loadingVersionCode, setVersionCode, setThemeId, setPosition } = useBible();
   const toast = useToast();
 
   const [sheet, setSheet] = useState<Sheet>(null);
@@ -76,6 +76,10 @@ export default function BibleScreen() {
     const parsed = parseReference(text, version.code);
     if (!parsed) {
       setSearchError('Não encontrei essa passagem. Tente "João 3:16" ou "Gênesis 1".');
+      return;
+    }
+    if (parsed.bookMissing) {
+      setSearchError('Esta versão não contém esse livro.');
       return;
     }
     setSearchError(null);
@@ -184,6 +188,7 @@ export default function BibleScreen() {
             theme={theme}
             selectedVerse={selectedVerse}
             highlightedVerses={highlightedVerses}
+            rtl={version.direction === 'rtl'}
             onToggleVerse={(verse) => setSelectedVerse((current) => (current === verse ? null : verse))}
             onVerseLayout={(verse, y) => verseOffsets.current.set(verse, y)}
           />
@@ -202,7 +207,12 @@ export default function BibleScreen() {
         visible={sheet === 'version'}
         versions={versions}
         selectedCode={version.code}
-        onSelect={setVersionCode}
+        loadingCode={loadingVersionCode}
+        onSelect={async (code) => {
+          const applied = await setVersionCode(code);
+          if (!applied) toast('Não foi possível carregar esta versão');
+          return applied;
+        }}
         onClose={() => setSheet(null)}
       />
       <BookPickerSheet

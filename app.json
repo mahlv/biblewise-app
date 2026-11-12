@@ -11,7 +11,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.mahlv.biblewise",
       "entitlements": {
-        "com.apple.security.application-groups": ["group.com.mahlv.biblewise"]
+        "com.apple.security.application-groups": [
+          "group.com.mahlv.biblewise"
+        ]
       }
     },
     "android": {
@@ -78,7 +80,8 @@
           "savePhotosPermission": "Permita que o BibleWise salve as artes das frases na sua galeria.",
           "isAccessMediaLocationEnabled": false
         }
-      ]
+      ],
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true
