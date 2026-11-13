@@ -13,11 +13,11 @@ import { languageName } from '../lib/bibleVersions';
 
 // Asset versions are read through expo-asset + File: here the "asset" is the file path itself.
 jest.mock('expo-asset', () => ({
-  Asset: { fromModule: (path: string) => ({ downloadAsync: async () => undefined, localUri: path, uri: path }) },
+  Asset: { fromModule: (path: string) => ({ downloadAsync: () => Promise.resolve(undefined), localUri: path, uri: path }) },
 }));
 jest.mock('expo-file-system', () => {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const fs = require('fs') as { readFileSync(path: string, encoding: string): string };
+  const fs = require('fs');
   return {
     File: jest.fn().mockImplementation((uri: string) => ({
       text: () => Promise.resolve(fs.readFileSync(uri, 'utf8')),

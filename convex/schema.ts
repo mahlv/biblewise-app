@@ -1,6 +1,7 @@
 import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
 import { AGE_RANGES, DENOMINATIONS } from '../lib/onboardingOptions';
+import { PRAYER_CATEGORIES, PRAYER_TYPES } from '../lib/prayerCategories';
 
 /** Accepted age ranges — the same list shown in onboarding. */
 export const ageRangeValidator = v.union(...AGE_RANGES.map((ageRange) => v.literal(ageRange)));
@@ -8,6 +9,10 @@ export const ageRangeValidator = v.union(...AGE_RANGES.map((ageRange) => v.liter
 export const denominationValidator = v.union(
   ...DENOMINATIONS.map((denomination) => v.literal(denomination)),
 );
+
+/** Prayer wall: request or testimony, and its category (same lists the form offers). */
+export const prayerTypeValidator = v.union(...PRAYER_TYPES.map((type) => v.literal(type)));
+export const prayerCategoryValidator = v.union(...PRAYER_CATEGORIES.map((category) => v.literal(category)));
 
 /** Meeting types selectable in the processing sheet. */
 export const MEETING_TYPES = ['celebration', 'bible_school', 'youth_service', 'prayer'] as const;
@@ -334,4 +339,55 @@ export default defineSchema({
     .index('by_user', ['userId'])
     .index('by_anonymous_id', ['anonymousId'])
     .index('by_status', ['status']),
+
+  // ---------------------------------------------------------------------------
+  // Prayer wall: prayer requests and testimonies shared with the community
+  // ---------------------------------------------------------------------------
+  /**
+   * `authorId` is the users document id, NOT the device `anonymousId`: the latter is a secret and
+   * must never appear in anything a public query returns. Anonymous posts store only the
+   * placeholder name and no location/avatar.
+   */
+  prayers: defineTable({
+    authorId: v.id('users'),
+    authorName: v.string(),
+    authorLocation: v.optional(v.string()),
+    /** Profile picture snapshot (non-anonymous posts only). */
+    authorImageId: v.optional(v.id('_storage')),
+    isAnonymous: v.boolean(),
+    type: prayerTypeValidator,
+    category: prayerCategoryValidator,
+    title: v.string(),
+    content: v.string(),
+    scriptureReference: v.optional(v.string()),
+    scriptureText: v.optional(v.string()),
+    amenCount: v.number(),
+    commentCount: v.number(),
+    /** Distinct users who reported the post; it is hidden automatically at the configured limit. */
+    reportCount: v.number(),
+    isHidden: v.boolean(),
+    /** Title + content + category (+ author name when public), for the search box. */
+    searchText: v.string(),
+    createdAt: v.number(),
+  })
+    // Wall feed (newest first), all types or one type; hidden posts are excluded by the index range.
+    .index('by_isHidden_and_createdAt', ['isHidden', 'createdAt'])
+    .index('by_type_and_isHidden_and_createdAt', ['type', 'isHidden', 'createdAt'])
+    // "Meus Pedidos" and the daily posting limit.
+    .index('by_authorId_and_createdAt', ['authorId', 'createdAt'])
+    .searchIndex('search_text', { searchField: 'searchText', filterFields: ['type', 'isHidden'] }),
+
+  /** One row per (prayer, user): makes "Amém" idempotent and un-inflatable. */
+  prayerAmens: defineTable({
+    prayerId: v.id('prayers'),
+    userId: v.id('users'),
+    createdAt: v.number(),
+  }).index('by_prayerId_and_userId', ['prayerId', 'userId']),
+
+  /** One row per (prayer, reporter), so the same person can't hide a post alone. */
+  prayerReports: defineTable({
+    prayerId: v.id('prayers'),
+    userId: v.id('users'),
+    createdAt: v.number(),
+  }).index('by_prayerId_and_userId', ['prayerId', 'userId']),
 });
