@@ -1,4 +1,4 @@
-import { extractJsonObject, formatClock, formatDuration, nextMilestone, parseSummary, progressLabel, statusLabel } from '../lib/recordingSummary';
+import { buildTeaser, extractJsonObject, formatClock, formatDuration, nextMilestone, parseSummary, progressLabel, statusLabel } from '../lib/recordingSummary';
 
 const VALID = {
   title: 'A fé que move montanhas',
@@ -56,5 +56,26 @@ describe('formatting helpers', () => {
     expect(nextMilestone('transcribing')).toBe(60);
     expect(nextMilestone('summarizing')).toBe(90);
     expect(nextMilestone('completed')).toBe(100);
+  });
+});
+
+describe('buildTeaser', () => {
+  it('shows the first items and counts the rest', () => {
+    expect(buildTeaser(['Salmos 100', '1 Tessalonicenses 5:18', 'João 3:16'])).toBe('Salmos 100, 1 Tessalonicenses 5:18 +1');
+    expect(buildTeaser(['Salmos 100', 'João 3:16'])).toBe('Salmos 100, João 3:16');
+  });
+
+  it('can show a single item with the count of the others', () => {
+    expect(buildTeaser(['Gratidão muda o olhar', 'Louvor diário', 'Registrar'], { maxItems: 1 })).toBe('Gratidão muda o olhar +2');
+  });
+
+  it('ellipsizes a long first item and skips items that would not fit', () => {
+    expect(buildTeaser(['a'.repeat(60)], { maxChars: 20 })).toBe(`${'a'.repeat(19)}…`);
+    expect(buildTeaser(['Gratidão em tempos difíceis', 'Outro título bem longo'], { maxChars: 30 })).toBe('Gratidão em tempos difíceis +1');
+  });
+
+  it('ignores blank items and returns an empty string for nothing', () => {
+    expect(buildTeaser(['  ', 'Salmos 100', ''])).toBe('Salmos 100');
+    expect(buildTeaser([])).toBe('');
   });
 });

@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { api } from '../../convex/_generated/api';
 import type { Id } from '../../convex/_generated/dataModel';
+import { CollapsibleSection } from '../../components/CollapsibleSection';
 import { ProgressBar } from '../../components/ProgressBar';
 import { QuoteCard } from '../../components/QuoteCard';
 import { QuoteShareSheet } from '../../components/QuoteShareSheet';
@@ -16,7 +17,7 @@ import { readQuoteStyle, saveQuoteStyle } from '../../lib/quoteStylePreferences'
 import { useOnboarding } from '../../hooks/useOnboarding';
 import { useToast } from '../../hooks/useToast';
 import { buildRecordingShareText } from '../../lib/recordingShareText';
-import { MEETING_TYPE_OPTIONS, formatClock, statusLabel } from '../../lib/recordingSummary';
+import { MEETING_TYPE_OPTIONS, buildTeaser, formatClock, statusLabel } from '../../lib/recordingSummary';
 import { shareRecordingAudio } from '../../lib/shareRecording';
 import { colors, fonts, radius, shadow, spacing } from '../../theme/tokens';
 
@@ -192,24 +193,52 @@ export default function RecordingDetailScreen() {
 
         {summary ? (
           <>
-            <Section title="Pontos centrais">
-              {summary.centralPoints.map((point, index) => (
-                <View key={index} style={styles.card}>
-                  <Text style={styles.cardTitle}>{`${index + 1}. ${point.title}`}</Text>
-                  <Text style={styles.body}>{point.description}</Text>
-                </View>
-              ))}
-            </Section>
-
-            {summary.scripturesCited.length > 0 ? (
-              <Section title="Escrituras citadas">
-                {summary.scripturesCited.map((scripture, index) => (
-                  <View key={index} style={styles.card}>
-                    <Text style={styles.reference}>{scripture.reference}</Text>
-                    {scripture.text ? <Text style={styles.verse}>{scripture.text}</Text> : null}
+            {summary.practicalTopics.length > 0 ? (
+              <Section title="Tópicos práticos">
+                {summary.practicalTopics.map((topic, index) => (
+                  <View key={index} style={styles.topic}>
+                    <MaterialCommunityIcons name="check-circle-outline" size={18} color={colors.tertiary} />
+                    <Text style={[styles.body, styles.topicText]}>{topic}</Text>
                   </View>
                 ))}
               </Section>
+            ) : null}
+
+            {summary.centralPoints.length > 0 ? (
+              <View style={styles.section}>
+                <CollapsibleSection
+                  title="Pontos centrais"
+                  count={summary.centralPoints.length}
+                  teaser={buildTeaser(
+                    summary.centralPoints.map((point) => point.title),
+                    { maxItems: 1 },
+                  )}
+                >
+                  {summary.centralPoints.map((point, index) => (
+                    <View key={index} style={styles.itemCard}>
+                      <Text style={styles.cardTitle}>{`${index + 1}. ${point.title}`}</Text>
+                      <Text style={styles.body}>{point.description}</Text>
+                    </View>
+                  ))}
+                </CollapsibleSection>
+              </View>
+            ) : null}
+
+            {summary.scripturesCited.length > 0 ? (
+              <View style={styles.section}>
+                <CollapsibleSection
+                  title="Escrituras citadas"
+                  count={summary.scripturesCited.length}
+                  teaser={buildTeaser(summary.scripturesCited.map((scripture) => scripture.reference))}
+                >
+                  {summary.scripturesCited.map((scripture, index) => (
+                    <View key={index} style={styles.itemCard}>
+                      <Text style={styles.reference}>{scripture.reference}</Text>
+                      {scripture.text ? <Text style={styles.verse}>{scripture.text}</Text> : null}
+                    </View>
+                  ))}
+                </CollapsibleSection>
+              </View>
             ) : null}
 
             <View style={styles.section}>
@@ -229,17 +258,6 @@ export default function RecordingDetailScreen() {
                 </LinearGradient>
               </Pressable>
             </View>
-
-            {summary.practicalTopics.length > 0 ? (
-              <Section title="Tópicos práticos">
-                {summary.practicalTopics.map((topic, index) => (
-                  <View key={index} style={styles.topic}>
-                    <MaterialCommunityIcons name="check-circle-outline" size={18} color={colors.tertiary} />
-                    <Text style={[styles.body, styles.topicText]}>{topic}</Text>
-                  </View>
-                ))}
-              </Section>
-            ) : null}
           </>
         ) : null}
       </ScrollView>
@@ -289,7 +307,7 @@ const styles = StyleSheet.create({
   error: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.primary },
   section: { gap: spacing.sm, marginTop: spacing.md },
   sectionTitle: { fontFamily: fonts.titleSemiBold, fontSize: 22, color: colors.onSurface },
-  card: { backgroundColor: colors.surfaceContainerLowest, borderRadius: radius.lg, padding: spacing.lg, gap: 4, ...shadow },
+  itemCard: { backgroundColor: colors.background, borderRadius: radius.md, padding: spacing.md, gap: 4 },
   cardTitle: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.onSurface },
   body: { fontFamily: fonts.body, fontSize: 14, lineHeight: 21, color: colors.onSurfaceVariant },
   reference: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.primary },

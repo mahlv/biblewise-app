@@ -150,3 +150,31 @@ export function nextMilestone(status: RecordingStatus): number {
       return 100;
   }
 }
+
+interface TeaserOptions {
+  /** Longest teaser, in characters (the first item is shortened to fit). */
+  maxChars?: number;
+  /** Most items shown before the "+N". */
+  maxItems?: number;
+}
+
+/**
+ * One-line preview of a collapsed list: "Salmos 100, 1 Tessalonicenses 5:18 +2".
+ * Blank items are ignored; the first item is always shown (ellipsized if it is too long).
+ */
+export function buildTeaser(items: string[], { maxChars = 48, maxItems = 2 }: TeaserOptions = {}): string {
+  const clean = items.map((item) => item.replace(/\s+/g, ' ').trim()).filter(Boolean);
+  const first = clean[0];
+  if (!first) return '';
+
+  let teaser = first.length > maxChars ? `${first.slice(0, maxChars - 1).trimEnd()}…` : first;
+  let shown = 1;
+  while (shown < Math.min(maxItems, clean.length)) {
+    const next = `${teaser}, ${clean[shown]}`;
+    if (next.length > maxChars) break;
+    teaser = next;
+    shown += 1;
+  }
+  const hidden = clean.length - shown;
+  return hidden > 0 ? `${teaser} +${hidden}` : teaser;
+}
