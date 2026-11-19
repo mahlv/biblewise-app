@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, useWindowDimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Share, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { useMutation, useQuery } from 'convex/react';
@@ -14,13 +14,17 @@ import { useEffect, useState } from 'react';
 import { DEFAULT_QUOTE_STYLE, formatQuoteDate, type QuoteStyle } from '../../lib/quoteStyle';
 import { readQuoteStyle, saveQuoteStyle } from '../../lib/quoteStylePreferences';
 import { useOnboarding } from '../../hooks/useOnboarding';
+import { useToast } from '../../hooks/useToast';
+import { buildRecordingShareText } from '../../lib/recordingShareText';
 import { MEETING_TYPE_OPTIONS, formatClock, statusLabel } from '../../lib/recordingSummary';
+import { shareRecordingAudio } from '../../lib/shareRecording';
 import { colors, fonts, radius, shadow, spacing } from '../../theme/tokens';
 
 /** Read-only detail of a recording: summary, scriptures, quote and audio player. */
 export default function RecordingDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { anonymousId } = useOnboarding();
+  const toast = useToast();
   const recordingId = id as Id<'recordings'>;
   const recording = useQuery(api.recordings.getRecording, anonymousId ? { anonymousId, recordingId } : 'skip');
   const deleteRecording = useMutation(api.recordings.deleteRecording);
@@ -31,6 +35,7 @@ export default function RecordingDetailScreen() {
   const { width: screenWidth } = useWindowDimensions();
   const [quoteStyle, setQuoteStyle] = useState<QuoteStyle>(DEFAULT_QUOTE_STYLE);
   const [quoteSheetOpen, setQuoteSheetOpen] = useState(false);
+  const [preparingAudio, setPreparingAudio] = useState(false);
 
   useEffect(() => {
     readQuoteStyle().then(setQuoteStyle);
@@ -60,6 +65,23 @@ export default function RecordingDetailScreen() {
   };
 
   const togglePlay = () => (playerStatus.playing ? player.pause() : player.play());
+
+  /** Sends the audio file through the share sheet (WhatsApp and others). */
+  const shareAudio = async () => {
+    if (!recording?.audioUrl || preparingAudio) return;
+    player.pause();
+    setPreparingAudio(true);
+    const result = await shareRecordingAudio(recording.audioUrl, recording.summary?.title ?? recording.title);
+    setPreparingAudio(false);
+    if (result === 'unavailable') toast('Atualize o app (nova build) para compartilhar');
+    else if (result === 'failed') toast('Não foi possível preparar o áudio. Verifique a conexão.');
+  };
+
+  const shareSummary = () => {
+    if (!recording?.summary) return;
+    const message = buildRecordingShareText({ summary: recording.summary, preacher: recording.preacher, church: recording.church });
+    Share.share({ message }).catch(() => undefined);
+  };
 
   const header = (
     <View style={styles.topBar}>
@@ -125,6 +147,39 @@ export default function RecordingDetailScreen() {
                 <Text style={styles.time}>{formatClock(duration)}</Text>
               </View>
             </View>
+          </View>
+        ) : null}
+
+        {recording.audioUrl || summary ? (
+          <View style={styles.shareRow}>
+            {recording.audioUrl ? (
+              <Pressable
+                onPress={shareAudio}
+                disabled={preparingAudio}
+                accessibilityRole="button"
+                accessibilityLabel="Compartilhar áudio"
+                accessibilityState={{ busy: preparingAudio }}
+                style={({ pressed }) => [styles.shareButton, pressed && { opacity: 0.85 }]}
+              >
+                {preparingAudio ? (
+                  <ActivityIndicator size="small" color={colors.primary} />
+                ) : (
+                  <MaterialCommunityIcons name="share-variant" size={18} color={colors.primary} />
+                )}
+                <Text style={styles.shareButtonText}>{preparingAudio ? 'Preparando áudio…' : 'Compartilhar áudio'}</Text>
+              </Pressable>
+            ) : null}
+            {summary ? (
+              <Pressable
+                onPress={shareSummary}
+                accessibilityRole="button"
+                accessibilityLabel="Compartilhar resumo"
+                style={({ pressed }) => [styles.shareButton, pressed && { opacity: 0.85 }]}
+              >
+                <MaterialCommunityIcons name="text-box-outline" size={18} color={colors.primary} />
+                <Text style={styles.shareButtonText}>Compartilhar resumo</Text>
+              </Pressable>
+            ) : null}
           </View>
         ) : null}
 
@@ -228,6 +283,9 @@ const styles = StyleSheet.create({
   playerBar: { flex: 1, gap: 6 },
   playerTimes: { flexDirection: 'row', justifyContent: 'space-between' },
   time: { fontFamily: fonts.body, fontSize: 11, color: colors.onSurfaceVariant },
+  shareRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
+  shareButton: { flexGrow: 1, flexBasis: 150, height: 46, borderRadius: radius.pill, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm, backgroundColor: colors.surfaceContainer },
+  shareButtonText: { fontFamily: fonts.bodySemiBold, fontSize: 13, color: colors.primary },
   error: { fontFamily: fonts.bodyMedium, fontSize: 13, color: colors.primary },
   section: { gap: spacing.sm, marginTop: spacing.md },
   sectionTitle: { fontFamily: fonts.titleSemiBold, fontSize: 22, color: colors.onSurface },
