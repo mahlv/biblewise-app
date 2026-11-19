@@ -8,7 +8,8 @@ interface Props {
   name: string | null;
   /** Profile picture URL; initials are shown when missing. */
   imageUrl?: string | null;
-  hasUnreadNotifications: boolean;
+  /** Unread notifications; the bell shows a badge when above zero. */
+  unreadCount: number;
   onPressBell: () => void;
   onPressAvatar: () => void;
   onLongPressAvatar?: () => void;
@@ -25,7 +26,7 @@ function initialsOf(name: string): string {
 }
 
 /** Date, greeting, notification bell and avatar. */
-export function HomeHeader({ name, imageUrl, hasUnreadNotifications, onPressBell, onPressAvatar, onLongPressAvatar }: Props) {
+export function HomeHeader({ name, imageUrl, unreadCount, onPressBell, onPressAvatar, onLongPressAvatar }: Props) {
   const firstName = name?.trim().split(/\s+/)[0];
   const initials = name?.trim() ? initialsOf(name) : '';
 
@@ -40,7 +41,11 @@ export function HomeHeader({ name, imageUrl, hasUnreadNotifications, onPressBell
 
       <Pressable onPress={onPressBell} accessibilityRole="button" accessibilityLabel="Notificações" style={styles.bell}>
         <MaterialCommunityIcons name="bell-outline" size={22} color={colors.onSurface} />
-        {hasUnreadNotifications ? <View style={styles.dot} /> : null}
+        {unreadCount > 0 ? (
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>{unreadCount > 99 ? '99+' : unreadCount}</Text>
+          </View>
+        ) : null}
       </Pressable>
 
       <Pressable
@@ -84,17 +89,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.surfaceContainer,
   },
-  dot: {
+  badge: {
     position: 'absolute',
-    top: 9,
-    right: 10,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    top: 2,
+    right: 0,
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    paddingHorizontal: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#E5252A',
     borderWidth: 1.5,
-    borderColor: colors.surfaceContainer,
+    borderColor: colors.background,
   },
+  badgeText: { fontFamily: fonts.bodyBold, fontSize: 10, lineHeight: 12, color: colors.onPrimary },
   avatar: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
   initials: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.onPrimary },
 });

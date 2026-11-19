@@ -9,8 +9,11 @@
  */
 
 import type * as bible from "../bible.js";
+import type * as comments from "../comments.js";
 import type * as data_seedData from "../data/seedData.js";
+import type * as lib_notify from "../lib/notify.js";
 import type * as lib_requireUser from "../lib/requireUser.js";
+import type * as notifications from "../notifications.js";
 import type * as prayers from "../prayers.js";
 import type * as recordings from "../recordings.js";
 import type * as seed from "../seed.js";
@@ -25,8 +28,11 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   bible: typeof bible;
+  comments: typeof comments;
   "data/seedData": typeof data_seedData;
+  "lib/notify": typeof lib_notify;
   "lib/requireUser": typeof lib_requireUser;
+  notifications: typeof notifications;
   prayers: typeof prayers;
   recordings: typeof recordings;
   seed: typeof seed;

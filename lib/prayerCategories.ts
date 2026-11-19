@@ -50,6 +50,13 @@ export const PRAYER_LIMITS = {
   reportsToHide: 3,
   /** Counts in the stats cards stop here (shown as "200+"). */
   statsCap: 200,
+  /** Comments: max length, and how many a user can write in 24 hours. */
+  comment: 500,
+  dailyComments: 30,
+  /** Characters of a comment kept in the notification preview. */
+  notificationPreview: 100,
+  /** Unread notifications are counted up to here (shown as "99+"). */
+  unreadCap: 100,
 } as const;
 
 /** Name shown for anonymous posts. */

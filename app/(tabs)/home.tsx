@@ -17,9 +17,6 @@ import { useWidgetSettings } from '../../hooks/useWidgetSettings';
 import { getDailyVerse } from '../../lib/dailyVerse';
 import { colors, fonts, spacing } from '../../theme/tokens';
 
-// TODO(notifications): replace with real unread state once a notification system exists.
-const HAS_UNREAD_NOTIFICATIONS = true;
-
 /** Home dashboard: daily verse, quick access, latest recording and widget banner. */
 export default function HomeScreen() {
   const { anonymousId, reset } = useOnboarding();
@@ -28,6 +25,8 @@ export default function HomeScreen() {
 
   const user = useQuery(api.users.getUserByAnonymousId, anonymousId ? { anonymousId } : 'skip');
   const latestRecording = useQuery(api.recordings.getLatestRecording, anonymousId ? { anonymousId } : 'skip');
+  // Live: the badge updates as soon as someone likes or comments on one of the user's posts.
+  const unreadNotifications = useQuery(api.notifications.getUnreadCount, anonymousId ? { anonymousId } : 'skip') ?? 0;
 
   const { settings: widgetSettings, placed: widgetPlaced } = useWidgetSettings();
   const widgetStatus: WidgetStatus = !widgetSettings.enabled ? 'paused' : widgetPlaced === false ? 'not_added' : 'active';
@@ -41,8 +40,8 @@ export default function HomeScreen() {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <HomeHeader
           name={user?.name ?? null}
-          hasUnreadNotifications={HAS_UNREAD_NOTIFICATIONS}
-          onPressBell={() => toast('Em breve')}
+          unreadCount={unreadNotifications}
+          onPressBell={() => router.push('/notifications')}
           imageUrl={user?.profileImageUrl ?? null}
           onPressAvatar={() => router.push('/profile/edit')}
           // Dev-only shortcut to redo onboarding (replaces the old temporary button).

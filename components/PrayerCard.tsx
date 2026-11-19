@@ -13,6 +13,8 @@ interface Props {
   onToggleAmen: (prayerId: PrayerView['_id']) => void;
   onReport: (prayerId: PrayerView['_id']) => void;
   onDelete: (prayerId: PrayerView['_id']) => void;
+  /** Opens the post detail with its comments (omit it on the detail screen itself). */
+  onOpen?: (prayerId: PrayerView['_id']) => void;
 }
 
 const BADGES = {
@@ -56,7 +58,7 @@ function Avatar({ author }: { author: PrayerView['author'] }) {
 }
 
 /** One prayer request or testimony on the wall. */
-export function PrayerCard({ prayer, onToggleAmen, onReport, onDelete }: Props) {
+export function PrayerCard({ prayer, onToggleAmen, onReport, onDelete, onOpen }: Props) {
   const badge = BADGES[prayer.type];
   const category = PRAYER_CATEGORY_COLORS[prayer.category];
   const scripture = SCRIPTURE_BOX[prayer.type];
@@ -119,8 +121,16 @@ export function PrayerCard({ prayer, onToggleAmen, onReport, onDelete }: Props) 
         <Text style={[styles.categoryText, { color: category.text }]}>{prayer.category}</Text>
       </View>
 
-      <Text style={styles.title}>{prayer.title}</Text>
-      <Text style={styles.body}>{prayer.content}</Text>
+      <Pressable
+        onPress={onOpen ? () => onOpen(prayer._id) : undefined}
+        disabled={!onOpen}
+        accessibilityRole={onOpen ? 'button' : undefined}
+        accessibilityLabel={onOpen ? `Abrir ${prayer.title}` : undefined}
+        style={styles.textBlock}
+      >
+        <Text style={styles.title}>{prayer.title}</Text>
+        <Text style={styles.body}>{prayer.content}</Text>
+      </Pressable>
 
       {hasScripture ? (
         <View style={[styles.scripture, { backgroundColor: scripture.background }]}>
@@ -138,22 +148,28 @@ export function PrayerCard({ prayer, onToggleAmen, onReport, onDelete }: Props) 
         <Pressable
           onPress={() => onToggleAmen(prayer._id)}
           accessibilityRole="button"
-          accessibilityLabel={prayer.amenedByMe ? 'Remover Amém' : 'Dizer Amém'}
+          accessibilityLabel={prayer.amenedByMe ? 'Remover curtida' : 'Curtir'}
           accessibilityState={{ selected: prayer.amenedByMe }}
           style={({ pressed }) => [styles.amen, prayer.amenedByMe && styles.amenActive, pressed && { opacity: 0.85 }]}
         >
           <MaterialCommunityIcons name={prayer.amenedByMe ? 'heart' : 'heart-outline'} size={16} color={prayer.amenedByMe ? colors.onPrimary : colors.primary} />
-          <Text style={[styles.amenLabel, prayer.amenedByMe && styles.amenLabelActive]}>Amém</Text>
           <View style={[styles.amenCount, prayer.amenedByMe && styles.amenCountActive]}>
             <Text style={[styles.amenCountText, prayer.amenedByMe && styles.amenLabelActive]}>{prayer.amenCount}</Text>
           </View>
         </Pressable>
 
         <View style={styles.actions}>
-          <View style={styles.action} accessibilityLabel={`${prayer.commentCount} comentários`}>
+          <Pressable
+            onPress={onOpen ? () => onOpen(prayer._id) : undefined}
+            disabled={!onOpen}
+            accessibilityRole="button"
+            accessibilityLabel={`Comentários: ${prayer.commentCount}`}
+            hitSlop={8}
+            style={styles.action}
+          >
             <MaterialCommunityIcons name="comment-outline" size={20} color={colors.onSurfaceVariant} />
             <Text style={styles.actionCount}>{prayer.commentCount}</Text>
-          </View>
+          </Pressable>
           <Pressable onPress={share} accessibilityRole="button" accessibilityLabel="Compartilhar" hitSlop={8}>
             <MaterialCommunityIcons name="share-variant-outline" size={20} color={colors.onSurfaceVariant} />
           </Pressable>
@@ -179,6 +195,7 @@ const styles = StyleSheet.create({
   typeBadgeText: { fontFamily: fonts.bodySemiBold, fontSize: 12 },
   categoryTag: { alignSelf: 'flex-start', borderRadius: radius.sm, paddingHorizontal: spacing.sm, paddingVertical: 4 },
   categoryText: { fontFamily: fonts.bodyBold, fontSize: 10, letterSpacing: 0.6 },
+  textBlock: { gap: spacing.md },
   title: { fontFamily: fonts.titleSemiBold, fontSize: 24, lineHeight: 30, color: colors.onSurface },
   body: { fontFamily: fonts.body, fontSize: 15, lineHeight: 23, color: colors.onSurfaceVariant },
   scripture: { flexDirection: 'row', gap: spacing.sm, borderRadius: radius.md, padding: spacing.lg },
@@ -187,7 +204,7 @@ const styles = StyleSheet.create({
   scriptureQuote: { fontFamily: fonts.verseItalic, fontSize: 16, lineHeight: 22 },
   scriptureReference: { fontFamily: fonts.bodyBold, fontSize: 11, letterSpacing: 0.4 },
   footer: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: spacing.xs },
-  amen: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: colors.selectedIconContainer, borderRadius: radius.pill, paddingLeft: spacing.md, paddingRight: spacing.sm, paddingVertical: 8 },
+  amen: { flexDirection: 'row', alignItems: 'center', gap: 8, backgroundColor: colors.selectedIconContainer, borderRadius: radius.pill, paddingLeft: spacing.md, paddingRight: spacing.sm, paddingVertical: 8 },
   amenActive: { backgroundColor: colors.primary },
   amenLabel: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.primary },
   amenLabelActive: { color: colors.onPrimary },

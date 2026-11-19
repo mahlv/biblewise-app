@@ -112,6 +112,8 @@ function RootNavigator() {
         <Stack.Screen name="profile/edit" />
         <Stack.Screen name="widget/settings" />
         <Stack.Screen name="prayer/create" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="prayer/[id]" />
+        <Stack.Screen name="notifications" />
       </Stack.Protected>
     </Stack>
   );

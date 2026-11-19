@@ -5,6 +5,7 @@ import type { Doc, Id } from './_generated/dataModel';
 import { internalMutation, mutation, query } from './_generated/server';
 import type { MutationCtx, QueryCtx } from './_generated/server';
 import { prayerCategoryValidator, prayerTypeValidator } from './schema';
+import { createNotification } from './lib/notify';
 import { findUser, requireUser } from './lib/requireUser';
 import { ANONYMOUS_AUTHOR_NAME, PRAYER_LIMITS } from '../lib/prayerCategories';
 
@@ -19,6 +20,7 @@ import { ANONYMOUS_AUTHOR_NAME, PRAYER_LIMITS } from '../lib/prayerCategories';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const CHILD_BATCH = 200;
+const COMMENT_BATCH = 50;
 
 const prayerViewValidator = v.object({
   _id: v.id('prayers'),
@@ -200,7 +202,19 @@ export const listPrayers = query({
   },
 });
 
-/** Adds or removes the viewer's "Amém". Idempotent per user thanks to the (prayer, user) row. */
+/** One post for the detail screen (null when it doesn't exist or is hidden for this viewer). */
+export const getPrayer = query({
+  args: { anonymousId: v.optional(v.string()), prayerId: v.id('prayers') },
+  returns: v.union(prayerViewValidator, v.null()),
+  handler: async (ctx, args) => {
+    const viewer = args.anonymousId ? await findUser(ctx, args.anonymousId) : null;
+    const prayer = await ctx.db.get('prayers', args.prayerId);
+    if (!prayer || (prayer.isHidden && prayer.authorId !== viewer?._id)) return null;
+    return await toView(ctx, prayer, viewer);
+  },
+});
+
+/** Adds or removes the viewer's like ("Amém" in the data model). Idempotent per user thanks to the (prayer, user) row. */
 export const toggleAmen = mutation({
   args: { anonymousId: v.string(), prayerId: v.id('prayers') },
   returns: v.object({ amened: v.boolean(), amenCount: v.number() }),
@@ -222,6 +236,16 @@ export const toggleAmen = mutation({
     const amenCount = prayer.amenCount + 1;
     await ctx.db.insert('prayerAmens', { prayerId: prayer._id, userId: user._id, createdAt: Date.now() });
     await ctx.db.patch('prayers', prayer._id, { amenCount });
+
+    // Tell the author (never for their own like, and only once per person and post).
+    await createNotification(ctx, {
+      recipientId: prayer.authorId,
+      actorId: user._id,
+      type: 'like',
+      prayer,
+      actorName: user.name?.trim() || 'Alguém',
+      dedupeKey: `like:${prayer._id}:${user._id}`,
+    });
     return { amened: true, amenCount };
   },
 });
@@ -307,10 +331,33 @@ export const purgePrayerChildren = internalMutation({
       .withIndex('by_prayerId_and_userId', (q) => q.eq('prayerId', args.prayerId))
       .take(CHILD_BATCH);
 
+    const comments = await ctx.db
+      .query('prayerComments')
+      .withIndex('by_prayerId', (q) => q.eq('prayerId', args.prayerId))
+      .take(COMMENT_BATCH);
+    const notifications = await ctx.db
+      .query('notifications')
+      .withIndex('by_prayerId', (q) => q.eq('prayerId', args.prayerId))
+      .take(CHILD_BATCH);
+
     for (const amen of amens) await ctx.db.delete('prayerAmens', amen._id);
     for (const report of reports) await ctx.db.delete('prayerReports', report._id);
+    for (const notification of notifications) await ctx.db.delete('notifications', notification._id);
+    for (const comment of comments) {
+      const commentReports = await ctx.db
+        .query('prayerCommentReports')
+        .withIndex('by_commentId_and_userId', (q) => q.eq('commentId', comment._id))
+        .take(CHILD_BATCH);
+      for (const report of commentReports) await ctx.db.delete('prayerCommentReports', report._id);
+      await ctx.db.delete('prayerComments', comment._id);
+    }
 
-    if (amens.length === CHILD_BATCH || reports.length === CHILD_BATCH) {
+    if (
+      amens.length === CHILD_BATCH ||
+      reports.length === CHILD_BATCH ||
+      notifications.length === CHILD_BATCH ||
+      comments.length === COMMENT_BATCH
+    ) {
       await ctx.scheduler.runAfter(0, internal.prayers.purgePrayerChildren, { prayerId: args.prayerId });
     }
     return null;

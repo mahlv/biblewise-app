@@ -160,7 +160,15 @@ export function PrayerWallFeed({ anonymousId, header, myPostsCount }: Props) {
       contentContainerStyle={styles.list}
       keyboardShouldPersistTaps="handled"
       ListHeaderComponent={listHeader}
-      renderItem={({ item }) => <PrayerCard prayer={item} onToggleAmen={handleToggleAmen} onReport={handleReport} onDelete={handleDelete} />}
+      renderItem={({ item }) => (
+        <PrayerCard
+          prayer={item}
+          onToggleAmen={handleToggleAmen}
+          onReport={handleReport}
+          onDelete={handleDelete}
+          onOpen={(id) => router.push({ pathname: '/prayer/[id]', params: { id } })}
+        />
+      )}
       ItemSeparatorComponent={() => <View style={{ height: spacing.lg }} />}
       onEndReachedThreshold={0.6}
       onEndReached={() => {

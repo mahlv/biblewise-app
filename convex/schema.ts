@@ -390,4 +390,50 @@ export default defineSchema({
     userId: v.id('users'),
     createdAt: v.number(),
   }).index('by_prayerId_and_userId', ['prayerId', 'userId']),
+
+  /** Flat comments on a post. Like posts, they never expose the author's users id to clients. */
+  prayerComments: defineTable({
+    prayerId: v.id('prayers'),
+    authorId: v.id('users'),
+    /** Snapshot: the profile name, or the anonymous placeholder. */
+    authorName: v.string(),
+    authorImageId: v.optional(v.id('_storage')),
+    isAnonymous: v.boolean(),
+    content: v.string(),
+    reportCount: v.number(),
+    isHidden: v.boolean(),
+    createdAt: v.number(),
+  })
+    .index('by_prayerId_and_isHidden_and_createdAt', ['prayerId', 'isHidden', 'createdAt'])
+    .index('by_prayerId', ['prayerId'])
+    // Daily comment limit.
+    .index('by_authorId_and_createdAt', ['authorId', 'createdAt']),
+
+  prayerCommentReports: defineTable({
+    commentId: v.id('prayerComments'),
+    userId: v.id('users'),
+    createdAt: v.number(),
+  }).index('by_commentId_and_userId', ['commentId', 'userId']),
+
+  /** In-app notifications shown behind the bell (someone liked or commented on your post). */
+  notifications: defineTable({
+    recipientId: v.id('users'),
+    type: v.union(v.literal('like'), v.literal('comment')),
+    prayerId: v.id('prayers'),
+    /** Snapshots, so the list renders without reading the post. */
+    prayerType: prayerTypeValidator,
+    prayerTitle: v.string(),
+    commentId: v.optional(v.id('prayerComments')),
+    /** Display name of whoever acted (anonymity-aware snapshot). The actor's id is never stored here. */
+    actorName: v.string(),
+    previewText: v.optional(v.string()),
+    isRead: v.boolean(),
+    /** Prevents duplicates, e.g. like -> unlike -> like on the same post. */
+    dedupeKey: v.optional(v.string()),
+    createdAt: v.number(),
+  })
+    .index('by_recipientId_and_createdAt', ['recipientId', 'createdAt'])
+    .index('by_recipientId_and_isRead', ['recipientId', 'isRead'])
+    .index('by_dedupeKey', ['dedupeKey'])
+    .index('by_prayerId', ['prayerId']),
 });
