@@ -1,3 +1,4 @@
+import i18n from './i18n';
 import { Alert, Linking } from 'react-native';
 import { File } from 'expo-file-system';
 
@@ -29,9 +30,9 @@ export async function pickAndUploadProfileImage(
 
   const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
   if (!permission.granted) {
-    Alert.alert('Permissão necessária', 'Permita o acesso às fotos nas configurações para escolher a foto do perfil.', [
-      { text: 'Agora não', style: 'cancel' },
-      { text: 'Abrir configurações', onPress: () => void Linking.openSettings() },
+    Alert.alert(i18n.t('profile.permissionTitle'), i18n.t('profile.permissionBody'), [
+      { text: i18n.t('common.notNow'), style: 'cancel' },
+      { text: i18n.t('common.openSettings'), onPress: () => void Linking.openSettings() },
     ]);
     return null;
   }

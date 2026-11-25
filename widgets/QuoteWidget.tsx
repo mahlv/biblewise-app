@@ -2,6 +2,7 @@
 // The widget tree is built from plain function calls (no hooks); the React Compiler would break that.
 
 import { FlexWidget, SvgWidget, TextWidget, type ColorProp } from 'react-native-android-widget';
+import i18n from '../lib/i18n';
 import { WIDGET_BIBLE_URL, type WidgetQuote } from '../lib/widgetQuotes';
 import type { WidgetLook } from '../lib/widgetStyle';
 
@@ -121,7 +122,7 @@ export function QuoteWidget({ quote, size, look, fontFamily }: Props) {
                 svg={refreshIcon(look.secondaryIcon)}
                 background={look.secondaryButton}
                 clickAction={REFRESH_ACTION}
-                label="Próxima frase"
+                label={i18n.t('widget.android.nextQuote')}
               />
             ) : null}
             <RoundButton
@@ -129,7 +130,7 @@ export function QuoteWidget({ quote, size, look, fontFamily }: Props) {
               background={look.button}
               clickAction="OPEN_URI"
               clickActionData={{ uri: WIDGET_BIBLE_URL }}
-              label="Abrir a Bíblia"
+              label={i18n.t('widget.android.openBible')}
             />
           </FlexWidget>
         )}

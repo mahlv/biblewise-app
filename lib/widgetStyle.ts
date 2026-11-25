@@ -1,3 +1,4 @@
+import type { ParseKeys } from 'i18next';
 import { fonts } from '../theme/tokens';
 
 /** Customizable look of the home-screen widget. Pure data: shared by the app, Android and iOS sync. */
@@ -20,17 +21,18 @@ export interface WidgetLook {
 
 export interface WidgetBackground {
   id: string;
-  label: string;
+  /** Translation key of the name shown in the picker. */
+  labelKey: ParseKeys;
   light: WidgetLook;
   /** Only `auto` follows the system theme; presets look the same in both. */
   dark?: WidgetLook;
 }
 
-const preset = (id: string, label: string, from: Hex, to: Hex, text: Hex, muted: Hex): WidgetBackground => {
+const preset = (id: string, labelKey: ParseKeys, from: Hex, to: Hex, text: Hex, muted: Hex): WidgetBackground => {
   const darkText = text !== '#FFFFFF';
   return {
     id,
-    label,
+    labelKey,
     light: {
       from,
       to,
@@ -47,7 +49,7 @@ const preset = (id: string, label: string, from: Hex, to: Hex, text: Hex, muted:
 /** `auto` = the app's soft pink look, switching to a dark brown one with the system theme. */
 const AUTO: WidgetBackground = {
   id: 'auto',
-  label: 'Automático',
+  labelKey: 'widget.settings.autoBackground',
   light: {
     from: '#FFF3F0',
     to: '#FFDDE3',
@@ -72,17 +74,17 @@ const AUTO: WidgetBackground = {
 
 export const WIDGET_BACKGROUNDS: readonly WidgetBackground[] = [
   AUTO,
-  preset('night', 'Noite', '#101A2E', '#2A1530', '#FFFFFF', '#C7C9D1'),
-  preset('dawn', 'Amanhecer', '#E8576F', '#6B3FA0', '#FFFFFF', '#F5E1EC'),
-  preset('forest', 'Floresta', '#0F2E22', '#3C7A4F', '#FFFFFF', '#CFE3D6'),
-  preset('royal', 'Real', '#0B2A6F', '#4C8DFF', '#FFFFFF', '#D6E4FF'),
-  preset('parchment', 'Pergaminho', '#FBF1D9', '#E8C98B', '#3D2B05', '#7A6A45'),
-  preset('rose', 'Rosa', '#FFE3EC', '#F7A6BD', '#4A0F26', '#7D4A5C'),
+  preset('night', 'quote.backgrounds.night', '#101A2E', '#2A1530', '#FFFFFF', '#C7C9D1'),
+  preset('dawn', 'quote.backgrounds.dawn', '#E8576F', '#6B3FA0', '#FFFFFF', '#F5E1EC'),
+  preset('forest', 'quote.backgrounds.forest', '#0F2E22', '#3C7A4F', '#FFFFFF', '#CFE3D6'),
+  preset('royal', 'quote.backgrounds.royal', '#0B2A6F', '#4C8DFF', '#FFFFFF', '#D6E4FF'),
+  preset('parchment', 'quote.backgrounds.parchment', '#FBF1D9', '#E8C98B', '#3D2B05', '#7A6A45'),
+  preset('rose', 'quote.backgrounds.rose', '#FFE3EC', '#F7A6BD', '#4A0F26', '#7D4A5C'),
 ];
 
 export interface WidgetFont {
   id: string;
-  label: string;
+  labelKey: ParseKeys;
   /** App font family; also the TTF file name bundled for the Android widget. */
   family: string;
   /** iOS widgets cannot use the app fonts, so they map to the closest system style. */
@@ -92,10 +94,10 @@ export interface WidgetFont {
 }
 
 export const WIDGET_FONTS: readonly WidgetFont[] = [
-  { id: 'classic', label: 'Clássica', family: fonts.titleMedium, iosDesign: 'serif', iosWeight: 'medium', iosItalic: false },
-  { id: 'italic', label: 'Itálica', family: fonts.verseItalic, iosDesign: 'serif', iosWeight: 'regular', iosItalic: true },
-  { id: 'bold', label: 'Destaque', family: fonts.titleBold, iosDesign: 'serif', iosWeight: 'bold', iosItalic: false },
-  { id: 'modern', label: 'Moderna', family: fonts.bodySemiBold, iosDesign: 'default', iosWeight: 'semibold', iosItalic: false },
+  { id: 'classic', labelKey: 'quote.fonts.classic', family: fonts.titleMedium, iosDesign: 'serif', iosWeight: 'medium', iosItalic: false },
+  { id: 'italic', labelKey: 'quote.fonts.italic', family: fonts.verseItalic, iosDesign: 'serif', iosWeight: 'regular', iosItalic: true },
+  { id: 'bold', labelKey: 'quote.fonts.bold', family: fonts.titleBold, iosDesign: 'serif', iosWeight: 'bold', iosItalic: false },
+  { id: 'modern', labelKey: 'quote.fonts.modern', family: fonts.bodySemiBold, iosDesign: 'default', iosWeight: 'semibold', iosItalic: false },
 ];
 
 export const getWidgetBackground = (id: string): WidgetBackground =>

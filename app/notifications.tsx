@@ -1,5 +1,6 @@
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useMutation, usePaginatedQuery, useQuery } from 'convex/react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -17,6 +18,7 @@ const PAGE_SIZE = 20;
 
 /** Notification center behind the bell: likes and comments on the user's posts. */
 export default function NotificationsScreen() {
+  const { t } = useTranslation();
   const { anonymousId } = useOnboarding();
   const { results, status, loadMore } = usePaginatedQuery(api.notifications.listNotifications, anonymousId ? { anonymousId } : 'skip', {
     initialNumItems: PAGE_SIZE,
@@ -37,15 +39,15 @@ export default function NotificationsScreen() {
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <View style={styles.header}>
-        <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Voltar" style={styles.headerButton}>
+        <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel={t('common.back')} style={styles.headerButton}>
           <MaterialCommunityIcons name="arrow-left" size={24} color={colors.onSurface} />
         </AppPressable>
-        <Text style={styles.headerTitle}>Notificações</Text>
+        <Text style={styles.headerTitle}>{t('home.notifications')}</Text>
         <AppPressable
           onPress={() => anonymousId && markAllRead({ anonymousId }).catch(() => undefined)}
           disabled={unreadCount === 0}
           accessibilityRole="button"
-          accessibilityLabel="Marcar todas como lidas"
+          accessibilityLabel={t('notifications.markAllRead')}
           style={styles.headerButton}
         >
           <MaterialCommunityIcons name="check-all" size={24} color={unreadCount === 0 ? colors.outlineVariant : colors.primary} />
@@ -67,8 +69,8 @@ export default function NotificationsScreen() {
           ) : (
             <View style={styles.empty}>
               <MaterialCommunityIcons name="bell-outline" size={36} color={colors.outline} />
-              <Text style={styles.emptyTitle}>Nenhuma notificação ainda</Text>
-              <Text style={styles.emptyBody}>Quando alguém curtir ou comentar nas suas publicações do mural, você verá aqui.</Text>
+              <Text style={styles.emptyTitle}>{t('notifications.emptyTitle')}</Text>
+              <Text style={styles.emptyBody}>{t('notifications.emptyBody')}</Text>
             </View>
           )
         }
@@ -80,7 +82,7 @@ export default function NotificationsScreen() {
             <AppPressable
               onPress={() => open(item)}
               accessibilityRole="button"
-              accessibilityLabel={`${message.headline}. ${item.isRead ? '' : 'Não lida.'}`}
+              accessibilityLabel={`${message.headline}. ${item.isRead ? '' : t('notifications.unread')}`}
               style={({ pressed }) => [styles.row, !item.isRead && styles.rowUnread, pressed && { opacity: 0.9 }]}
             >
               <View style={[styles.icon, { backgroundColor: like ? colors.selectedIconContainer : '#DDE8FF' }]}>

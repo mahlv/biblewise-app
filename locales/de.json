@@ -10,7 +10,9 @@
     "tryAgain": "Bitte versuche es erneut.",
     "continue": "Weiter",
     "share": "Teilen",
-    "availableSoon": "Bald verfügbar"
+    "availableSoon": "Bald verfügbar",
+    "notNow": "Nicht jetzt",
+    "openSettings": "Einstellungen öffnen"
   },
   "tabs": {
     "home": "Start",
@@ -166,6 +168,31 @@
     "rotation": {
       "today": "heute um {{time}}",
       "yesterday": "gestern um {{time}}"
+    },
+    "settings": {
+      "title": "Widget",
+      "addInstructionsIos": "Halte den Home-Bildschirm gedrückt, tippe auf „+“ und wähle Biblewise.",
+      "addInstructionsAndroid": "Halte eine freie Stelle auf dem Home-Bildschirm gedrückt, tippe auf Widgets und wähle Biblewise.",
+      "add": "Zum Home-Bildschirm hinzufügen",
+      "addAnother": "Weiteres zum Home-Bildschirm hinzufügen",
+      "statusPaused": "Pausiert: Das Widget zeigt einen Hinweis, bis du es wieder aktivierst.",
+      "statusPlaced": "Auf deinem Home-Bildschirm aktiv.",
+      "statusNotPlaced": "Noch nicht zum Home-Bildschirm hinzugefügt.",
+      "statusUnknown": "Aktiv. Füge es dem Home-Bildschirm hinzu, um es zu sehen.",
+      "sizeSmall": "Klein",
+      "sizeMedium": "Mittel",
+      "active": "Widget aktiv",
+      "removeHint": "Um das Widget zu entfernen, halte es auf dem Home-Bildschirm gedrückt und wähle Entfernen. Hier deaktiviert, wird es nur pausiert.",
+      "background": "Hintergrund",
+      "font": "Schrift",
+      "autoBackground": "Automatisch"
+    },
+    "android": {
+      "paused": "Widget pausiert",
+      "tapToActivate": "Zum Aktivieren tippen",
+      "activateLabel": "Widget aktivieren",
+      "nextQuote": "Nächstes Zitat",
+      "openBible": "Bibel öffnen"
     }
   },
   "bible": {
@@ -513,5 +540,41 @@
       "unavailableBody": "Er wurde möglicherweise gelöscht oder ausgeblendet.",
       "noComments": "Sei der Erste, der kommentiert und mit einem Wort ermutigt."
     }
+  },
+  "notifications": {
+    "markAllRead": "Alle als gelesen markieren",
+    "emptyTitle": "Noch keine Benachrichtigungen",
+    "emptyBody": "Wenn jemand deine Beiträge auf der Wand mit „Gefällt mir“ markiert oder kommentiert, siehst du es hier.",
+    "unread": "Ungelesen.",
+    "someone": "Jemand",
+    "likeRequest": "{{actor}} gefällt dein Anliegen",
+    "likeTestimony": "{{actor}} gefällt dein Zeugnis",
+    "commentRequest": "{{actor}} hat dein Anliegen kommentiert",
+    "commentTestimony": "{{actor}} hat dein Zeugnis kommentiert"
+  },
+  "profile": {
+    "title": "Profil bearbeiten",
+    "changePhoto": "Profilfoto ändern",
+    "updateNeededTitle": "Update erforderlich",
+    "updateNeededBody": "Aktualisiere die App (neuer Build), um ein Profilfoto zu wählen.",
+    "photoFailed": "Das Foto konnte nicht hochgeladen werden",
+    "permissionTitle": "Berechtigung erforderlich",
+    "permissionBody": "Erlaube den Fotozugriff in den Einstellungen, um ein Profilfoto zu wählen.",
+    "name": "Name",
+    "namePlaceholder": "Dein Name",
+    "age": "Alter",
+    "email": "E-Mail",
+    "emailPlaceholder": "du@beispiel.de",
+    "emailInvalid": "Gib eine gültige E-Mail-Adresse ein.",
+    "country": "Land",
+    "countryPlaceholder": "Brasilien",
+    "city": "Stadt",
+    "cityPlaceholder": "Deine Stadt",
+    "church": "Name der Gemeinde",
+    "churchPlaceholder": "Deine Gemeinde",
+    "haptics": "Vibration beim Tippen",
+    "hapticsBody": "Haptisches Feedback bei Schaltflächen und App-Aktionen.",
+    "updated": "Profil erfolgreich aktualisiert!",
+    "saveFailed": "Speichern nicht möglich"
   }
 }

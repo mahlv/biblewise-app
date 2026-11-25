@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, Platform, ScrollView, StyleSheet, Switch, Text, View, useColorScheme } from 'react-native';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -9,25 +10,26 @@ import { getQuoteForDate } from '../../lib/widgetQuotes';
 import { WIDGET_BACKGROUNDS, WIDGET_FONTS, getWidgetBackground, getWidgetFont } from '../../lib/widgetStyle';
 import { haptics } from '../../lib/haptics';
 import { requestPinWidgetPrompt } from '../../lib/widgetSync';
+import i18n from '../../lib/i18n';
 import { colors, fonts, radius, shadow, spacing } from '../../theme/tokens';
 import { AppPressable } from '../../components/ui/AppPressable';
 
 type PreviewSize = 'small' | 'medium';
 
-const ADD_INSTRUCTIONS =
-  Platform.OS === 'ios'
-    ? 'Mantenha pressionada a tela inicial, toque em “+” e escolha Biblewise.'
-    : 'Mantenha pressionado um espaço vazio da tela inicial, toque em Widgets e escolha Biblewise.';
+function addInstructions(): string {
+  return Platform.OS === 'ios' ? i18n.t('widget.settings.addInstructionsIos') : i18n.t('widget.settings.addInstructionsAndroid');
+}
 
 function statusText(enabled: boolean, placed: boolean | null): string {
-  if (!enabled) return 'Pausado: o widget mostra um aviso até você reativá-lo.';
-  if (placed === true) return 'Ativo na sua tela inicial.';
-  if (placed === false) return 'Ainda não foi adicionado à tela inicial.';
-  return 'Ativo. Adicione-o à tela inicial para vê-lo.';
+  if (!enabled) return i18n.t('widget.settings.statusPaused');
+  if (placed === true) return i18n.t('widget.settings.statusPlaced');
+  if (placed === false) return i18n.t('widget.settings.statusNotPlaced');
+  return i18n.t('widget.settings.statusUnknown');
 }
 
 /** Customize the home-screen widget: look, on/off and adding it to the home screen. */
 export default function WidgetSettingsScreen() {
+  const { t } = useTranslation();
   const { settings, placed, loaded, update } = useWidgetSettings();
   const scheme = useColorScheme();
   const [previewSize, setPreviewSize] = useState<PreviewSize>('medium');
@@ -41,16 +43,16 @@ export default function WidgetSettingsScreen() {
 
   const handleAdd = async () => {
     if (await requestPinWidgetPrompt()) return;
-    Alert.alert('Adicionar à tela inicial', ADD_INSTRUCTIONS);
+    Alert.alert(t('widget.settings.add'), addInstructions());
   };
 
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <View style={styles.header}>
-        <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Voltar" style={styles.headerButton}>
+        <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel={t('common.back')} style={styles.headerButton}>
           <MaterialCommunityIcons name="arrow-left" size={24} color={colors.onSurface} />
         </AppPressable>
-        <Text style={styles.headerTitle}>Widget</Text>
+        <Text style={styles.headerTitle}>{t('widget.settings.title')}</Text>
         <View style={styles.headerButton} />
       </View>
 
@@ -100,7 +102,7 @@ export default function WidgetSettingsScreen() {
                   style={[styles.sizeChip, previewSize === size && styles.sizeChipSelected]}
                 >
                   <Text style={[styles.sizeChipText, previewSize === size && styles.sizeChipTextSelected]}>
-                    {size === 'small' ? 'Pequeno' : 'Médio'}
+                    {size === 'small' ? t('widget.settings.sizeSmall') : t('widget.settings.sizeMedium')}
                   </Text>
                 </AppPressable>
               ))}
@@ -110,7 +112,7 @@ export default function WidgetSettingsScreen() {
           <View style={styles.card}>
             <View style={styles.switchRow}>
               <View style={styles.switchTexts}>
-                <Text style={styles.cardTitle}>Widget ativo</Text>
+                <Text style={styles.cardTitle}>{t('widget.settings.active')}</Text>
                 <Text style={styles.cardBody}>{statusText(settings.enabled, placed)}</Text>
               </View>
               <Switch
@@ -121,7 +123,7 @@ export default function WidgetSettingsScreen() {
                 }}
                 trackColor={{ false: colors.outlineVariant, true: colors.primary }}
                 thumbColor={colors.onPrimary}
-                accessibilityLabel="Widget ativo"
+                accessibilityLabel={t('widget.settings.active')}
               />
             </View>
 
@@ -131,15 +133,13 @@ export default function WidgetSettingsScreen() {
               style={({ pressed }) => [styles.addButton, pressed && { opacity: 0.85 }]}
             >
               <MaterialCommunityIcons name="plus-circle-outline" size={20} color={colors.primary} />
-              <Text style={styles.addButtonText}>{placed ? 'Adicionar outro à tela inicial' : 'Adicionar à tela inicial'}</Text>
+              <Text style={styles.addButtonText}>{placed ? t('widget.settings.addAnother') : t('widget.settings.add')}</Text>
             </AppPressable>
-            <Text style={styles.hint}>
-              Para remover o widget, mantenha-o pressionado na tela inicial e escolha remover. Desativar aqui apenas o pausa.
-            </Text>
+            <Text style={styles.hint}>{t('widget.settings.removeHint')}</Text>
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Fundo</Text>
+            <Text style={styles.sectionTitle}>{t('widget.settings.background')}</Text>
             <View style={styles.swatches}>
               {WIDGET_BACKGROUNDS.map((item) => {
                 const itemLook = item.light;
@@ -149,7 +149,7 @@ export default function WidgetSettingsScreen() {
                     key={item.id}
                     onPress={() => update({ backgroundId: item.id })}
                     accessibilityRole="button"
-                    accessibilityLabel={item.label}
+                    accessibilityLabel={t(item.labelKey)}
                     accessibilityState={{ selected }}
                     style={styles.swatchItem}
                   >
@@ -162,7 +162,7 @@ export default function WidgetSettingsScreen() {
                       />
                     </View>
                     <Text style={[styles.swatchLabel, selected && styles.swatchLabelSelected]} numberOfLines={1}>
-                      {item.label}
+                      {t(item.labelKey)}
                     </Text>
                   </AppPressable>
                 );
@@ -171,7 +171,7 @@ export default function WidgetSettingsScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Fonte</Text>
+            <Text style={styles.sectionTitle}>{t('widget.settings.font')}</Text>
             <View style={styles.fontList}>
               {WIDGET_FONTS.map((item) => {
                 const selected = item.id === settings.fontId;
@@ -184,7 +184,7 @@ export default function WidgetSettingsScreen() {
                     style={[styles.fontChip, selected && styles.fontChipSelected]}
                   >
                     <Text style={[styles.fontChipText, { fontFamily: item.family }, selected && styles.fontChipTextSelected]}>
-                      {item.label}
+                      {t(item.labelKey)}
                     </Text>
                   </AppPressable>
                 );

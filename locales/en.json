@@ -10,7 +10,9 @@
     "tryAgain": "Please try again.",
     "continue": "Continue",
     "share": "Share",
-    "availableSoon": "Available soon"
+    "availableSoon": "Available soon",
+    "notNow": "Not now",
+    "openSettings": "Open settings"
   },
   "tabs": {
     "home": "Home",
@@ -166,6 +168,31 @@
     "rotation": {
       "today": "today at {{time}}",
       "yesterday": "yesterday at {{time}}"
+    },
+    "settings": {
+      "title": "Widget",
+      "addInstructionsIos": "Press and hold the home screen, tap “+” and choose Biblewise.",
+      "addInstructionsAndroid": "Press and hold an empty space on the home screen, tap Widgets and choose Biblewise.",
+      "add": "Add to home screen",
+      "addAnother": "Add another to home screen",
+      "statusPaused": "Paused: the widget shows a notice until you turn it back on.",
+      "statusPlaced": "Active on your home screen.",
+      "statusNotPlaced": "It hasn't been added to your home screen yet.",
+      "statusUnknown": "Active. Add it to your home screen to see it.",
+      "sizeSmall": "Small",
+      "sizeMedium": "Medium",
+      "active": "Widget active",
+      "removeHint": "To remove the widget, press and hold it on the home screen and choose remove. Turning it off here only pauses it.",
+      "background": "Background",
+      "font": "Font",
+      "autoBackground": "Automatic"
+    },
+    "android": {
+      "paused": "Widget paused",
+      "tapToActivate": "Tap to turn on",
+      "activateLabel": "Turn on the widget",
+      "nextQuote": "Next quote",
+      "openBible": "Open the Bible"
     }
   },
   "bible": {
@@ -513,5 +540,41 @@
       "unavailableBody": "It may have been deleted or hidden.",
       "noComments": "Be the first to comment and encourage with a word."
     }
+  },
+  "notifications": {
+    "markAllRead": "Mark all as read",
+    "emptyTitle": "No notifications yet",
+    "emptyBody": "When someone likes or comments on your wall posts, you will see it here.",
+    "unread": "Unread.",
+    "someone": "Someone",
+    "likeRequest": "{{actor}} liked your request",
+    "likeTestimony": "{{actor}} liked your testimony",
+    "commentRequest": "{{actor}} commented on your request",
+    "commentTestimony": "{{actor}} commented on your testimony"
+  },
+  "profile": {
+    "title": "Edit Profile",
+    "changePhoto": "Change profile photo",
+    "updateNeededTitle": "Update required",
+    "updateNeededBody": "Update the app (new build) to choose a profile photo.",
+    "photoFailed": "Couldn't upload the photo",
+    "permissionTitle": "Permission required",
+    "permissionBody": "Allow photo access in settings to choose a profile photo.",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "age": "Age",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "emailInvalid": "Enter a valid email.",
+    "country": "Country",
+    "countryPlaceholder": "Brazil",
+    "city": "City",
+    "cityPlaceholder": "Your city",
+    "church": "Church Name",
+    "churchPlaceholder": "Your church",
+    "haptics": "Vibrate on touch",
+    "hapticsBody": "Haptic feedback on buttons and app actions.",
+    "updated": "Profile updated successfully!",
+    "saveFailed": "Couldn't save"
   }
 }

@@ -10,7 +10,9 @@
     "tryAgain": "Inténtalo de nuevo.",
     "continue": "Continuar",
     "share": "Compartir",
-    "availableSoon": "Disponible próximamente"
+    "availableSoon": "Disponible próximamente",
+    "notNow": "Ahora no",
+    "openSettings": "Abrir ajustes"
   },
   "tabs": {
     "home": "Inicio",
@@ -166,6 +168,31 @@
     "rotation": {
       "today": "hoy a las {{time}}",
       "yesterday": "ayer a las {{time}}"
+    },
+    "settings": {
+      "title": "Widget",
+      "addInstructionsIos": "Mantén pulsada la pantalla de inicio, toca “+” y elige Biblewise.",
+      "addInstructionsAndroid": "Mantén pulsado un espacio vacío de la pantalla de inicio, toca Widgets y elige Biblewise.",
+      "add": "Añadir a la pantalla de inicio",
+      "addAnother": "Añadir otro a la pantalla de inicio",
+      "statusPaused": "En pausa: el widget muestra un aviso hasta que lo reactives.",
+      "statusPlaced": "Activo en tu pantalla de inicio.",
+      "statusNotPlaced": "Aún no se ha añadido a la pantalla de inicio.",
+      "statusUnknown": "Activo. Añádelo a la pantalla de inicio para verlo.",
+      "sizeSmall": "Pequeño",
+      "sizeMedium": "Mediano",
+      "active": "Widget activo",
+      "removeHint": "Para quitar el widget, mantenlo pulsado en la pantalla de inicio y elige eliminar. Desactivarlo aquí solo lo pausa.",
+      "background": "Fondo",
+      "font": "Fuente",
+      "autoBackground": "Automático"
+    },
+    "android": {
+      "paused": "Widget en pausa",
+      "tapToActivate": "Toca para activar",
+      "activateLabel": "Activar el widget",
+      "nextQuote": "Siguiente frase",
+      "openBible": "Abrir la Biblia"
     }
   },
   "bible": {
@@ -513,5 +540,41 @@
       "unavailableBody": "Puede haberse eliminado u ocultado.",
       "noComments": "Sé el primero en comentar y animar con una palabra."
     }
+  },
+  "notifications": {
+    "markAllRead": "Marcar todas como leídas",
+    "emptyTitle": "Aún no hay notificaciones",
+    "emptyBody": "Cuando alguien dé me gusta o comente tus publicaciones del muro, lo verás aquí.",
+    "unread": "No leída.",
+    "someone": "Alguien",
+    "likeRequest": "A {{actor}} le gustó tu petición",
+    "likeTestimony": "A {{actor}} le gustó tu testimonio",
+    "commentRequest": "{{actor}} comentó tu petición",
+    "commentTestimony": "{{actor}} comentó tu testimonio"
+  },
+  "profile": {
+    "title": "Editar perfil",
+    "changePhoto": "Cambiar foto de perfil",
+    "updateNeededTitle": "Actualización necesaria",
+    "updateNeededBody": "Actualiza la app (nueva build) para elegir la foto de perfil.",
+    "photoFailed": "No se pudo subir la foto",
+    "permissionTitle": "Permiso necesario",
+    "permissionBody": "Permite el acceso a las fotos en los ajustes para elegir la foto de perfil.",
+    "name": "Nombre",
+    "namePlaceholder": "Tu nombre",
+    "age": "Edad",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "emailInvalid": "Introduce un correo válido.",
+    "country": "País",
+    "countryPlaceholder": "Brasil",
+    "city": "Ciudad",
+    "cityPlaceholder": "Tu ciudad",
+    "church": "Nombre de la iglesia",
+    "churchPlaceholder": "Tu iglesia",
+    "haptics": "Vibración al tocar",
+    "hapticsBody": "Respuesta háptica en los botones y acciones de la app.",
+    "updated": "¡Perfil actualizado con éxito!",
+    "saveFailed": "No se pudo guardar"
   }
 }

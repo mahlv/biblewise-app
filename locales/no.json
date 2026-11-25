@@ -10,7 +10,9 @@
     "tryAgain": "Prøv igjen.",
     "continue": "Fortsett",
     "share": "Del",
-    "availableSoon": "Tilgjengelig snart"
+    "availableSoon": "Tilgjengelig snart",
+    "notNow": "Ikke nå",
+    "openSettings": "Åpne innstillinger"
   },
   "tabs": {
     "home": "Hjem",
@@ -166,6 +168,31 @@
     "rotation": {
       "today": "i dag kl. {{time}}",
       "yesterday": "i går kl. {{time}}"
+    },
+    "settings": {
+      "title": "Widget",
+      "addInstructionsIos": "Trykk og hold på hjemskjermen, trykk på «+» og velg Biblewise.",
+      "addInstructionsAndroid": "Trykk og hold på et tomt område på hjemskjermen, trykk på Widgets og velg Biblewise.",
+      "add": "Legg til på hjemskjermen",
+      "addAnother": "Legg til en til på hjemskjermen",
+      "statusPaused": "På pause: widgeten viser en melding til du slår den på igjen.",
+      "statusPlaced": "Aktiv på hjemskjermen din.",
+      "statusNotPlaced": "Er ennå ikke lagt til på hjemskjermen.",
+      "statusUnknown": "Aktiv. Legg den til på hjemskjermen for å se den.",
+      "sizeSmall": "Liten",
+      "sizeMedium": "Middels",
+      "active": "Widget aktiv",
+      "removeHint": "For å fjerne widgeten, trykk og hold på den på hjemskjermen og velg fjern. Å slå den av her pauser den bare.",
+      "background": "Bakgrunn",
+      "font": "Skrift",
+      "autoBackground": "Automatisk"
+    },
+    "android": {
+      "paused": "Widget på pause",
+      "tapToActivate": "Trykk for å slå på",
+      "activateLabel": "Slå på widgeten",
+      "nextQuote": "Neste sitat",
+      "openBible": "Åpne Bibelen"
     }
   },
   "bible": {
@@ -513,5 +540,41 @@
       "unavailableBody": "Det kan ha blitt slettet eller skjult.",
       "noComments": "Vær den første til å kommentere og oppmuntre med et ord."
     }
+  },
+  "notifications": {
+    "markAllRead": "Merk alle som lest",
+    "emptyTitle": "Ingen varsler ennå",
+    "emptyBody": "Når noen liker eller kommenterer innleggene dine på veggen, ser du det her.",
+    "unread": "Ulest.",
+    "someone": "Noen",
+    "likeRequest": "{{actor}} likte forbønnen din",
+    "likeTestimony": "{{actor}} likte vitnesbyrdet ditt",
+    "commentRequest": "{{actor}} kommenterte forbønnen din",
+    "commentTestimony": "{{actor}} kommenterte vitnesbyrdet ditt"
+  },
+  "profile": {
+    "title": "Rediger profil",
+    "changePhoto": "Endre profilbilde",
+    "updateNeededTitle": "Oppdatering kreves",
+    "updateNeededBody": "Oppdater appen (ny build) for å velge profilbilde.",
+    "photoFailed": "Kunne ikke laste opp bildet",
+    "permissionTitle": "Tillatelse kreves",
+    "permissionBody": "Gi tilgang til bilder i innstillingene for å velge profilbilde.",
+    "name": "Navn",
+    "namePlaceholder": "Ditt navn",
+    "age": "Alder",
+    "email": "E-post",
+    "emailPlaceholder": "deg@eksempel.no",
+    "emailInvalid": "Skriv inn en gyldig e-postadresse.",
+    "country": "Land",
+    "countryPlaceholder": "Brasil",
+    "city": "By",
+    "cityPlaceholder": "Din by",
+    "church": "Menighetens navn",
+    "churchPlaceholder": "Din menighet",
+    "haptics": "Vibrer ved trykk",
+    "hapticsBody": "Haptisk tilbakemelding på knapper og handlinger i appen.",
+    "updated": "Profilet er oppdatert!",
+    "saveFailed": "Kunne ikke lagre"
   }
 }

@@ -1,6 +1,7 @@
 'use no memo';
 
 import { FlexWidget, TextWidget } from 'react-native-android-widget';
+import i18n from '../lib/i18n';
 import { WIDGET_SETTINGS_URL } from '../lib/widgetQuotes';
 import type { WidgetTheme } from './QuoteWidget';
 
@@ -17,7 +18,7 @@ export function PausedWidget({ theme }: { theme: WidgetTheme }) {
     <FlexWidget
       clickAction="OPEN_URI"
       clickActionData={{ uri: WIDGET_SETTINGS_URL }}
-      accessibilityLabel="Ativar o widget"
+      accessibilityLabel={i18n.t('widget.android.activateLabel')}
       style={{
         width: 'match_parent',
         height: 'match_parent',
@@ -30,8 +31,8 @@ export function PausedWidget({ theme }: { theme: WidgetTheme }) {
         flexGap: 4,
       }}
     >
-      <TextWidget text="Widget pausado" style={{ fontSize: 14, fontWeight: 'bold', color: look.title }} />
-      <TextWidget text="Toque para ativar" style={{ fontSize: 12, color: look.subtitle }} />
+      <TextWidget text={i18n.t('widget.android.paused')} style={{ fontSize: 14, fontWeight: 'bold', color: look.title }} />
+      <TextWidget text={i18n.t('widget.android.tapToActivate')} style={{ fontSize: 12, color: look.subtitle }} />
     </FlexWidget>
   );
 }

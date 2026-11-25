@@ -26,6 +26,7 @@ import { useToast } from '../../hooks/useToast';
 import { haptics, isHapticsEnabled, setHapticsEnabled } from '../../lib/haptics';
 import { AGE_RANGES, type AgeRange } from '../../lib/onboardingOptions';
 import { isMissingNativeModule, pickAndUploadProfileImage } from '../../lib/profileImage';
+import { syncWidget } from '../../lib/widgetSync';
 import { brandGradient, colors, fonts, radius, spacing } from '../../theme/tokens';
 import { AppPressable } from '../../components/ui/AppPressable';
 
@@ -82,9 +83,9 @@ export default function EditProfileScreen() {
       }
     } catch (error) {
       if (isMissingNativeModule(error)) {
-        Alert.alert('Atualização necessária', 'Atualize o app (nova build) para escolher a foto do perfil.');
+        Alert.alert(t('profile.updateNeededTitle'), t('profile.updateNeededBody'));
       } else {
-        Alert.alert('Não foi possível enviar a foto', 'Tente novamente.');
+        Alert.alert(t('profile.photoFailed'), t('common.tryAgain'));
       }
     } finally {
       setUploading(false);
@@ -95,7 +96,7 @@ export default function EditProfileScreen() {
     if (!anonymousId || saving || uploading) return;
     const trimmedEmail = email.trim();
     if (trimmedEmail && !EMAIL_FORMAT.test(trimmedEmail)) {
-      setEmailError('Digite um e-mail válido.');
+      setEmailError(t('profile.emailInvalid'));
       return;
     }
 
@@ -112,11 +113,11 @@ export default function EditProfileScreen() {
         ...(newImageId ? { profileImageId: newImageId as Id<'_storage'> } : {}),
       });
       haptics.success();
-      toast('Perfil atualizado com sucesso!');
+      toast(t('profile.updated'));
       goBack();
     } catch (error) {
       haptics.error();
-      Alert.alert('Não foi possível salvar', error instanceof Error ? error.message : 'Tente novamente.');
+      Alert.alert(t('profile.saveFailed'), error instanceof Error ? error.message : t('common.tryAgain'));
       setSaving(false);
     }
   };
@@ -127,10 +128,10 @@ export default function EditProfileScreen() {
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <View style={styles.header}>
-        <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Voltar" style={styles.headerButton}>
+        <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel={t('common.back')} style={styles.headerButton}>
           <MaterialCommunityIcons name="arrow-left" size={24} color={colors.onSurface} />
         </AppPressable>
-        <Text style={styles.headerTitle}>Editar Perfil</Text>
+        <Text style={styles.headerTitle}>{t('profile.title')}</Text>
         <View style={styles.headerButton} />
       </View>
 
@@ -148,7 +149,7 @@ export default function EditProfileScreen() {
             <AppPressable
               onPress={handlePickImage}
               accessibilityRole="button"
-              accessibilityLabel="Alterar foto do perfil"
+              accessibilityLabel={t('profile.changePhoto')}
               style={styles.avatarWrapper}
             >
               {avatarUri ? (
@@ -179,10 +180,10 @@ export default function EditProfileScreen() {
             </AppPressable>
 
             <View style={styles.form}>
-              <ProfileTextField label="Nome" value={name} onChangeText={setName} placeholder="Seu nome" autoComplete="name" maxLength={80} />
+              <ProfileTextField label={t('profile.name')} value={name} onChangeText={setName} placeholder={t('profile.namePlaceholder')} autoComplete="name" maxLength={80} />
 
               <View style={styles.ageGroup}>
-                <Text style={styles.ageLabel}>Idade</Text>
+                <Text style={styles.ageLabel}>{t('profile.age')}</Text>
                 <View style={styles.chips}>
                   {AGE_RANGES.map((range) => {
                     const selected = ageRange === range;
@@ -202,25 +203,25 @@ export default function EditProfileScreen() {
               </View>
 
               <ProfileTextField
-                label="E-mail"
+                label={t('profile.email')}
                 value={email}
                 onChangeText={(value) => {
                   setEmail(value);
                   if (emailError) setEmailError(null);
                 }}
-                placeholder="voce@exemplo.com"
+                placeholder={t('profile.emailPlaceholder')}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoComplete="email"
                 error={emailError}
               />
-              <ProfileTextField label="País" value={country} onChangeText={setCountry} placeholder="Brasil" maxLength={120} />
-              <ProfileTextField label="Cidade" value={city} onChangeText={setCity} placeholder="Sua cidade" maxLength={120} />
+              <ProfileTextField label={t('profile.country')} value={country} onChangeText={setCountry} placeholder={t('profile.countryPlaceholder')} maxLength={120} />
+              <ProfileTextField label={t('profile.city')} value={city} onChangeText={setCity} placeholder={t('profile.cityPlaceholder')} maxLength={120} />
               <ProfileTextField
-                label="Nome da Igreja"
+                label={t('profile.church')}
                 value={churchName}
                 onChangeText={setChurchName}
-                placeholder="Sua igreja"
+                placeholder={t('profile.churchPlaceholder')}
                 maxLength={120}
               />
             </View>
@@ -241,8 +242,8 @@ export default function EditProfileScreen() {
 
             <View style={styles.preference}>
               <View style={styles.preferenceTexts}>
-                <Text style={styles.preferenceTitle}>Vibração ao tocar</Text>
-                <Text style={styles.preferenceBody}>Resposta tátil nos botões e ações do app.</Text>
+                <Text style={styles.preferenceTitle}>{t('profile.haptics')}</Text>
+                <Text style={styles.preferenceBody}>{t('profile.hapticsBody')}</Text>
               </View>
               <Switch
                 value={vibration}
@@ -254,17 +255,18 @@ export default function EditProfileScreen() {
                 }}
                 trackColor={{ false: colors.outlineVariant, true: colors.primary }}
                 thumbColor={colors.onPrimary}
-                accessibilityLabel="Vibração ao tocar"
+                accessibilityLabel={t('profile.haptics')}
               />
             </View>
           </ScrollView>
 
           <View style={styles.footer}>
-            <PrimaryButton label="Salvar" showArrow={false} onPress={handleSave} loading={saving} disabled={uploading} />
+            <PrimaryButton label={t('common.save')} showArrow={false} onPress={handleSave} loading={saving} disabled={uploading} />
           </View>
         </KeyboardAvoidingView>
       )}
-      <LanguageSwitcher visible={languageOpen} onClose={() => setLanguageOpen(false)} />
+      {/* The widget text follows the app language, so redraw it after a change. */}
+      <LanguageSwitcher visible={languageOpen} onClose={() => setLanguageOpen(false)} onChanged={() => void syncWidget()} />
     </SafeAreaView>
   );
 }
