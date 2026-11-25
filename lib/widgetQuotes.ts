@@ -1,4 +1,5 @@
 import quotesData from '../assets/widget/quotes.json';
+import i18n from './i18n';
 
 export type WidgetQuoteType = 'bible' | 'quote';
 
@@ -30,12 +31,12 @@ export function getSlotNumber(date: Date): number {
   return Math.floor((localMs - FIRST_SLOT_HOUR * HOUR_MS) / SLOT_MS);
 }
 
-/** When the current quote started showing, e.g. "hoje às 06:00" (rotations happen at 06:00 and 18:00). */
+/** When the current quote started showing, e.g. "today at 06:00" (rotations happen at 06:00 and 18:00). */
 export function getLastRotationLabel(date: Date): string {
   const hour = date.getHours();
-  if (hour >= 18) return 'hoje às 18:00';
-  if (hour >= FIRST_SLOT_HOUR) return 'hoje às 06:00';
-  return 'ontem às 18:00';
+  if (hour >= 18) return i18n.t('widget.rotation.today', { time: '18:00' });
+  if (hour >= FIRST_SLOT_HOUR) return i18n.t('widget.rotation.today', { time: '06:00' });
+  return i18n.t('widget.rotation.yesterday', { time: '18:00' });
 }
 
 /** The quote for the slot of `date`; `offset` moves forward manually (the Refresh button). */

@@ -1,5 +1,6 @@
 import { View } from 'react-native';
 import { Tabs, router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppTabBar } from '../../components/AppTabBar';
 import { MicFab } from '../../components/MicFab';
@@ -10,6 +11,7 @@ const TAB_BAR_HEIGHT = 58;
 
 function TabsWithFab() {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
 
   return (
     <View style={{ flex: 1 }}>
@@ -17,9 +19,9 @@ function TabsWithFab() {
         tabBar={(props) => <AppTabBar {...props} />}
         screenOptions={{ headerShown: false, sceneStyle: { backgroundColor: colors.background } }}
       >
-        <Tabs.Screen name="home" options={{ title: 'Início' }} />
-        <Tabs.Screen name="bible" options={{ title: 'Bíblia' }} />
-        <Tabs.Screen name="diary" options={{ title: 'Diário' }} />
+        <Tabs.Screen name="home" options={{ title: t('tabs.home') }} />
+        <Tabs.Screen name="bible" options={{ title: t('tabs.bible') }} />
+        <Tabs.Screen name="diary" options={{ title: t('tabs.diary') }} />
       </Tabs>
       <View style={{ position: 'absolute', right: 20, bottom: TAB_BAR_HEIGHT + Math.max(insets.bottom, 8) + 12 }}>
         <MicFab onPress={() => router.push('/recording')} />

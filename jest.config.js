@@ -15,6 +15,8 @@
 module.exports = {
   preset: 'jest-expo/ios',
   testMatch: ['<rootDir>/test/**/*.test.ts', '<rootDir>/test/**/*.test.tsx'],
+  // Starts i18n in pt-BR so components using `useTranslation` render real text in every test.
+  setupFilesAfterEnv: ['<rootDir>/test/setupI18n.ts'],
   transform: {
     '\.bible$': '<rootDir>/test/bibleAssetTransformer.js',
   },

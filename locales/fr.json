@@ -1,0 +1,136 @@
+{
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "delete": "Supprimer",
+    "close": "Fermer",
+    "back": "Retour",
+    "comingSoon": "Bientôt disponible",
+    "tryAgain": "Veuillez réessayer.",
+    "continue": "Continuer",
+    "share": "Partager"
+  },
+  "tabs": {
+    "home": "Accueil",
+    "bible": "Bible",
+    "diary": "Journal"
+  },
+  "language": {
+    "title": "Langue",
+    "description": "Choisissez la langue de l'application.",
+    "restartTitle": "Redémarrer l'application",
+    "restartBody": "Pour appliquer le sens de lecture de la langue choisie, l'application va redémarrer.",
+    "restartConfirm": "Redémarrer"
+  },
+  "onboarding": {
+    "logoLabel": "Logo de BibleWise",
+    "privacy": "Votre vie privée est protégée et vos informations resteront confidentielles.",
+    "welcome": {
+      "tag": "DÉVOTION QUOTIDIENNE & APPRENTISSAGE",
+      "rankPrefix": "Top",
+      "rankTitle": "Appli de connaissance biblique",
+      "ratingValue": "4,8",
+      "ratingLabel": "Note",
+      "communityValue": "+10 M",
+      "communityLabel": "Chrétiens",
+      "title": "Bienvenue sur BibleWise !",
+      "subtitle": "Rapprochez-vous de Dieu, mémorisez les saintes Écritures et renouvelez votre foi où que vous soyez.",
+      "readTitle": "Lis",
+      "readDescription": "Bible numérique personnalisée",
+      "listenTitle": "Écoute",
+      "listenDescription": "Témoignages vrais",
+      "writeTitle": "Écris",
+      "writeDescription": "Ta propre histoire",
+      "consent": "En continuant, vous acceptez notre Politique de confidentialité et nos Conditions d'utilisation."
+    },
+    "age": {
+      "title": "Quel âge avez-vous ?",
+      "subtitle": "Pour personnaliser vos moments de dévotion et vos lectures quotidiennes.",
+      "years": "ans"
+    },
+    "denomination": {
+      "step": "ÉTAPE 2 SUR 2",
+      "title": "Quelle est votre confession ?",
+      "subtitle": "Cela nous aide à vous proposer des versions de la Bible et des plans de lecture adaptés à votre parcours.",
+      "default": "Par défaut",
+      "saveError": "Impossible d'enregistrer pour le moment. Vérifiez votre connexion et réessayez."
+    },
+    "denominations": {
+      "catholic": "Catholique",
+      "evangelical": "Évangélique",
+      "protestant": "Protestante",
+      "pentecostal": "Pentecôtiste",
+      "non_denominational": "Protestante non confessionnel",
+      "orthodox": "Orthodoxe",
+      "other": "Autre / En quête de foi"
+    }
+  },
+  "home": {
+    "greeting": "Bonjour",
+    "greetingNamed": "Bonjour {{name}}",
+    "notifications": "Notifications",
+    "profile": "Profil",
+    "quickAccess": {
+      "title": "Accès rapide",
+      "hint": "3 raccourcis",
+      "bibleTitle": "Bible numérique",
+      "bibleSubtitle": "Lecture et recherche",
+      "recordTitle": "Enregistrer un culte",
+      "recordSubtitle": "Notes automatiques",
+      "recordBadge": "Résumé IA",
+      "diaryTitle": "Mon journal",
+      "diarySubtitle": "Prières et foi"
+    },
+    "recent": {
+      "title": "Derniers souvenirs",
+      "seeAll": "Tout voir",
+      "empty": "Aucun enregistrement pour l'instant. Enregistrez votre premier culte !",
+      "recordButton": "Enregistrer un culte",
+      "openRecording": "Ouvrir l'enregistrement",
+      "unknownPreacher": "Prédicateur non indiqué",
+      "processing": "Enregistrement en cours de traitement",
+      "recordedOn": "Enregistré le {{date}}",
+      "minutes": "{{count}} min",
+      "keyPoints": "3 points clés générés par l'IA :",
+      "failed": "Impossible de générer le résumé de cet enregistrement.",
+      "preparing": "L'IA prépare le résumé de votre enregistrement…",
+      "readTranscript": "Lire la transcription complète",
+      "viewRecording": "Voir l'enregistrement",
+      "moreOptions": "Plus d'options"
+    },
+    "quote": {
+      "badge": "VERSET DU JOUR",
+      "listen": "Écouter le verset",
+      "favorite": "Ajouter aux favoris",
+      "unfavorite": "Retirer des favoris",
+      "unsave": "Retirer des enregistrés"
+    }
+  },
+  "recording": {
+    "meetingTypes": {
+      "celebration": "Célébration",
+      "bible_school": "École biblique",
+      "youth_service": "Culte des jeunes",
+      "prayer": "Prière",
+      "fallback": "Culte"
+    }
+  },
+  "widget": {
+    "banner": {
+      "statusActive": "WIDGET ACTIF",
+      "statusPaused": "WIDGET EN PAUSE",
+      "statusNotAdded": "AJOUTER À L'ÉCRAN",
+      "title": "Verset à l'écran",
+      "updated": "Mis à jour {{when}}",
+      "pausedHint": "Appuyez sur Ajuster pour réactiver",
+      "addHint": "Appuyez sur Ajuster pour l'ajouter",
+      "adjust": "Ajuster",
+      "adjustLabel": "Ajuster le widget"
+    },
+    "rotation": {
+      "today": "aujourd'hui à {{time}}",
+      "yesterday": "hier à {{time}}"
+    }
+  }
+}

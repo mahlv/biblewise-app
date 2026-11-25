@@ -23,16 +23,7 @@ export type Denomination = (typeof DENOMINATIONS)[number];
 /** Pre-selected suggestion on step 2 (shows the "Padrão" badge). */
 export const DEFAULT_DENOMINATION: Denomination = 'evangelical';
 
-/** User-facing labels (Portuguese). */
-export const DENOMINATION_LABELS: Record<Denomination, string> = {
-  catholic: 'Católica',
-  evangelical: 'Evangélica',
-  protestant: 'Protestante',
-  pentecostal: 'Pentecostal',
-  non_denominational: 'Protestante Não Denominacional',
-  orthodox: 'Ortodoxa',
-  other: 'Outra / Em busca da fé',
-};
+/** The user-facing names live in the translation files (`onboarding.denominations.<id>`). */
 
 export function isAgeRange(value: unknown): value is AgeRange {
   return typeof value === 'string' && (AGE_RANGES as readonly string[]).includes(value);

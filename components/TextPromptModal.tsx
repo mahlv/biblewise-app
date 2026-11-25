@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { KeyboardAvoidingView, Modal, Platform, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
 import { AppPressable } from './ui/AppPressable';
 
@@ -13,11 +14,12 @@ interface Props {
 }
 
 function PromptBody({ title, placeholder, initialValue, onSubmit, onCancel }: Omit<Props, 'visible'>) {
+  const { t } = useTranslation();
   const [value, setValue] = useState(initialValue);
 
   return (
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <AppPressable haptic="none" feedback="none" style={styles.backdrop} onPress={onCancel} accessibilityLabel="Cancelar" />
+      <AppPressable haptic="none" feedback="none" style={styles.backdrop} onPress={onCancel} accessibilityLabel={t('common.cancel')} />
       <View style={styles.card}>
         <Text style={styles.title}>{title}</Text>
         <TextInput
@@ -33,10 +35,10 @@ function PromptBody({ title, placeholder, initialValue, onSubmit, onCancel }: Om
         />
         <View style={styles.actions}>
           <AppPressable onPress={onCancel} accessibilityRole="button" style={styles.cancel}>
-            <Text style={styles.cancelText}>Cancelar</Text>
+            <Text style={styles.cancelText}>{t('common.cancel')}</Text>
           </AppPressable>
           <AppPressable onPress={() => onSubmit(value)} accessibilityRole="button" style={styles.confirm}>
-            <Text style={styles.confirmText}>Confirmar</Text>
+            <Text style={styles.confirmText}>{t('common.confirm')}</Text>
           </AppPressable>
         </View>
       </View>

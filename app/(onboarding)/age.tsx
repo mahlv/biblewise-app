@@ -1,5 +1,6 @@
 import { ScrollView, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { OnboardingHeader } from '../../components/OnboardingHeader';
 import { OnboardingOption } from '../../components/OnboardingOption';
@@ -12,6 +13,7 @@ import { onboardingStyles } from '../../theme/onboardingStyles';
 
 /** Onboarding step 1: age range. */
 export default function AgeScreen() {
+  const { t } = useTranslation();
   const { draft, setAgeRange } = useOnboarding();
 
   return (
@@ -24,10 +26,10 @@ export default function AgeScreen() {
 
       <ScrollView contentContainerStyle={onboardingStyles.content} showsVerticalScrollIndicator={false}>
         <Text style={onboardingStyles.title} accessibilityRole="header">
-          Quantos anos você tem?
+          {t('onboarding.age.title')}
         </Text>
         <Text style={onboardingStyles.subtitle}>
-          Para personalizarmos seus momentos devocionais e leituras diárias.
+          {t('onboarding.age.subtitle')}
         </Text>
 
         <View style={onboardingStyles.options} accessibilityRole="radiogroup">
@@ -37,7 +39,7 @@ export default function AgeScreen() {
               variant="display"
               // Typographic en dash, as in the design: "25–34".
               label={ageRange.replace('-', '–')}
-              suffix="anos"
+              suffix={t('onboarding.age.years')}
               selected={draft.ageRange === ageRange}
               onPress={() => setAgeRange(ageRange)}
             />
@@ -46,8 +48,8 @@ export default function AgeScreen() {
       </ScrollView>
 
       <View style={onboardingStyles.footer}>
-        <PrimaryButton label="Continuar" disabled={!draft.ageRange} onPress={() => router.push('/denomination')} />
-        <PrivacyNote text="Sua privacidade é garantida e suas informações permanecerão confidenciais." />
+        <PrimaryButton label={t('common.continue')} disabled={!draft.ageRange} onPress={() => router.push('/denomination')} />
+        <PrivacyNote text={t('onboarding.privacy')} />
       </View>
     </SafeAreaView>
   );

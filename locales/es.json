@@ -1,0 +1,136 @@
+{
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "delete": "Eliminar",
+    "close": "Cerrar",
+    "back": "Volver",
+    "comingSoon": "Próximamente",
+    "tryAgain": "Inténtalo de nuevo.",
+    "continue": "Continuar",
+    "share": "Compartir"
+  },
+  "tabs": {
+    "home": "Inicio",
+    "bible": "Biblia",
+    "diary": "Diario"
+  },
+  "language": {
+    "title": "Idioma",
+    "description": "Elige el idioma de la aplicación.",
+    "restartTitle": "Reiniciar la app",
+    "restartBody": "Para aplicar la dirección de lectura del idioma elegido, la app se reiniciará.",
+    "restartConfirm": "Reiniciar"
+  },
+  "onboarding": {
+    "logoLabel": "Logotipo de BibleWise",
+    "privacy": "Tu privacidad está garantizada y tu información permanecerá confidencial.",
+    "welcome": {
+      "tag": "DEVOCIONAL DIARIO Y APRENDIZAJE",
+      "rankPrefix": "Top",
+      "rankTitle": "App de Conocimiento Bíblico",
+      "ratingValue": "4,8",
+      "ratingLabel": "Valoración",
+      "communityValue": "+10 M",
+      "communityLabel": "Cristianos",
+      "title": "¡Bienvenido a BibleWise!",
+      "subtitle": "Conéctate con Dios, memoriza las sagradas escrituras y renueva tu fe estés donde estés.",
+      "readTitle": "Lee",
+      "readDescription": "Biblia digital personalizada",
+      "listenTitle": "Escucha",
+      "listenDescription": "Testimonios reales",
+      "writeTitle": "Escribe",
+      "writeDescription": "Tu propia historia",
+      "consent": "Al continuar, aceptas nuestra Política de Privacidad y los Términos de Uso."
+    },
+    "age": {
+      "title": "¿Cuántos años tienes?",
+      "subtitle": "Para personalizar tus momentos devocionales y lecturas diarias.",
+      "years": "años"
+    },
+    "denomination": {
+      "step": "PASO 2 DE 2",
+      "title": "¿Cuál es tu denominación?",
+      "subtitle": "Esto nos ayuda a sugerir versiones bíblicas y planes de lectura adecuados a tu camino.",
+      "default": "Predeterminada",
+      "saveError": "No se pudo guardar ahora. Comprueba tu conexión e inténtalo de nuevo."
+    },
+    "denominations": {
+      "catholic": "Católica",
+      "evangelical": "Evangélica",
+      "protestant": "Protestante",
+      "pentecostal": "Pentecostal",
+      "non_denominational": "Protestante no denominacional",
+      "orthodox": "Ortodoxa",
+      "other": "Otra / En busca de la fe"
+    }
+  },
+  "home": {
+    "greeting": "Buenos días",
+    "greetingNamed": "Buenos días, {{name}}",
+    "notifications": "Notificaciones",
+    "profile": "Perfil",
+    "quickAccess": {
+      "title": "Acceso rápido",
+      "hint": "3 accesos",
+      "bibleTitle": "Biblia digital",
+      "bibleSubtitle": "Lectura y búsqueda",
+      "recordTitle": "Grabar culto",
+      "recordSubtitle": "Notas automáticas",
+      "recordBadge": "Resumen IA",
+      "diaryTitle": "Mi diario",
+      "diarySubtitle": "Oraciones y fe"
+    },
+    "recent": {
+      "title": "Últimos recuerdos",
+      "seeAll": "Ver todo",
+      "empty": "Aún no hay grabaciones. ¡Graba tu primer culto!",
+      "recordButton": "Grabar culto",
+      "openRecording": "Abrir grabación",
+      "unknownPreacher": "Predicador no indicado",
+      "processing": "Grabación en proceso",
+      "recordedOn": "Grabado el {{date}}",
+      "minutes": "{{count}} min",
+      "keyPoints": "3 puntos clave generados por la IA:",
+      "failed": "No se pudo generar el resumen de esta grabación.",
+      "preparing": "La IA está preparando el resumen de tu grabación…",
+      "readTranscript": "Leer transcripción completa",
+      "viewRecording": "Ver grabación",
+      "moreOptions": "Más opciones"
+    },
+    "quote": {
+      "badge": "VERSÍCULO DEL DÍA",
+      "listen": "Escuchar versículo",
+      "favorite": "Añadir a favoritos",
+      "unfavorite": "Quitar de favoritos",
+      "unsave": "Quitar de guardados"
+    }
+  },
+  "recording": {
+    "meetingTypes": {
+      "celebration": "Celebración",
+      "bible_school": "Escuela bíblica",
+      "youth_service": "Culto de jóvenes",
+      "prayer": "Oración",
+      "fallback": "Culto"
+    }
+  },
+  "widget": {
+    "banner": {
+      "statusActive": "WIDGET ACTIVO",
+      "statusPaused": "WIDGET EN PAUSA",
+      "statusNotAdded": "AÑADIR A LA PANTALLA",
+      "title": "Versículo en pantalla",
+      "updated": "Actualizado {{when}}",
+      "pausedHint": "Toca Ajustar para reactivar",
+      "addHint": "Toca Ajustar para añadirlo",
+      "adjust": "Ajustar",
+      "adjustLabel": "Ajustar widget"
+    },
+    "rotation": {
+      "today": "hoy a las {{time}}",
+      "yesterday": "ayer a las {{time}}"
+    }
+  }
+}

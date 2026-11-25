@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { BrandLogo } from './BrandLogo';
 import { colors, fonts, radius } from '../theme/tokens';
 import { AppPressable } from './ui/AppPressable';
@@ -12,12 +13,13 @@ interface Props {
 
 /** Step header: back | centered logo | step counter. */
 export function OnboardingHeader({ onBack, stepLabel }: Props) {
+  const { t } = useTranslation();
   return (
     <View style={styles.header}>
       <AppPressable
         onPress={onBack}
         accessibilityRole="button"
-        accessibilityLabel="Voltar"
+        accessibilityLabel={t('common.back')}
         hitSlop={8}
         style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}
       >

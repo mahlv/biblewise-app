@@ -1,20 +1,22 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import type { BottomTabBarProps } from 'expo-router/tabs';
 import { colors, fonts } from '../theme/tokens';
 import type { IconName } from './OnboardingOption';
 import { AppPressable } from './ui/AppPressable';
 
-const TABS: Record<string, { label: string; icon: IconName; activeIcon: IconName }> = {
-  home: { label: 'Início', icon: 'home-outline', activeIcon: 'home' },
-  bible: { label: 'Bíblia', icon: 'book-open-variant', activeIcon: 'book-open-variant' },
-  diary: { label: 'Diário', icon: 'heart-outline', activeIcon: 'heart' },
+const TABS: Record<string, { labelKey: 'tabs.home' | 'tabs.bible' | 'tabs.diary'; icon: IconName; activeIcon: IconName }> = {
+  home: { labelKey: 'tabs.home', icon: 'home-outline', activeIcon: 'home' },
+  bible: { labelKey: 'tabs.bible', icon: 'book-open-variant', activeIcon: 'book-open-variant' },
+  diary: { labelKey: 'tabs.diary', icon: 'heart-outline', activeIcon: 'heart' },
 };
 
-/** Shared bottom navigation (Início / Bíblia / Diário). */
+/** Shared bottom navigation (Home / Bible / Diary). */
 export function AppTabBar({ state, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
 
   return (
     <View style={[styles.bar, { paddingBottom: Math.max(insets.bottom, 8) }]}>
@@ -29,7 +31,7 @@ export function AppTabBar({ state, navigation }: BottomTabBarProps) {
             key={route.key}
             accessibilityRole="tab"
             accessibilityState={{ selected: focused }}
-            accessibilityLabel={tab.label}
+            accessibilityLabel={t(tab.labelKey)}
             onPress={() => {
               const event = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
               if (!focused && !event.defaultPrevented) navigation.navigate(route.name);
@@ -37,7 +39,7 @@ export function AppTabBar({ state, navigation }: BottomTabBarProps) {
             style={styles.item}
           >
             <MaterialCommunityIcons name={focused ? tab.activeIcon : tab.icon} size={24} color={color} />
-            <Text style={[styles.label, { color }, focused && styles.labelActive]}>{tab.label}</Text>
+            <Text style={[styles.label, { color }, focused && styles.labelActive]}>{t(tab.labelKey)}</Text>
           </AppPressable>
         );
       })}

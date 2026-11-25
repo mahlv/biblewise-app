@@ -1,6 +1,8 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
+import { localeTag } from '../../lib/i18n';
 import { brandGradient, colors, fonts, spacing } from '../../theme/tokens';
 import { AppPressable } from '../ui/AppPressable';
 
@@ -16,9 +18,9 @@ interface Props {
   onLongPressAvatar?: () => void;
 }
 
-/** "DOMINGO, 20 DE OUTUBRO" for the current device date. */
+/** "SUNDAY, OCTOBER 20" (in the app language) for the current device date. */
 function formatToday(date: Date): string {
-  return date.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
+  return date.toLocaleDateString(localeTag(), { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
 }
 
 function initialsOf(name: string): string {
@@ -28,6 +30,7 @@ function initialsOf(name: string): string {
 
 /** Date, greeting, notification bell and avatar. */
 export function HomeHeader({ name, imageUrl, unreadCount, onPressBell, onPressAvatar, onLongPressAvatar }: Props) {
+  const { t } = useTranslation();
   const firstName = name?.trim().split(/\s+/)[0];
   const initials = name?.trim() ? initialsOf(name) : '';
 
@@ -36,11 +39,11 @@ export function HomeHeader({ name, imageUrl, unreadCount, onPressBell, onPressAv
       <View style={styles.texts}>
         <Text style={styles.date}>{formatToday(new Date())}</Text>
         <Text style={styles.greeting} numberOfLines={1}>
-          {firstName ? `Bom dia, ${firstName}` : 'Bom dia'}
+          {firstName ? t('home.greetingNamed', { name: firstName }) : t('home.greeting')}
         </Text>
       </View>
 
-      <AppPressable onPress={onPressBell} accessibilityRole="button" accessibilityLabel="Notificações" style={styles.bell}>
+      <AppPressable onPress={onPressBell} accessibilityRole="button" accessibilityLabel={t('home.notifications')} style={styles.bell}>
         <MaterialCommunityIcons name="bell-outline" size={22} color={colors.onSurface} />
         {unreadCount > 0 ? (
           <View style={styles.badge}>
@@ -53,7 +56,7 @@ export function HomeHeader({ name, imageUrl, unreadCount, onPressBell, onPressAv
         onPress={onPressAvatar}
         onLongPress={onLongPressAvatar}
         accessibilityRole="button"
-        accessibilityLabel="Perfil"
+        accessibilityLabel={t('home.profile')}
       >
         {imageUrl ? (
           <Image source={{ uri: imageUrl }} style={styles.avatar} />

@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import type { IconName } from '../OnboardingOption';
 import { colors, fonts, radius, shadow, spacing } from '../../theme/tokens';
 import { AppPressable } from '../ui/AppPressable';
@@ -50,8 +51,9 @@ function Shortcut({ icon, iconColor, iconBackground, title, subtitle, badge, onP
   );
 }
 
-/** "Acesso Rápido": 2 cards on the first row, 1 on the second. */
+/** "Quick Access": 2 cards on the first row, 1 on the second. */
 export function QuickAccessGrid({ onOpenBible, onOpenRecording, onOpenDiary }: Props) {
+  const { t } = useTranslation();
   return (
     <View style={styles.grid}>
       <View style={styles.row}>
@@ -59,17 +61,17 @@ export function QuickAccessGrid({ onOpenBible, onOpenRecording, onOpenDiary }: P
           icon="book-open-page-variant-outline"
           iconColor={colors.secondary}
           iconBackground="#DDE8FF"
-          title="Bíblia Digital"
-          subtitle="Leitura & Busca"
+          title={t('home.quickAccess.bibleTitle')}
+          subtitle={t('home.quickAccess.bibleSubtitle')}
           onPress={onOpenBible}
         />
         <Shortcut
           icon="microphone-outline"
           iconColor={colors.primary}
           iconBackground={colors.selectedIconContainer}
-          title="Gravar Culto"
-          subtitle="Notas automáticas"
-          badge="IA Resumo"
+          title={t('home.quickAccess.recordTitle')}
+          subtitle={t('home.quickAccess.recordSubtitle')}
+          badge={t('home.quickAccess.recordBadge')}
           onPress={onOpenRecording}
         />
       </View>
@@ -78,8 +80,8 @@ export function QuickAccessGrid({ onOpenBible, onOpenRecording, onOpenDiary }: P
           icon="heart-outline"
           iconColor="#6B3FD1"
           iconBackground="#EADFFF"
-          title="Meu Diário"
-          subtitle="Orações e fé"
+          title={t('home.quickAccess.diaryTitle')}
+          subtitle={t('home.quickAccess.diarySubtitle')}
           onPress={onOpenDiary}
         />
         <View style={styles.spacer} />

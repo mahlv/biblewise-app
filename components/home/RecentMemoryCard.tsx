@@ -1,8 +1,10 @@
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import type { FunctionReturnType } from 'convex/server';
 import type { api } from '../../convex/_generated/api';
-import { MEETING_TYPE_OPTIONS } from '../../lib/recordingSummary';
+import { localeTag } from '../../lib/i18n';
+import { isMeetingType } from '../../lib/recordingSummary';
 import { colors, fonts, radius, shadow, spacing } from '../../theme/tokens';
 import { AppPressable } from '../ui/AppPressable';
 
@@ -16,20 +18,13 @@ interface Props {
   onMore: () => void;
 }
 
-function formatMinutes(seconds: number): string {
-  return `${Math.max(1, Math.round(seconds / 60))} min`;
-}
-
 function formatRecordedAt(timestamp: number): string {
-  return new Date(timestamp).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }).replace('.', '');
-}
-
-function meetingLabel(meetingType: string | undefined): string {
-  return MEETING_TYPE_OPTIONS.find((option) => option.id === meetingType)?.label ?? 'Culto';
+  return new Date(timestamp).toLocaleDateString(localeTag(), { day: '2-digit', month: 'short' }).replace('.', '');
 }
 
 /** Most recent recording with its AI key points; loading and empty states included. */
 export function RecentMemoryCard({ recording, onOpen, onRecord, onMore }: Props) {
+  const { t } = useTranslation();
   if (recording === undefined) {
     return (
       <View style={[styles.card, styles.center]}>
@@ -42,15 +37,15 @@ export function RecentMemoryCard({ recording, onOpen, onRecord, onMore }: Props)
     return (
       <View style={[styles.card, styles.center, styles.emptyGap]}>
         <MaterialCommunityIcons name="microphone-outline" size={32} color={colors.outline} />
-        <Text style={styles.emptyText}>Nenhuma gravação ainda. Grave seu primeiro culto!</Text>
+        <Text style={styles.emptyText}>{t('home.recent.empty')}</Text>
         <AppPressable
           onPress={onRecord}
           accessibilityRole="button"
-          accessibilityLabel="Gravar culto"
+          accessibilityLabel={t('home.recent.recordButton')}
           style={({ pressed }) => [styles.recordButton, pressed && { opacity: 0.85 }]}
         >
           <MaterialCommunityIcons name="microphone" size={18} color={colors.onPrimary} />
-          <Text style={styles.recordButtonText}>Gravar culto</Text>
+          <Text style={styles.recordButtonText}>{t('home.recent.recordButton')}</Text>
         </AppPressable>
       </View>
     );
@@ -64,20 +59,23 @@ export function RecentMemoryCard({ recording, onOpen, onRecord, onMore }: Props)
       <AppPressable
         onPress={() => onOpen(recording._id)}
         accessibilityRole="button"
-        accessibilityLabel={recording.title ?? 'Abrir gravação'}
+        accessibilityLabel={recording.title ?? t('home.recent.openRecording')}
         style={styles.body}
       >
         <Text style={styles.metaTop} numberOfLines={1}>
-          {recording.preacher ?? recording.church ?? 'Pregador não informado'}
+          {recording.preacher ?? recording.church ?? t('home.recent.unknownPreacher')}
           {'  •  '}
-          {formatMinutes(recording.durationSeconds)}
+          {t('home.recent.minutes', { count: Math.max(1, Math.round(recording.durationSeconds / 60)) })}
         </Text>
         <Text style={styles.title} numberOfLines={2}>
-          {recording.title ?? 'Gravação em processamento'}
+          {recording.title ?? t('home.recent.processing')}
         </Text>
         <Text style={styles.metaBottom} numberOfLines={1}>
-          {meetingLabel(recording.meetingType)}
-          {'  •  '}Gravado em {formatRecordedAt(recording.createdAt)}
+          {isMeetingType(recording.meetingType)
+            ? t(`recording.meetingTypes.${recording.meetingType}`)
+            : t('recording.meetingTypes.fallback')}
+          {'  •  '}
+          {t('home.recent.recordedOn', { date: formatRecordedAt(recording.createdAt) })}
         </Text>
       </AppPressable>
 
@@ -86,7 +84,7 @@ export function RecentMemoryCard({ recording, onOpen, onRecord, onMore }: Props)
           <>
             <View style={styles.summaryHeader}>
               <MaterialCommunityIcons name="creation" size={14} color={colors.primary} />
-              <Text style={styles.summaryTitle}>3 Pontos-Chave Gerados pela IA:</Text>
+              <Text style={styles.summaryTitle}>{t('home.recent.keyPoints')}</Text>
             </View>
             {recording.keyPoints.map((point, index) => (
               <View key={index} style={styles.bulletRow}>
@@ -97,7 +95,7 @@ export function RecentMemoryCard({ recording, onOpen, onRecord, onMore }: Props)
           </>
         ) : (
           <Text style={styles.statusText}>
-            {failed ? 'Não foi possível gerar o resumo desta gravação.' : 'A IA está preparando o resumo da sua gravação…'}
+            {failed ? t('home.recent.failed') : t('home.recent.preparing')}
           </Text>
         )}
       </View>
@@ -109,12 +107,12 @@ export function RecentMemoryCard({ recording, onOpen, onRecord, onMore }: Props)
           style={styles.link}
         >
           <MaterialCommunityIcons name="book-open-page-variant-outline" size={16} color={colors.secondary} />
-          <Text style={styles.linkText}>{completed ? 'Ler transcrição completa' : 'Ver gravação'}</Text>
+          <Text style={styles.linkText}>{completed ? t('home.recent.readTranscript') : t('home.recent.viewRecording')}</Text>
         </AppPressable>
         <AppPressable
           onPress={onMore}
           accessibilityRole="button"
-          accessibilityLabel="Mais opções"
+          accessibilityLabel={t('home.recent.moreOptions')}
           style={styles.moreButton}
         >
           <MaterialCommunityIcons name="dots-horizontal" size={18} color={colors.onSurfaceVariant} />

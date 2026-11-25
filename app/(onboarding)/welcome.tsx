@@ -9,6 +9,7 @@ import {
   type LayoutChangeEvent,
 } from 'react-native';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -46,17 +47,20 @@ const MAX_FONT_SIZE_MULTIPLIER = 1.2;
 
 interface Benefit {
   icon: IconName;
-  title: string;
-  description: string;
+  titleKey: 'onboarding.welcome.readTitle' | 'onboarding.welcome.listenTitle' | 'onboarding.welcome.writeTitle';
+  descriptionKey:
+    | 'onboarding.welcome.readDescription'
+    | 'onboarding.welcome.listenDescription'
+    | 'onboarding.welcome.writeDescription';
   tint: string;
   background: string;
 }
 
 /** The app's three pillars, shown as cards. */
 const BENEFITS: readonly Benefit[] = [
-  { icon: 'book-open-page-variant', title: 'Leia', description: 'Bíblia Digital Personalizada', tint: colors.tertiary, background: '#E4F2D9' },
-  { icon: 'headphones', title: 'Escute', description: 'Testemunhos Reais', tint: colors.secondary, background: '#DDE8FF' },
-  { icon: 'note-edit-outline', title: 'Escreva', description: 'Sua própria História', tint: colors.primary, background: '#FFE0E6' },
+  { icon: 'book-open-page-variant', titleKey: 'onboarding.welcome.readTitle', descriptionKey: 'onboarding.welcome.readDescription', tint: colors.tertiary, background: '#E4F2D9' },
+  { icon: 'headphones', titleKey: 'onboarding.welcome.listenTitle', descriptionKey: 'onboarding.welcome.listenDescription', tint: colors.secondary, background: '#DDE8FF' },
+  { icon: 'note-edit-outline', titleKey: 'onboarding.welcome.writeTitle', descriptionKey: 'onboarding.welcome.writeDescription', tint: colors.primary, background: '#FFE0E6' },
 ];
 
 /**
@@ -82,6 +86,7 @@ function getHeroFrame(screenWidth: number, heroHeight: number, focusY: number) {
 
 /** Welcome screen — first screen on the first launch. Fills the viewport without scrolling. */
 export default function WelcomeScreen() {
+  const { t } = useTranslation();
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
   const fontScale = PixelRatio.getFontScale();
   const isCompact =
@@ -133,7 +138,7 @@ export default function WelcomeScreen() {
           <View style={styles.tag}>
             <View style={styles.tagDot} />
             <Text style={styles.tagText} maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}>
-              DEVOCIONAL DIÁRIO & APRENDIZADO
+              {t('onboarding.welcome.tag')}
             </Text>
           </View>
         </View>
@@ -144,8 +149,8 @@ export default function WelcomeScreen() {
         <View style={[styles.content, isCompact && styles.contentCompact]} onLayout={handleContentLayout}>
           <View style={styles.highlight}>
             <Text style={styles.highlightText} numberOfLines={1} maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}>
-              Top <Text style={styles.highlightRank}>#1</Text>{' '}
-              <Text style={styles.highlightStrong}>App para Conhecimento Bíblico</Text>
+              {t('onboarding.welcome.rankPrefix')} <Text style={styles.highlightRank}>#1</Text>{' '}
+              <Text style={styles.highlightStrong}>{t('onboarding.welcome.rankTitle')}</Text>
             </Text>
           </View>
 
@@ -153,21 +158,21 @@ export default function WelcomeScreen() {
             <View style={styles.stat}>
               <View style={styles.statRow}>
                 <Text style={styles.statValue} maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}>
-                  4,8
+                  {t('onboarding.welcome.ratingValue')}
                 </Text>
                 <MaterialCommunityIcons name="star" size={16} color={colors.primary} />
               </View>
               <Text style={styles.statLabel} maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}>
-                Avaliação
+                {t('onboarding.welcome.ratingLabel')}
               </Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.stat}>
               <Text style={styles.statValue} maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}>
-                +10 mi
+                {t('onboarding.welcome.communityValue')}
               </Text>
               <Text style={styles.statLabel} maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}>
-                Cristãos
+                {t('onboarding.welcome.communityLabel')}
               </Text>
             </View>
           </View>
@@ -180,41 +185,38 @@ export default function WelcomeScreen() {
             minimumFontScale={0.7}
             maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}
           >
-            Bem-vindo ao BibleWise!
+            {t('onboarding.welcome.title')}
           </Text>
           <Text
             style={[styles.subtitle, { fontSize: subtitleSize, lineHeight: Math.round(subtitleSize * 1.45) }]}
             maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}
           >
-            Conecte-se com Deus, memorize escrituras sagradas e renove sua fé onde quer que você esteja.
+            {t('onboarding.welcome.subtitle')}
           </Text>
 
           <View style={styles.benefits}>
             {BENEFITS.map((benefit) => (
-              <View key={benefit.title} style={[styles.benefit, isCompact && styles.benefitCompact]}>
+              <View key={benefit.titleKey} style={[styles.benefit, isCompact && styles.benefitCompact]}>
                 <View style={[styles.benefitIcon, { backgroundColor: benefit.background }]}>
                   <MaterialCommunityIcons name={benefit.icon} size={18} color={benefit.tint} />
                 </View>
                 <Text style={styles.benefitTitle} maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}>
-                  {benefit.title}
+                  {t(benefit.titleKey)}
                 </Text>
                 <Text
                   style={styles.benefitDescription}
                   numberOfLines={2}
                   maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}
                 >
-                  {benefit.description}
+                  {t(benefit.descriptionKey)}
                 </Text>
               </View>
             ))}
           </View>
 
           <View style={styles.footer}>
-            <PrimaryButton label="Continuar" onPress={() => router.push('/age')} />
-            <PrivacyNote
-              icon="check-circle"
-              text="Ao continuar você concorda com nossas Políticas de Privacidade e Termos de Uso."
-            />
+            <PrimaryButton label={t('common.continue')} onPress={() => router.push('/age')} />
+            <PrivacyNote icon="check-circle" text={t('onboarding.welcome.consent')} />
           </View>
         </View>
       </SafeAreaView>

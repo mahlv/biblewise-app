@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Alert,
@@ -17,6 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { api } from '../../convex/_generated/api';
 import type { Id } from '../../convex/_generated/dataModel';
+import { LanguageSwitcher, currentLanguageName } from '../../components/LanguageSwitcher';
 import { PrimaryButton } from '../../components/PrimaryButton';
 import { ProfileTextField } from '../../components/ProfileTextField';
 import { useOnboarding } from '../../hooks/useOnboarding';
@@ -34,6 +36,8 @@ const AVATAR_SIZE = 120;
 export default function EditProfileScreen() {
   const { anonymousId } = useOnboarding();
   const toast = useToast();
+  const { t } = useTranslation();
+  const [languageOpen, setLanguageOpen] = useState(false);
   const user = useQuery(api.users.getUserByAnonymousId, anonymousId ? { anonymousId } : 'skip');
   const generateUploadUrl = useMutation(api.users.generateProfileImageUploadUrl);
   const updateProfile = useMutation(api.users.updateUserProfile);
@@ -221,6 +225,20 @@ export default function EditProfileScreen() {
               />
             </View>
 
+            <AppPressable
+              haptic="selection"
+              onPress={() => setLanguageOpen(true)}
+              accessibilityRole="button"
+              accessibilityLabel={`${t('language.title')}: ${currentLanguageName()}`}
+              style={styles.preference}
+            >
+              <View style={styles.preferenceTexts}>
+                <Text style={styles.preferenceTitle}>{t('language.title')}</Text>
+                <Text style={styles.preferenceBody}>{currentLanguageName()}</Text>
+              </View>
+              <MaterialCommunityIcons name="chevron-right" size={22} color={colors.outline} />
+            </AppPressable>
+
             <View style={styles.preference}>
               <View style={styles.preferenceTexts}>
                 <Text style={styles.preferenceTitle}>Vibração ao tocar</Text>
@@ -246,6 +264,7 @@ export default function EditProfileScreen() {
           </View>
         </KeyboardAvoidingView>
       )}
+      <LanguageSwitcher visible={languageOpen} onClose={() => setLanguageOpen(false)} />
     </SafeAreaView>
   );
 }

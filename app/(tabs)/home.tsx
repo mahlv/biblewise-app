@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useQuery } from 'convex/react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { api } from '../../convex/_generated/api';
@@ -23,6 +24,7 @@ export default function HomeScreen() {
   const { anonymousId, reset } = useOnboarding();
   const { versionCode } = useBible();
   const toast = useToast();
+  const { t } = useTranslation();
 
   const user = useQuery(api.users.getUserByAnonymousId, anonymousId ? { anonymousId } : 'skip');
   const latestRecording = useQuery(api.recordings.getLatestRecording, anonymousId ? { anonymousId } : 'skip');
@@ -62,8 +64,8 @@ export default function HomeScreen() {
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Acesso Rápido</Text>
-            <Text style={styles.sectionHint}>3 atalhos</Text>
+            <Text style={styles.sectionTitle}>{t('home.quickAccess.title')}</Text>
+            <Text style={styles.sectionHint}>{t('home.quickAccess.hint')}</Text>
           </View>
           <QuickAccessGrid
             onOpenBible={() => router.push('/bible')}
@@ -74,16 +76,16 @@ export default function HomeScreen() {
 
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Últimas Memórias</Text>
-            <AppPressable onPress={() => router.push('/diary')} accessibilityRole="link" accessibilityLabel="Ver tudo">
-              <Text style={styles.sectionLink}>Ver tudo</Text>
+            <Text style={styles.sectionTitle}>{t('home.recent.title')}</Text>
+            <AppPressable onPress={() => router.push('/diary')} accessibilityRole="link" accessibilityLabel={t('home.recent.seeAll')}>
+              <Text style={styles.sectionLink}>{t('home.recent.seeAll')}</Text>
             </AppPressable>
           </View>
           <RecentMemoryCard
             recording={latestRecording}
             onOpen={(id) => router.push({ pathname: '/diary/[id]', params: { id } })}
             onRecord={() => router.push('/recording')}
-            onMore={() => toast('Em breve')}
+            onMore={() => toast(t('common.comingSoon'))}
           />
         </View>
 

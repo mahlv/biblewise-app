@@ -1,0 +1,136 @@
+{
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "delete": "Löschen",
+    "close": "Schließen",
+    "back": "Zurück",
+    "comingSoon": "Demnächst verfügbar",
+    "tryAgain": "Bitte versuche es erneut.",
+    "continue": "Weiter",
+    "share": "Teilen"
+  },
+  "tabs": {
+    "home": "Start",
+    "bible": "Bibel",
+    "diary": "Tagebuch"
+  },
+  "language": {
+    "title": "Sprache",
+    "description": "Wähle die Sprache der App.",
+    "restartTitle": "App neu starten",
+    "restartBody": "Um die Leserichtung der gewählten Sprache anzuwenden, wird die App neu gestartet.",
+    "restartConfirm": "Neu starten"
+  },
+  "onboarding": {
+    "logoLabel": "BibleWise-Logo",
+    "privacy": "Deine Privatsphäre ist geschützt und deine Daten bleiben vertraulich.",
+    "welcome": {
+      "tag": "TÄGLICHE ANDACHT & LERNEN",
+      "rankPrefix": "Top",
+      "rankTitle": "App für Bibelwissen",
+      "ratingValue": "4,8",
+      "ratingLabel": "Bewertung",
+      "communityValue": "+10 Mio.",
+      "communityLabel": "Christen",
+      "title": "Willkommen bei BibleWise!",
+      "subtitle": "Verbinde dich mit Gott, lerne die Heilige Schrift auswendig und erneuere deinen Glauben – wo immer du bist.",
+      "readTitle": "Lies",
+      "readDescription": "Personalisierte digitale Bibel",
+      "listenTitle": "Hör zu",
+      "listenDescription": "Echte Zeugnisse",
+      "writeTitle": "Schreib",
+      "writeDescription": "Deine eigene Geschichte",
+      "consent": "Mit dem Fortfahren stimmst du unserer Datenschutzerklärung und den Nutzungsbedingungen zu."
+    },
+    "age": {
+      "title": "Wie alt bist du?",
+      "subtitle": "Damit wir deine Andachten und täglichen Lesungen persönlicher gestalten können.",
+      "years": "Jahre"
+    },
+    "denomination": {
+      "step": "SCHRITT 2 VON 2",
+      "title": "Welcher Konfession gehörst du an?",
+      "subtitle": "Das hilft uns, Bibelübersetzungen und Lesepläne vorzuschlagen, die zu deinem Weg passen.",
+      "default": "Standard",
+      "saveError": "Speichern ist gerade nicht möglich. Prüfe deine Verbindung und versuche es erneut."
+    },
+    "denominations": {
+      "catholic": "Katholisch",
+      "evangelical": "Evangelikal",
+      "protestant": "Protestantisch",
+      "pentecostal": "Pfingstlich",
+      "non_denominational": "Überkonfessionell protestantisch",
+      "orthodox": "Orthodox",
+      "other": "Andere / Auf der Suche nach Glauben"
+    }
+  },
+  "home": {
+    "greeting": "Guten Morgen",
+    "greetingNamed": "Guten Morgen, {{name}}",
+    "notifications": "Benachrichtigungen",
+    "profile": "Profil",
+    "quickAccess": {
+      "title": "Schnellzugriff",
+      "hint": "3 Verknüpfungen",
+      "bibleTitle": "Digitale Bibel",
+      "bibleSubtitle": "Lesen & Suchen",
+      "recordTitle": "Gottesdienst aufnehmen",
+      "recordSubtitle": "Automatische Notizen",
+      "recordBadge": "KI-Zusammenfassung",
+      "diaryTitle": "Mein Tagebuch",
+      "diarySubtitle": "Gebete und Glaube"
+    },
+    "recent": {
+      "title": "Letzte Erinnerungen",
+      "seeAll": "Alle ansehen",
+      "empty": "Noch keine Aufnahmen. Nimm deinen ersten Gottesdienst auf!",
+      "recordButton": "Gottesdienst aufnehmen",
+      "openRecording": "Aufnahme öffnen",
+      "unknownPreacher": "Prediger nicht angegeben",
+      "processing": "Aufnahme wird verarbeitet",
+      "recordedOn": "Aufgenommen am {{date}}",
+      "minutes": "{{count}} Min.",
+      "keyPoints": "3 von der KI erzeugte Kernpunkte:",
+      "failed": "Die Zusammenfassung dieser Aufnahme konnte nicht erstellt werden.",
+      "preparing": "Die KI erstellt gerade die Zusammenfassung deiner Aufnahme …",
+      "readTranscript": "Vollständiges Transkript lesen",
+      "viewRecording": "Aufnahme ansehen",
+      "moreOptions": "Weitere Optionen"
+    },
+    "quote": {
+      "badge": "VERS DES TAGES",
+      "listen": "Vers anhören",
+      "favorite": "Zu Favoriten hinzufügen",
+      "unfavorite": "Aus Favoriten entfernen",
+      "unsave": "Aus Gespeichertem entfernen"
+    }
+  },
+  "recording": {
+    "meetingTypes": {
+      "celebration": "Feier",
+      "bible_school": "Bibelschule",
+      "youth_service": "Jugendgottesdienst",
+      "prayer": "Gebet",
+      "fallback": "Gottesdienst"
+    }
+  },
+  "widget": {
+    "banner": {
+      "statusActive": "WIDGET AKTIV",
+      "statusPaused": "WIDGET PAUSIERT",
+      "statusNotAdded": "ZUM HOMESCREEN HINZUFÜGEN",
+      "title": "Vers auf dem Bildschirm",
+      "updated": "Aktualisiert {{when}}",
+      "pausedHint": "Tippe auf Anpassen, um zu reaktivieren",
+      "addHint": "Tippe auf Anpassen, um es hinzuzufügen",
+      "adjust": "Anpassen",
+      "adjustLabel": "Widget anpassen"
+    },
+    "rotation": {
+      "today": "heute um {{time}}",
+      "yesterday": "gestern um {{time}}"
+    }
+  }
+}

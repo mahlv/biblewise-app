@@ -1,0 +1,136 @@
+{
+  "common": {
+    "save": "Lagre",
+    "cancel": "Avbryt",
+    "confirm": "Bekreft",
+    "delete": "Slett",
+    "close": "Lukk",
+    "back": "Tilbake",
+    "comingSoon": "Kommer snart",
+    "tryAgain": "Prøv igjen.",
+    "continue": "Fortsett",
+    "share": "Del"
+  },
+  "tabs": {
+    "home": "Hjem",
+    "bible": "Bibel",
+    "diary": "Dagbok"
+  },
+  "language": {
+    "title": "Språk",
+    "description": "Velg språk for appen.",
+    "restartTitle": "Start appen på nytt",
+    "restartBody": "For å bruke leseretningen til det valgte språket, starter appen på nytt.",
+    "restartConfirm": "Start på nytt"
+  },
+  "onboarding": {
+    "logoLabel": "BibleWise-logo",
+    "privacy": "Personvernet ditt er ivaretatt, og informasjonen din forblir konfidensiell.",
+    "welcome": {
+      "tag": "DAGLIG ANDAKT OG LÆRING",
+      "rankPrefix": "Topp",
+      "rankTitle": "App for bibelkunnskap",
+      "ratingValue": "4,8",
+      "ratingLabel": "Vurdering",
+      "communityValue": "+10 mill.",
+      "communityLabel": "Kristne",
+      "title": "Velkommen til BibleWise!",
+      "subtitle": "Kom nær Gud, memorer Skriften og fornye troen din uansett hvor du er.",
+      "readTitle": "Les",
+      "readDescription": "Personlig digital bibel",
+      "listenTitle": "Lytt",
+      "listenDescription": "Ekte vitnesbyrd",
+      "writeTitle": "Skriv",
+      "writeDescription": "Din egen historie",
+      "consent": "Ved å fortsette godtar du personvernerklæringen og vilkårene våre."
+    },
+    "age": {
+      "title": "Hvor gammel er du?",
+      "subtitle": "Slik at vi kan tilpasse andaktene og de daglige lesningene dine.",
+      "years": "år"
+    },
+    "denomination": {
+      "step": "STEG 2 AV 2",
+      "title": "Hva er din kirketilhørighet?",
+      "subtitle": "Dette hjelper oss å foreslå bibeloversettelser og leseplaner som passer for din vandring.",
+      "default": "Standard",
+      "saveError": "Kunne ikke lagre akkurat nå. Sjekk tilkoblingen og prøv igjen."
+    },
+    "denominations": {
+      "catholic": "Katolsk",
+      "evangelical": "Evangelisk",
+      "protestant": "Protestantisk",
+      "pentecostal": "Pinsevennlig",
+      "non_denominational": "Ikke-konfesjonell protestantisk",
+      "orthodox": "Ortodoks",
+      "other": "Annen / På jakt etter tro"
+    }
+  },
+  "home": {
+    "greeting": "God morgen",
+    "greetingNamed": "God morgen, {{name}}",
+    "notifications": "Varsler",
+    "profile": "Profil",
+    "quickAccess": {
+      "title": "Hurtigtilgang",
+      "hint": "3 snarveier",
+      "bibleTitle": "Digital bibel",
+      "bibleSubtitle": "Lesing og søk",
+      "recordTitle": "Ta opp gudstjeneste",
+      "recordSubtitle": "Automatiske notater",
+      "recordBadge": "KI-sammendrag",
+      "diaryTitle": "Min dagbok",
+      "diarySubtitle": "Bønner og tro"
+    },
+    "recent": {
+      "title": "Siste minner",
+      "seeAll": "Se alle",
+      "empty": "Ingen opptak ennå. Ta opp din første gudstjeneste!",
+      "recordButton": "Ta opp gudstjeneste",
+      "openRecording": "Åpne opptak",
+      "unknownPreacher": "Taler ikke oppgitt",
+      "processing": "Opptaket behandles",
+      "recordedOn": "Tatt opp {{date}}",
+      "minutes": "{{count}} min",
+      "keyPoints": "3 nøkkelpunkter generert av KI:",
+      "failed": "Kunne ikke lage sammendrag av dette opptaket.",
+      "preparing": "KI-en lager sammendrag av opptaket ditt …",
+      "readTranscript": "Les hele transkripsjonen",
+      "viewRecording": "Se opptaket",
+      "moreOptions": "Flere valg"
+    },
+    "quote": {
+      "badge": "DAGENS VERS",
+      "listen": "Lytt til vers",
+      "favorite": "Legg til i favoritter",
+      "unfavorite": "Fjern fra favoritter",
+      "unsave": "Fjern fra lagret"
+    }
+  },
+  "recording": {
+    "meetingTypes": {
+      "celebration": "Feiring",
+      "bible_school": "Bibelskole",
+      "youth_service": "Ungdomsgudstjeneste",
+      "prayer": "Bønn",
+      "fallback": "Gudstjeneste"
+    }
+  },
+  "widget": {
+    "banner": {
+      "statusActive": "WIDGET AKTIV",
+      "statusPaused": "WIDGET PAUSET",
+      "statusNotAdded": "LEGG TIL PÅ SKJERMEN",
+      "title": "Vers på skjermen",
+      "updated": "Oppdatert {{when}}",
+      "pausedHint": "Trykk Juster for å aktivere igjen",
+      "addHint": "Trykk Juster for å legge den til",
+      "adjust": "Juster",
+      "adjustLabel": "Juster widget"
+    },
+    "rotation": {
+      "today": "i dag kl. {{time}}",
+      "yesterday": "i går kl. {{time}}"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import { Share, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { useToast } from '../../hooks/useToast';
 import { colors, fonts, radius, spacing } from '../../theme/tokens';
 import { AppPressable } from '../ui/AppPressable';
@@ -19,6 +20,7 @@ const CARD_GRADIENT = ['#7A2E1C', '#4A1D12', '#2A1410'] as const;
 /** "Frase do Dia": dark card with the daily verse, share and favorite/bookmark actions. */
 export function DailyQuoteCard({ quote, reference, favorite, bookmarked, onToggleFavorite, onToggleBookmark }: Props) {
   const toast = useToast();
+  const { t } = useTranslation();
 
   const handleShare = () => {
     Share.share({ message: `“${quote}”\n— ${reference}` }).catch(() => undefined);
@@ -29,12 +31,12 @@ export function DailyQuoteCard({ quote, reference, favorite, bookmarked, onToggl
       <View style={styles.topRow}>
         <View style={styles.badge}>
           <MaterialCommunityIcons name="star-four-points" size={12} color={colors.onPrimary} />
-          <Text style={styles.badgeText}>FRASE DO DIA</Text>
+          <Text style={styles.badgeText}>{t('home.quote.badge')}</Text>
         </View>
         <AppPressable
-          onPress={() => toast('Em breve')}
+          onPress={() => toast(t('common.comingSoon'))}
           accessibilityRole="button"
-          accessibilityLabel="Ouvir versículo"
+          accessibilityLabel={t('home.quote.listen')}
           style={styles.roundButton}
         >
           <MaterialCommunityIcons name="volume-high" size={18} color={colors.onPrimary} />
@@ -48,18 +50,18 @@ export function DailyQuoteCard({ quote, reference, favorite, bookmarked, onToggl
         <AppPressable
           onPress={handleShare}
           accessibilityRole="button"
-          accessibilityLabel="Compartilhar"
+          accessibilityLabel={t('common.share')}
           style={({ pressed }) => [styles.shareButton, pressed && { opacity: 0.85 }]}
         >
           <MaterialCommunityIcons name="share-variant-outline" size={18} color={colors.onSurface} />
-          <Text style={styles.shareText}>Compartilhar</Text>
+          <Text style={styles.shareText}>{t('common.share')}</Text>
         </AppPressable>
 
         <View style={styles.actions}>
           <AppPressable haptic="selection"
             onPress={onToggleFavorite}
             accessibilityRole="button"
-            accessibilityLabel={favorite ? 'Remover dos favoritos' : 'Favoritar'}
+            accessibilityLabel={favorite ? t('home.quote.unfavorite') : t('home.quote.favorite')}
             accessibilityState={{ selected: favorite }}
             style={styles.roundButton}
           >
@@ -72,7 +74,7 @@ export function DailyQuoteCard({ quote, reference, favorite, bookmarked, onToggl
           <AppPressable haptic="selection"
             onPress={onToggleBookmark}
             accessibilityRole="button"
-            accessibilityLabel={bookmarked ? 'Remover dos salvos' : 'Salvar'}
+            accessibilityLabel={bookmarked ? t('home.quote.unsave') : t('common.save')}
             accessibilityState={{ selected: bookmarked }}
             style={styles.roundButton}
           >

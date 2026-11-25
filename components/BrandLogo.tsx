@@ -1,4 +1,5 @@
 import { Image, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { colors } from '../theme/tokens';
 
 interface Props {
@@ -7,13 +8,14 @@ interface Props {
 
 /** App logo inside a white circle with a soft shadow (top of the screens). */
 export function BrandLogo({ size = 44 }: Props) {
+  const { t } = useTranslation();
   const frameSize = size + 10;
 
   return (
     <View
       style={[styles.frame, { width: frameSize, height: frameSize, borderRadius: frameSize / 2 }]}
       accessibilityRole="image"
-      accessibilityLabel="Logo do BibleWise"
+      accessibilityLabel={t('onboarding.logoLabel')}
     >
       <Image
         source={require('../assets/bw-logo.png')}

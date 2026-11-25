@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
@@ -17,6 +17,7 @@ import { BibleProvider } from '../hooks/useBible';
 import { ToastProvider } from '../hooks/useToast';
 import { OnboardingProvider, useOnboarding } from '../hooks/useOnboarding';
 import { loadHapticsPreference } from '../lib/haptics';
+import { loadLanguagePreference } from '../lib/i18n';
 import { syncWidget } from '../lib/widgetSync';
 import { colors } from '../theme/tokens';
 
@@ -80,9 +81,14 @@ function RootNavigator() {
     PlusJakartaSans_700Bold,
   });
   const { status, completed } = useOnboarding();
+  // The saved language is applied before the first screen so nothing flashes in the wrong language.
+  const [languageReady, setLanguageReady] = useState(false);
+  useEffect(() => {
+    void loadLanguagePreference().finally(() => setLanguageReady(true));
+  }, []);
 
   // If fonts fail to load, fall back to system fonts instead of hanging.
-  const isReady = (fontsLoaded || fontError !== null) && status === 'ready';
+  const isReady = (fontsLoaded || fontError !== null) && status === 'ready' && languageReady;
 
   useEffect(() => {
     if (isReady) SplashScreen.hideAsync();

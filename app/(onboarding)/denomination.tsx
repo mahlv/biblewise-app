@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { OnboardingHeader } from '../../components/OnboardingHeader';
 import { OnboardingOption, type IconName } from '../../components/OnboardingOption';
@@ -11,7 +12,6 @@ import { useOnboarding } from '../../hooks/useOnboarding';
 import {
   DEFAULT_DENOMINATION,
   DENOMINATIONS,
-  DENOMINATION_LABELS,
   type Denomination,
 } from '../../lib/onboardingOptions';
 import { colors, fonts } from '../../theme/tokens';
@@ -29,6 +29,7 @@ const DENOMINATION_ICONS: Record<Denomination, IconName> = {
 
 /** Onboarding step 2: denomination. Completing it saves the anonymous user in Convex. */
 export default function DenominationScreen() {
+  const { t } = useTranslation();
   const { draft, setDenomination, complete } = useOnboarding();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -52,7 +53,7 @@ export default function DenominationScreen() {
       // no `router.replace`, and onboarding is not left in the history.
       await complete();
     } catch {
-      setError('Não foi possível salvar agora. Verifique sua conexão e tente novamente.');
+      setError(t('onboarding.denomination.saveError'));
       setSaving(false);
     }
   };
@@ -62,7 +63,7 @@ export default function DenominationScreen() {
       <View style={onboardingStyles.header}>
         <OnboardingHeader onBack={() => router.back()} />
         <View style={styles.progressLegend}>
-          <Text style={styles.stepLabel}>ETAPA 2 DE 2</Text>
+          <Text style={styles.stepLabel}>{t('onboarding.denomination.step')}</Text>
           <Text style={styles.percentage}>{`${Math.round(progress * 100)}%`}</Text>
         </View>
         <ProgressBar progress={progress} />
@@ -70,19 +71,19 @@ export default function DenominationScreen() {
 
       <ScrollView contentContainerStyle={onboardingStyles.content} showsVerticalScrollIndicator={false}>
         <Text style={onboardingStyles.title} accessibilityRole="header">
-          Qual é a sua denominação?
+          {t('onboarding.denomination.title')}
         </Text>
         <Text style={onboardingStyles.subtitle}>
-          Isso nos ajuda a sugerir versões bíblicas e planos de leitura adequados à sua caminhada.
+          {t('onboarding.denomination.subtitle')}
         </Text>
 
         <View style={onboardingStyles.options} accessibilityRole="radiogroup">
           {DENOMINATIONS.map((denomination) => (
             <OnboardingOption
               key={denomination}
-              label={DENOMINATION_LABELS[denomination]}
+              label={t(`onboarding.denominations.${denomination}`)}
               icon={DENOMINATION_ICONS[denomination]}
-              badge={denomination === DEFAULT_DENOMINATION ? 'Padrão' : undefined}
+              badge={denomination === DEFAULT_DENOMINATION ? t('onboarding.denomination.default') : undefined}
               selected={draft.denomination === denomination}
               onPress={() => handleSelect(denomination)}
             />
@@ -96,8 +97,8 @@ export default function DenominationScreen() {
             {error}
           </Text>
         ) : null}
-        <PrimaryButton label="Continuar" loading={saving} disabled={!draft.ageRange} onPress={handleComplete} />
-        <PrivacyNote text="Sua privacidade é garantida e suas informações permanecerão confidenciais." />
+        <PrimaryButton label={t('common.continue')} loading={saving} disabled={!draft.ageRange} onPress={handleComplete} />
+        <PrivacyNote text={t('onboarding.privacy')} />
       </View>
     </SafeAreaView>
   );

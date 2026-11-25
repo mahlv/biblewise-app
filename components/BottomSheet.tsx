@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Animated, Dimensions, Easing, Modal, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { ToastProvider } from '../hooks/useToast';
 import { colors, radius } from '../theme/tokens';
 import { AppPressable } from './ui/AppPressable';
@@ -14,6 +15,7 @@ interface Props {
 
 /** Bottom sheet built on Modal + Animated (no native gesture libs). Closes on backdrop tap or back. */
 export function BottomSheet({ visible, onClose, children, heightRatio = 0.88 }: Props) {
+  const { t } = useTranslation();
   const height = Dimensions.get('window').height * heightRatio;
   const [mounted, setMounted] = useState(visible);
   const [progress] = useState(() => new Animated.Value(0));
@@ -37,7 +39,7 @@ export function BottomSheet({ visible, onClose, children, heightRatio = 0.88 }: 
     <Modal visible={mounted} transparent animationType="none" onRequestClose={onClose} statusBarTranslucent>
       <View style={styles.root}>
         <Animated.View style={[styles.backdrop, { opacity: progress }]}>
-          <AppPressable haptic="none" feedback="none" style={StyleSheet.absoluteFill} onPress={onClose} accessibilityLabel="Fechar" />
+          <AppPressable haptic="none" feedback="none" style={StyleSheet.absoluteFill} onPress={onClose} accessibilityLabel={t('common.close')} />
         </Animated.View>
         <Animated.View style={[styles.sheet, { height, transform: [{ translateY }] }]}>
           <View style={styles.handle} />

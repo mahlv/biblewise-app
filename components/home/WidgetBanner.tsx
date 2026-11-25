@@ -1,26 +1,28 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { getLastRotationLabel } from '../../lib/widgetQuotes';
 import { colors, fonts, radius, spacing } from '../../theme/tokens';
 import { AppPressable } from '../ui/AppPressable';
 
 export type WidgetStatus = 'active' | 'paused' | 'not_added';
 
-const STATUS: Record<WidgetStatus, { label: string; color: string }> = {
-  active: { label: 'WIDGET ATIVO', color: '#6BC24A' },
-  paused: { label: 'WIDGET PAUSADO', color: colors.outline },
-  not_added: { label: 'ADICIONAR À TELA', color: '#E0A100' },
-};
+const STATUS = {
+  active: { labelKey: 'widget.banner.statusActive', color: '#6BC24A' },
+  paused: { labelKey: 'widget.banner.statusPaused', color: colors.outline },
+  not_added: { labelKey: 'widget.banner.statusNotAdded', color: '#E0A100' },
+} as const satisfies Record<WidgetStatus, { labelKey: string; color: string }>;
 
 interface Props {
   status: WidgetStatus;
   onAdjust: () => void;
 }
 
-/** Home banner showing the widget's real state; "Ajustar" opens the widget settings. */
+/** Home banner showing the widget's real state; "Adjust" opens the widget settings. */
 export function WidgetBanner({ status, onAdjust }: Props) {
-  const { label, color } = STATUS[status];
+  const { t } = useTranslation();
+  const { labelKey, color } = STATUS[status];
 
   return (
     <LinearGradient
@@ -35,24 +37,28 @@ export function WidgetBanner({ status, onAdjust }: Props) {
 
       <View style={styles.texts}>
         <View style={styles.badgeRow}>
-          <Text style={[styles.badge, { color }]}>{label}</Text>
+          <Text style={[styles.badge, { color }]}>{t(labelKey)}</Text>
           <View style={[styles.dot, { backgroundColor: color }]} />
         </View>
         <Text style={styles.title} numberOfLines={1}>
-          Versículo na Tela
+          {t('widget.banner.title')}
         </Text>
         <Text style={styles.subtitle}>
-          {status === 'active' ? `Atualizado ${getLastRotationLabel(new Date())}` : status === 'paused' ? 'Toque em Ajustar para reativar' : 'Toque em Ajustar para adicionar'}
+          {status === 'active'
+            ? t('widget.banner.updated', { when: getLastRotationLabel(new Date()) })
+            : status === 'paused'
+              ? t('widget.banner.pausedHint')
+              : t('widget.banner.addHint')}
         </Text>
       </View>
 
       <AppPressable
         onPress={onAdjust}
         accessibilityRole="button"
-        accessibilityLabel="Ajustar widget"
+        accessibilityLabel={t('widget.banner.adjustLabel')}
         style={({ pressed }) => [styles.button, pressed && { opacity: 0.85 }]}
       >
-        <Text style={styles.buttonText}>Ajustar</Text>
+        <Text style={styles.buttonText}>{t('widget.banner.adjust')}</Text>
       </AppPressable>
     </LinearGradient>
   );
