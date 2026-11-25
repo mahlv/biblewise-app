@@ -1,8 +1,10 @@
 import { Alert, Image, StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import type { FunctionReturnType } from 'convex/server';
 import type { api } from '../convex/_generated/api';
 import { haptics } from '../lib/haptics';
+import { authorDisplayName } from '../lib/prayerLabels';
 import { formatTimeAgo } from '../lib/timeAgo';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
 import { AppPressable } from './ui/AppPressable';
@@ -32,6 +34,7 @@ function avatarColor(name: string): string {
 
 /** One flat comment under a post. */
 export function CommentItem({ comment, viewerIsPostAuthor, onDelete, onReport }: Props) {
+  const { t } = useTranslation();
   const { author } = comment;
   const canDelete = comment.isMine || viewerIsPostAuthor;
 
@@ -39,13 +42,13 @@ export function CommentItem({ comment, viewerIsPostAuthor, onDelete, onReport }:
     const buttons: { text: string; style?: 'destructive' | 'cancel'; onPress?: () => void }[] = [];
     if (canDelete) {
       buttons.push({
-        text: 'Excluir',
+        text: t('common.delete'),
         style: 'destructive',
         onPress: () =>
-          Alert.alert('Excluir comentário?', undefined, [
-            { text: 'Cancelar', style: 'cancel' },
+          Alert.alert(t('prayer.comment.deleteTitle'), undefined, [
+            { text: t('common.cancel'), style: 'cancel' },
             {
-              text: 'Excluir',
+              text: t('common.delete'),
               style: 'destructive',
               onPress: () => {
                 haptics.warning();
@@ -57,13 +60,13 @@ export function CommentItem({ comment, viewerIsPostAuthor, onDelete, onReport }:
     }
     if (!comment.isMine) {
       buttons.push({
-        text: 'Denunciar',
+        text: t('prayer.card.report'),
         style: 'destructive',
         onPress: () =>
-          Alert.alert('Denunciar comentário?', 'Comentários denunciados por várias pessoas são ocultados.', [
-            { text: 'Cancelar', style: 'cancel' },
+          Alert.alert(t('prayer.comment.reportTitle'), t('prayer.comment.reportBody'), [
+            { text: t('common.cancel'), style: 'cancel' },
             {
-              text: 'Denunciar',
+              text: t('prayer.card.report'),
               style: 'destructive',
               onPress: () => {
                 haptics.warning();
@@ -73,8 +76,8 @@ export function CommentItem({ comment, viewerIsPostAuthor, onDelete, onReport }:
           ]),
       });
     }
-    buttons.push({ text: 'Cancelar', style: 'cancel' });
-    Alert.alert('Comentário', undefined, buttons);
+    buttons.push({ text: t('common.cancel'), style: 'cancel' });
+    Alert.alert(t('prayer.comment.menuTitle'), undefined, buttons);
   };
 
   return (
@@ -95,16 +98,16 @@ export function CommentItem({ comment, viewerIsPostAuthor, onDelete, onReport }:
         <View style={styles.top}>
           <View style={styles.nameRow}>
             <Text style={styles.name} numberOfLines={1}>
-              {author.name}
+              {authorDisplayName(author)}
             </Text>
             {comment.isPostAuthor ? (
               <View style={styles.authorBadge}>
-                <Text style={styles.authorBadgeText}>Autor</Text>
+                <Text style={styles.authorBadgeText}>{t('prayer.comment.author')}</Text>
               </View>
             ) : null}
           </View>
           <Text style={styles.time}>{formatTimeAgo(comment.createdAt)}</Text>
-          <AppPressable onPress={openMenu} accessibilityRole="button" accessibilityLabel="Mais opções do comentário" hitSlop={8}>
+          <AppPressable onPress={openMenu} accessibilityRole="button" accessibilityLabel={t('prayer.comment.moreOptions')} hitSlop={8}>
             <MaterialCommunityIcons name="dots-horizontal" size={20} color={colors.outline} />
           </AppPressable>
         </View>

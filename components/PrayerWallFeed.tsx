@@ -3,6 +3,7 @@ import { ActivityIndicator, Alert, FlatList, ScrollView, StyleSheet, Text, TextI
 import { router } from 'expo-router';
 import { optimisticallyUpdateValueInPaginatedQuery, useMutation, usePaginatedQuery } from 'convex/react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { api } from '../convex/_generated/api';
 import { PrayerCard, type PrayerView } from './PrayerCard';
 import { useToast } from '../hooks/useToast';
@@ -30,9 +31,10 @@ const errorMessage = (error: unknown, fallback: string): string => {
   return match?.[1] ?? fallback;
 };
 
-/** "Mural de Oração / Testemunho": CTA, search, filter chips and the paginated feed. */
+/** "Prayer / Testimony wall": CTA, search, filter chips and the paginated feed. */
 export function PrayerWallFeed({ anonymousId, header, myPostsCount }: Props) {
   const toast = useToast();
+  const { t } = useTranslation();
   const [filter, setFilter] = useState<Filter>('all');
   const [searchText, setSearchText] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
@@ -70,30 +72,30 @@ export function PrayerWallFeed({ anonymousId, header, myPostsCount }: Props) {
     if (!anonymousId) return;
     toggleAmen({ anonymousId, prayerId }).catch((error) => {
       haptics.error();
-      toast(errorMessage(error, 'Não foi possível registrar o Amém.'));
+      toast(errorMessage(error, t('prayer.feed.likeFailed')));
     });
   };
 
   const handleReport = (prayerId: PrayerView['_id']) => {
     if (!anonymousId) return;
     reportPrayer({ anonymousId, prayerId }).then(
-      () => toast('Obrigado. Vamos analisar esta publicação.'),
-      (error) => Alert.alert('Não foi possível denunciar', errorMessage(error, 'Tente novamente.')),
+      () => toast(t('prayer.feed.reportThanks')),
+      (error) => Alert.alert(t('prayer.feed.reportFailed'), errorMessage(error, t('common.tryAgain'))),
     );
   };
 
   const handleDelete = (prayerId: PrayerView['_id']) => {
     if (!anonymousId) return;
     deletePrayer({ anonymousId, prayerId }).then(
-      () => toast('Publicação excluída'),
-      (error) => Alert.alert('Não foi possível excluir', errorMessage(error, 'Tente novamente.')),
+      () => toast(t('prayer.feed.deleted')),
+      (error) => Alert.alert(t('prayer.feed.deleteFailed'), errorMessage(error, t('common.tryAgain'))),
     );
   };
 
   const chips: { id: Filter; label: string; count?: number; dot?: boolean }[] = [
-    { id: 'all', label: 'Todos' },
-    { id: 'mine', label: 'Meus Pedidos', count: myPostsCount },
-    { id: 'testimony', label: 'Testemunhos', dot: true },
+    { id: 'all', label: t('prayer.feed.all') },
+    { id: 'mine', label: t('prayer.feed.mine'), count: myPostsCount },
+    { id: 'testimony', label: t('diary.stats.testimonies'), dot: true },
   ];
 
   const listHeader = (
@@ -104,11 +106,11 @@ export function PrayerWallFeed({ anonymousId, header, myPostsCount }: Props) {
         <AppPressable
           onPress={() => router.push('/prayer/create')}
           accessibilityRole="button"
-          accessibilityLabel="Nova Oração ou Testemunho"
+          accessibilityLabel={t('prayer.feed.cta')}
           style={({ pressed }) => [styles.cta, pressed && { opacity: 0.9 }]}
         >
           <MaterialCommunityIcons name="plus" size={20} color={colors.onPrimary} />
-          <Text style={styles.ctaText}>Nova Oração ou Testemunho</Text>
+          <Text style={styles.ctaText}>{t('prayer.feed.cta')}</Text>
         </AppPressable>
       </View>
 
@@ -117,15 +119,15 @@ export function PrayerWallFeed({ anonymousId, header, myPostsCount }: Props) {
         <TextInput
           value={searchText}
           onChangeText={setSearchText}
-          placeholder="Buscar pedido, oração ou autor..."
+          placeholder={t('prayer.feed.searchPlaceholder')}
           placeholderTextColor={colors.outline}
           returnKeyType="search"
           autoCorrect={false}
-          accessibilityLabel="Buscar pedido, oração ou autor"
+          accessibilityLabel={t('prayer.feed.searchLabel')}
           style={styles.searchInput}
         />
         {searchText ? (
-          <AppPressable onPress={() => setSearchText('')} accessibilityRole="button" accessibilityLabel="Limpar busca" hitSlop={8}>
+          <AppPressable onPress={() => setSearchText('')} accessibilityRole="button" accessibilityLabel={t('prayer.feed.clearSearch')} hitSlop={8}>
             <MaterialCommunityIcons name="close-circle" size={18} color={colors.outline} />
           </AppPressable>
         ) : null}
@@ -188,14 +190,14 @@ export function PrayerWallFeed({ anonymousId, header, myPostsCount }: Props) {
           <View style={styles.empty}>
             <MaterialCommunityIcons name="hands-pray" size={36} color={colors.outline} />
             <Text style={styles.emptyTitle}>
-              {filter === 'mine' && !searchTerm ? 'Você ainda não publicou nada' : 'Nenhuma oração encontrada'}
+              {filter === 'mine' && !searchTerm ? t('prayer.feed.emptyMine') : t('prayer.feed.emptyAll')}
             </Text>
             <Text style={styles.emptyBody}>
               {searchTerm
-                ? 'Tente outras palavras na busca.'
+                ? t('prayer.feed.emptySearch')
                 : filter === 'mine'
-                  ? 'Compartilhe um pedido de oração ou um testemunho com a comunidade.'
-                  : 'Seja o primeiro a compartilhar um pedido ou testemunho.'}
+                  ? t('prayer.feed.emptyMineBody')
+                  : t('prayer.feed.emptyAllBody')}
             </Text>
           </View>
         )

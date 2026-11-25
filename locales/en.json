@@ -406,5 +406,112 @@
       "card": "Card",
       "story": "Story"
     }
+  },
+  "time": {
+    "now": "Now",
+    "minutesAgo": "{{count}}min ago",
+    "hoursAgo": "{{count}}h ago",
+    "yesterday": "Yesterday",
+    "daysAgo_one": "{{count}} day ago",
+    "daysAgo_other": "{{count}} days ago"
+  },
+  "prayer": {
+    "types": {
+      "request": "Prayer",
+      "testimony": "Testimony",
+      "requestLong": "Prayer Request"
+    },
+    "categories": {
+      "familyHealth": "FAMILY & HEALTH",
+      "career": "CAREER",
+      "peaceDirection": "PEACE & GUIDANCE",
+      "reconciliation": "RECONCILIATION",
+      "finances": "FINANCES",
+      "gratitude": "GRATITUDE",
+      "faithGrowth": "FAITH & GROWTH",
+      "other": "OTHER"
+    },
+    "anonymousName": "Brother in Christ",
+    "card": {
+      "yourPost": "Your post",
+      "post": "Post",
+      "deleteTitle": "Delete post?",
+      "deleteBody": "It will no longer appear on the wall for anyone.",
+      "reportTitle": "Report post?",
+      "reportBody": "We'll notify moderation. Posts reported by several people are hidden.",
+      "report": "Report",
+      "open": "Open {{title}}",
+      "like": "Like",
+      "unlike": "Remove like",
+      "comments": "Comments: {{count}}"
+    },
+    "comment": {
+      "menuTitle": "Comment",
+      "deleteTitle": "Delete comment?",
+      "reportTitle": "Report comment?",
+      "reportBody": "Comments reported by several people are hidden.",
+      "author": "Author",
+      "moreOptions": "More comment options",
+      "placeholder": "Write a comment...",
+      "inputLabel": "Write a comment",
+      "send": "Send comment",
+      "failed": "Couldn't comment.",
+      "reportThanks": "Thank you. We'll review this comment."
+    },
+    "feed": {
+      "all": "All",
+      "mine": "My Requests",
+      "cta": "New Prayer or Testimony",
+      "searchPlaceholder": "Search request, prayer or author...",
+      "searchLabel": "Search request, prayer or author",
+      "clearSearch": "Clear search",
+      "emptyMine": "You haven't posted anything yet",
+      "emptyAll": "No prayers found",
+      "emptySearch": "Try different words in the search.",
+      "emptyMineBody": "Share a prayer request or a testimony with the community.",
+      "emptyAllBody": "Be the first to share a request or testimony.",
+      "likeFailed": "Couldn't like this post.",
+      "reportThanks": "Thank you. We'll review this post.",
+      "reportFailed": "Couldn't report",
+      "deleteFailed": "Couldn't delete",
+      "deleted": "Post deleted"
+    },
+    "create": {
+      "headerTitle": "New post",
+      "title": "Title",
+      "titlePlaceholderRequest": "E.g. Healing for my mother",
+      "titlePlaceholderTestimony": "E.g. Grateful for my new job",
+      "category": "Category",
+      "message": "Message",
+      "messagePlaceholderRequest": "Share your prayer request...",
+      "messagePlaceholderTestimony": "Tell what God has done in your life...",
+      "verseOptional": "Verse (optional)",
+      "reference": "Reference",
+      "referencePlaceholder": "E.g. {{example}}",
+      "fillVerse": "Fill with the Bible text",
+      "verseTextPlaceholder": "Verse text",
+      "verseNotFound": "Verse not found",
+      "verseNeedsVerse": "Type the reference with the verse, for example \"{{first}}\" or \"{{second}}\".",
+      "verseNotInVersion": "That verse doesn't exist in this Bible version.",
+      "anonymousTitle": "Post anonymously",
+      "anonymousBody": "Your name, city and photo will not appear. \"{{name}}\" will be shown instead.",
+      "noName": "Set your name in your profile to post with your name. For now, the post will be anonymous.",
+      "editProfile": "Edit profile",
+      "rules": "Posts can be reported and hidden by the community. Be respectful and do not share other people's personal data.",
+      "publishRequest": "Post prayer",
+      "publishTestimony": "Post testimony",
+      "titleRequired": "Write a title.",
+      "categoryRequired": "Choose a category.",
+      "contentRequired": "Write your message.",
+      "published": "Posted to the wall!",
+      "publishFailed": "Couldn't post",
+      "tryLater": "Please try again in a moment."
+    },
+    "detail": {
+      "comments": "Comments",
+      "unavailable": "Post unavailable",
+      "unavailableBody": "It may have been deleted or hidden.",
+      "noComments": "Be the first to comment and encourage with a word."
+    }
   }
 }

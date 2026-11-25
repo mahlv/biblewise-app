@@ -406,5 +406,112 @@
       "card": "Kort",
       "story": "Story"
     }
+  },
+  "time": {
+    "now": "Nå",
+    "minutesAgo": "{{count}} min siden",
+    "hoursAgo": "{{count}} t siden",
+    "yesterday": "I går",
+    "daysAgo_one": "{{count}} dag siden",
+    "daysAgo_other": "{{count}} dager siden"
+  },
+  "prayer": {
+    "types": {
+      "request": "Bønn",
+      "testimony": "Vitnesbyrd",
+      "requestLong": "Bønneemne"
+    },
+    "categories": {
+      "familyHealth": "FAMILIE OG HELSE",
+      "career": "YRKESLIV",
+      "peaceDirection": "FRED OG VEILEDNING",
+      "reconciliation": "FORSONING",
+      "finances": "ØKONOMI",
+      "gratitude": "TAKKNEMLIGHET",
+      "faithGrowth": "TRO OG VEKST",
+      "other": "ANNET"
+    },
+    "anonymousName": "Bror i Kristus",
+    "card": {
+      "yourPost": "Innlegget ditt",
+      "post": "Innlegg",
+      "deleteTitle": "Slette innlegget?",
+      "deleteBody": "Det vises ikke lenger på veggen for noen.",
+      "reportTitle": "Rapportere innlegget?",
+      "reportBody": "Vi varsler moderasjonen. Innlegg som er rapportert av flere, skjules.",
+      "report": "Rapporter",
+      "open": "Åpne {{title}}",
+      "like": "Lik",
+      "unlike": "Fjern lik",
+      "comments": "Kommentarer: {{count}}"
+    },
+    "comment": {
+      "menuTitle": "Kommentar",
+      "deleteTitle": "Slette kommentaren?",
+      "reportTitle": "Rapportere kommentaren?",
+      "reportBody": "Kommentarer som er rapportert av flere, skjules.",
+      "author": "Forfatter",
+      "moreOptions": "Flere kommentarvalg",
+      "placeholder": "Skriv en kommentar ...",
+      "inputLabel": "Skriv en kommentar",
+      "send": "Send kommentar",
+      "failed": "Kunne ikke kommentere.",
+      "reportThanks": "Takk. Vi gjennomgår denne kommentaren."
+    },
+    "feed": {
+      "all": "Alle",
+      "mine": "Mine forbønner",
+      "cta": "Ny bønn eller vitnesbyrd",
+      "searchPlaceholder": "Søk etter forbønn, bønn eller forfatter ...",
+      "searchLabel": "Søk etter forbønn, bønn eller forfatter",
+      "clearSearch": "Tøm søket",
+      "emptyMine": "Du har ikke publisert noe ennå",
+      "emptyAll": "Ingen bønner funnet",
+      "emptySearch": "Prøv andre ord i søket.",
+      "emptyMineBody": "Del et bønneemne eller et vitnesbyrd med fellesskapet.",
+      "emptyAllBody": "Vær den første til å dele et bønneemne eller vitnesbyrd.",
+      "likeFailed": "Kunne ikke like innlegget.",
+      "reportThanks": "Takk. Vi gjennomgår dette innlegget.",
+      "reportFailed": "Kunne ikke rapportere",
+      "deleteFailed": "Kunne ikke slette",
+      "deleted": "Innlegg slettet"
+    },
+    "create": {
+      "headerTitle": "Nytt innlegg",
+      "title": "Tittel",
+      "titlePlaceholderRequest": "F.eks. Helbredelse for moren min",
+      "titlePlaceholderTestimony": "F.eks. Takknemlig for ny jobb",
+      "category": "Kategori",
+      "message": "Melding",
+      "messagePlaceholderRequest": "Del bønneemnet ditt ...",
+      "messagePlaceholderTestimony": "Fortell hva Gud har gjort i livet ditt ...",
+      "verseOptional": "Vers (valgfritt)",
+      "reference": "Referanse",
+      "referencePlaceholder": "F.eks. {{example}}",
+      "fillVerse": "Fyll ut med bibelteksten",
+      "verseTextPlaceholder": "Verstekst",
+      "verseNotFound": "Fant ikke verset",
+      "verseNeedsVerse": "Skriv referansen med vers, for eksempel \"{{first}}\" eller \"{{second}}\".",
+      "verseNotInVersion": "Dette verset finnes ikke i denne bibeloversettelsen.",
+      "anonymousTitle": "Publiser anonymt",
+      "anonymousBody": "Navn, by og bilde vises ikke. «{{name}}» vises i stedet.",
+      "noName": "Angi navnet ditt i profilen for å publisere under eget navn. Foreløpig blir innlegget anonymt.",
+      "editProfile": "Rediger profil",
+      "rules": "Innlegg kan rapporteres og skjules av fellesskapet. Vær respektfull og ikke del andres personopplysninger.",
+      "publishRequest": "Publiser bønn",
+      "publishTestimony": "Publiser vitnesbyrd",
+      "titleRequired": "Skriv en tittel.",
+      "categoryRequired": "Velg en kategori.",
+      "contentRequired": "Skriv meldingen din.",
+      "published": "Publisert på veggen!",
+      "publishFailed": "Kunne ikke publisere",
+      "tryLater": "Prøv igjen om litt."
+    },
+    "detail": {
+      "comments": "Kommentarer",
+      "unavailable": "Innlegg utilgjengelig",
+      "unavailableBody": "Det kan ha blitt slettet eller skjult.",
+      "noComments": "Vær den første til å kommentere og oppmuntre med et ord."
+    }
   }
 }

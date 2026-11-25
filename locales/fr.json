@@ -406,5 +406,112 @@
       "card": "Carte",
       "story": "Story"
     }
+  },
+  "time": {
+    "now": "À l'instant",
+    "minutesAgo": "Il y a {{count}} min",
+    "hoursAgo": "Il y a {{count}} h",
+    "yesterday": "Hier",
+    "daysAgo_one": "Il y a {{count}} jour",
+    "daysAgo_other": "Il y a {{count}} jours"
+  },
+  "prayer": {
+    "types": {
+      "request": "Prière",
+      "testimony": "Témoignage",
+      "requestLong": "Demande de prière"
+    },
+    "categories": {
+      "familyHealth": "FAMILLE & SANTÉ",
+      "career": "VIE PROFESSIONNELLE",
+      "peaceDirection": "PAIX & DIRECTION",
+      "reconciliation": "RÉCONCILIATION",
+      "finances": "FINANCES",
+      "gratitude": "GRATITUDE",
+      "faithGrowth": "FOI & CROISSANCE",
+      "other": "AUTRES"
+    },
+    "anonymousName": "Frère en Christ",
+    "card": {
+      "yourPost": "Votre publication",
+      "post": "Publication",
+      "deleteTitle": "Supprimer la publication ?",
+      "deleteBody": "Elle n'apparaîtra plus sur le mur pour personne.",
+      "reportTitle": "Signaler la publication ?",
+      "reportBody": "Nous préviendrons la modération. Les publications signalées par plusieurs personnes sont masquées.",
+      "report": "Signaler",
+      "open": "Ouvrir {{title}}",
+      "like": "J'aime",
+      "unlike": "Retirer le j'aime",
+      "comments": "Commentaires : {{count}}"
+    },
+    "comment": {
+      "menuTitle": "Commentaire",
+      "deleteTitle": "Supprimer le commentaire ?",
+      "reportTitle": "Signaler le commentaire ?",
+      "reportBody": "Les commentaires signalés par plusieurs personnes sont masqués.",
+      "author": "Auteur",
+      "moreOptions": "Plus d'options du commentaire",
+      "placeholder": "Écrivez un commentaire...",
+      "inputLabel": "Écrivez un commentaire",
+      "send": "Envoyer le commentaire",
+      "failed": "Impossible de commenter.",
+      "reportThanks": "Merci. Nous allons examiner ce commentaire."
+    },
+    "feed": {
+      "all": "Tous",
+      "mine": "Mes demandes",
+      "cta": "Nouvelle prière ou témoignage",
+      "searchPlaceholder": "Rechercher une demande, une prière ou un auteur...",
+      "searchLabel": "Rechercher une demande, une prière ou un auteur",
+      "clearSearch": "Effacer la recherche",
+      "emptyMine": "Vous n'avez encore rien publié",
+      "emptyAll": "Aucune prière trouvée",
+      "emptySearch": "Essayez d'autres mots dans la recherche.",
+      "emptyMineBody": "Partagez une demande de prière ou un témoignage avec la communauté.",
+      "emptyAllBody": "Soyez le premier à partager une demande ou un témoignage.",
+      "likeFailed": "Impossible d'aimer cette publication.",
+      "reportThanks": "Merci. Nous allons examiner cette publication.",
+      "reportFailed": "Impossible de signaler",
+      "deleteFailed": "Impossible de supprimer",
+      "deleted": "Publication supprimée"
+    },
+    "create": {
+      "headerTitle": "Nouvelle publication",
+      "title": "Titre",
+      "titlePlaceholderRequest": "Ex. : Guérison de ma mère",
+      "titlePlaceholderTestimony": "Ex. : Reconnaissance pour mon nouvel emploi",
+      "category": "Catégorie",
+      "message": "Message",
+      "messagePlaceholderRequest": "Partagez votre demande de prière...",
+      "messagePlaceholderTestimony": "Racontez ce que Dieu a fait dans votre vie...",
+      "verseOptional": "Verset (facultatif)",
+      "reference": "Référence",
+      "referencePlaceholder": "Ex. : {{example}}",
+      "fillVerse": "Remplir avec le texte de la Bible",
+      "verseTextPlaceholder": "Texte du verset",
+      "verseNotFound": "Verset introuvable",
+      "verseNeedsVerse": "Saisissez la référence avec le verset, par exemple « {{first}} » ou « {{second}} ».",
+      "verseNotInVersion": "Ce verset n'existe pas dans cette version de la Bible.",
+      "anonymousTitle": "Publier anonymement",
+      "anonymousBody": "Votre nom, votre ville et votre photo n'apparaîtront pas. « {{name}} » sera affiché.",
+      "noName": "Définissez votre nom dans votre profil pour publier sous votre nom. Pour l'instant, la publication sera anonyme.",
+      "editProfile": "Modifier le profil",
+      "rules": "Les publications peuvent être signalées et masquées par la communauté. Soyez respectueux et ne partagez pas les données personnelles de tiers.",
+      "publishRequest": "Publier la prière",
+      "publishTestimony": "Publier le témoignage",
+      "titleRequired": "Écrivez un titre.",
+      "categoryRequired": "Choisissez une catégorie.",
+      "contentRequired": "Écrivez votre message.",
+      "published": "Publié sur le mur !",
+      "publishFailed": "Impossible de publier",
+      "tryLater": "Réessayez dans un instant."
+    },
+    "detail": {
+      "comments": "Commentaires",
+      "unavailable": "Publication indisponible",
+      "unavailableBody": "Elle a peut-être été supprimée ou masquée.",
+      "noComments": "Soyez le premier à commenter et à encourager par un mot."
+    }
   }
 }

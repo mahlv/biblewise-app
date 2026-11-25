@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { ActivityIndicator, Alert, FlatList, KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useMutation, usePaginatedQuery, useQuery } from 'convex/react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -29,6 +30,7 @@ export default function PrayerDetailScreen() {
   const prayerId = id as Id<'prayers'>;
   const { anonymousId } = useOnboarding();
   const toast = useToast();
+  const { t } = useTranslation();
   const listRef = useRef<FlatList<CommentView>>(null);
 
   const viewerId = anonymousId ?? undefined;
@@ -67,7 +69,7 @@ export default function PrayerDetailScreen() {
       setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 350);
     } catch (error) {
       haptics.error();
-      toast(errorMessage(error, 'Não foi possível comentar.'));
+      toast(errorMessage(error, t('prayer.comment.failed')));
       throw error;
     }
   };
@@ -76,36 +78,38 @@ export default function PrayerDetailScreen() {
     <View style={styles.headerBlock}>
       <PrayerCard
         prayer={prayer}
-        onToggleAmen={(id) => anonymousId && toggleAmen({ anonymousId, prayerId: id }).catch((error) => toast(errorMessage(error, 'Não foi possível curtir.')))}
+        onToggleAmen={(id) => anonymousId && toggleAmen({ anonymousId, prayerId: id }).catch((error) => toast(errorMessage(error, t('prayer.feed.likeFailed'))))}
         onReport={(id) =>
           anonymousId &&
           reportPrayer({ anonymousId, prayerId: id }).then(
-            () => toast('Obrigado. Vamos analisar esta publicação.'),
-            (error) => Alert.alert('Não foi possível denunciar', errorMessage(error, 'Tente novamente.')),
+            () => toast(t('prayer.feed.reportThanks')),
+            (error) => Alert.alert(t('prayer.feed.reportFailed'), errorMessage(error, t('common.tryAgain'))),
           )
         }
         onDelete={(id) =>
           anonymousId &&
           deletePrayer({ anonymousId, prayerId: id }).then(
             () => {
-              toast('Publicação excluída');
+              toast(t('prayer.feed.deleted'));
               goBack();
             },
-            (error) => Alert.alert('Não foi possível excluir', errorMessage(error, 'Tente novamente.')),
+            (error) => Alert.alert(t('prayer.feed.deleteFailed'), errorMessage(error, t('common.tryAgain'))),
           )
         }
       />
-      <Text style={styles.commentsTitle}>Comentários {prayer.commentCount > 0 ? `(${prayer.commentCount})` : ''}</Text>
+      <Text style={styles.commentsTitle}>
+        {t('prayer.detail.comments')} {prayer.commentCount > 0 ? `(${prayer.commentCount})` : ''}
+      </Text>
     </View>
   ) : null;
 
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <View style={styles.topBar}>
-        <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Voltar" style={styles.topButton}>
+        <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel={t('common.back')} style={styles.topButton}>
           <MaterialCommunityIcons name="arrow-left" size={24} color={colors.onSurface} />
         </AppPressable>
-        <Text style={styles.topTitle}>Publicação</Text>
+        <Text style={styles.topTitle}>{t('prayer.card.post')}</Text>
         <View style={styles.topButton} />
       </View>
 
@@ -116,8 +120,8 @@ export default function PrayerDetailScreen() {
       ) : prayer === null ? (
         <View style={styles.center}>
           <MaterialCommunityIcons name="text-box-remove-outline" size={36} color={colors.outline} />
-          <Text style={styles.emptyTitle}>Publicação indisponível</Text>
-          <Text style={styles.emptyBody}>Ela pode ter sido excluída ou ocultada.</Text>
+          <Text style={styles.emptyTitle}>{t('prayer.detail.unavailable')}</Text>
+          <Text style={styles.emptyBody}>{t('prayer.detail.unavailableBody')}</Text>
         </View>
       ) : (
         <KeyboardAvoidingView style={styles.flex} behavior="padding">
@@ -135,13 +139,15 @@ export default function PrayerDetailScreen() {
                 viewerIsPostAuthor={prayer.isMine}
                 onDelete={(commentId) =>
                   anonymousId &&
-                  deleteComment({ anonymousId, commentId }).catch((error) => Alert.alert('Não foi possível excluir', errorMessage(error, 'Tente novamente.')))
+                  deleteComment({ anonymousId, commentId }).catch((error) =>
+                    Alert.alert(t('prayer.feed.deleteFailed'), errorMessage(error, t('common.tryAgain'))),
+                  )
                 }
                 onReport={(commentId) =>
                   anonymousId &&
                   reportComment({ anonymousId, commentId }).then(
-                    () => toast('Obrigado. Vamos analisar este comentário.'),
-                    (error) => Alert.alert('Não foi possível denunciar', errorMessage(error, 'Tente novamente.')),
+                    () => toast(t('prayer.comment.reportThanks')),
+                    (error) => Alert.alert(t('prayer.feed.reportFailed'), errorMessage(error, t('common.tryAgain'))),
                   )
                 }
               />
@@ -156,7 +162,7 @@ export default function PrayerDetailScreen() {
               ) : (
                 <View style={styles.noComments}>
                   <MaterialCommunityIcons name="comment-text-outline" size={28} color={colors.outline} />
-                  <Text style={styles.emptyBody}>Seja o primeiro a comentar e encorajar com uma palavra.</Text>
+                  <Text style={styles.emptyBody}>{t('prayer.detail.noComments')}</Text>
                 </View>
               )
             }

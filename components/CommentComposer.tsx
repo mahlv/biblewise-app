@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, TextInput, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { PRAYER_LIMITS } from '../lib/prayerCategories';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
 import { AppPressable } from './ui/AppPressable';
@@ -12,6 +13,7 @@ interface Props {
 
 /** Input bar to write a comment, with a send button and a counter near the limit. */
 export function CommentComposer({ onSubmit }: Props) {
+  const { t } = useTranslation();
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
   const canSend = text.trim().length > 0 && !sending;
@@ -35,11 +37,11 @@ export function CommentComposer({ onSubmit }: Props) {
         <TextInput
           value={text}
           onChangeText={setText}
-          placeholder="Escreva um comentário..."
+          placeholder={t('prayer.comment.placeholder')}
           placeholderTextColor={colors.outline}
           multiline
           maxLength={PRAYER_LIMITS.comment}
-          accessibilityLabel="Escreva um comentário"
+          accessibilityLabel={t('prayer.comment.inputLabel')}
           style={styles.input}
         />
         {text.length > PRAYER_LIMITS.comment - 100 ? (
@@ -52,7 +54,7 @@ export function CommentComposer({ onSubmit }: Props) {
         onPress={send}
         disabled={!canSend}
         accessibilityRole="button"
-        accessibilityLabel="Enviar comentário"
+        accessibilityLabel={t('prayer.comment.send')}
         style={({ pressed }) => [styles.send, !canSend && styles.sendDisabled, pressed && { opacity: 0.85 }]}
       >
         {sending ? <ActivityIndicator color={colors.onPrimary} /> : <MaterialCommunityIcons name="send" size={20} color={colors.onPrimary} />}

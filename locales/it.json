@@ -406,5 +406,112 @@
       "card": "Cartolina",
       "story": "Story"
     }
+  },
+  "time": {
+    "now": "Adesso",
+    "minutesAgo": "{{count}} min fa",
+    "hoursAgo": "{{count}} h fa",
+    "yesterday": "Ieri",
+    "daysAgo_one": "{{count}} giorno fa",
+    "daysAgo_other": "{{count}} giorni fa"
+  },
+  "prayer": {
+    "types": {
+      "request": "Preghiera",
+      "testimony": "Testimonianza",
+      "requestLong": "Richiesta di preghiera"
+    },
+    "categories": {
+      "familyHealth": "FAMIGLIA E SALUTE",
+      "career": "VITA PROFESSIONALE",
+      "peaceDirection": "PACE E GUIDA",
+      "reconciliation": "RICONCILIAZIONE",
+      "finances": "FINANZE",
+      "gratitude": "GRATITUDINE",
+      "faithGrowth": "FEDE E CRESCITA",
+      "other": "ALTRO"
+    },
+    "anonymousName": "Fratello in Cristo",
+    "card": {
+      "yourPost": "La tua pubblicazione",
+      "post": "Pubblicazione",
+      "deleteTitle": "Eliminare la pubblicazione?",
+      "deleteBody": "Non apparirà più nella bacheca per nessuno.",
+      "reportTitle": "Segnalare la pubblicazione?",
+      "reportBody": "Avviseremo la moderazione. Le pubblicazioni segnalate da più persone vengono nascoste.",
+      "report": "Segnala",
+      "open": "Apri {{title}}",
+      "like": "Mi piace",
+      "unlike": "Rimuovi mi piace",
+      "comments": "Commenti: {{count}}"
+    },
+    "comment": {
+      "menuTitle": "Commento",
+      "deleteTitle": "Eliminare il commento?",
+      "reportTitle": "Segnalare il commento?",
+      "reportBody": "I commenti segnalati da più persone vengono nascosti.",
+      "author": "Autore",
+      "moreOptions": "Altre opzioni del commento",
+      "placeholder": "Scrivi un commento...",
+      "inputLabel": "Scrivi un commento",
+      "send": "Invia commento",
+      "failed": "Impossibile commentare.",
+      "reportThanks": "Grazie. Esamineremo questo commento."
+    },
+    "feed": {
+      "all": "Tutti",
+      "mine": "Le mie richieste",
+      "cta": "Nuova preghiera o testimonianza",
+      "searchPlaceholder": "Cerca richiesta, preghiera o autore...",
+      "searchLabel": "Cerca richiesta, preghiera o autore",
+      "clearSearch": "Cancella ricerca",
+      "emptyMine": "Non hai ancora pubblicato nulla",
+      "emptyAll": "Nessuna preghiera trovata",
+      "emptySearch": "Prova altre parole nella ricerca.",
+      "emptyMineBody": "Condividi una richiesta di preghiera o una testimonianza con la comunità.",
+      "emptyAllBody": "Sii il primo a condividere una richiesta o una testimonianza.",
+      "likeFailed": "Impossibile mettere mi piace.",
+      "reportThanks": "Grazie. Esamineremo questa pubblicazione.",
+      "reportFailed": "Impossibile segnalare",
+      "deleteFailed": "Impossibile eliminare",
+      "deleted": "Pubblicazione eliminata"
+    },
+    "create": {
+      "headerTitle": "Nuova pubblicazione",
+      "title": "Titolo",
+      "titlePlaceholderRequest": "Es.: Guarigione di mia madre",
+      "titlePlaceholderTestimony": "Es.: Gratitudine per il nuovo lavoro",
+      "category": "Categoria",
+      "message": "Messaggio",
+      "messagePlaceholderRequest": "Condividi la tua richiesta di preghiera...",
+      "messagePlaceholderTestimony": "Racconta cosa Dio ha fatto nella tua vita...",
+      "verseOptional": "Versetto (facoltativo)",
+      "reference": "Riferimento",
+      "referencePlaceholder": "Es.: {{example}}",
+      "fillVerse": "Compila con il testo della Bibbia",
+      "verseTextPlaceholder": "Testo del versetto",
+      "verseNotFound": "Versetto non trovato",
+      "verseNeedsVerse": "Scrivi il riferimento con il versetto, ad esempio \"{{first}}\" o \"{{second}}\".",
+      "verseNotInVersion": "Quel versetto non esiste in questa versione della Bibbia.",
+      "anonymousTitle": "Pubblica in forma anonima",
+      "anonymousBody": "Il tuo nome, la città e la foto non appariranno. Verrà mostrato \"{{name}}\".",
+      "noName": "Imposta il tuo nome nel profilo per pubblicare con il tuo nome. Per ora, la pubblicazione sarà anonima.",
+      "editProfile": "Modifica profilo",
+      "rules": "Le pubblicazioni possono essere segnalate e nascoste dalla comunità. Sii rispettoso e non condividere dati personali di terzi.",
+      "publishRequest": "Pubblica preghiera",
+      "publishTestimony": "Pubblica testimonianza",
+      "titleRequired": "Scrivi un titolo.",
+      "categoryRequired": "Scegli una categoria.",
+      "contentRequired": "Scrivi il tuo messaggio.",
+      "published": "Pubblicato in bacheca!",
+      "publishFailed": "Impossibile pubblicare",
+      "tryLater": "Riprova tra qualche istante."
+    },
+    "detail": {
+      "comments": "Commenti",
+      "unavailable": "Pubblicazione non disponibile",
+      "unavailableBody": "Potrebbe essere stata eliminata o nascosta.",
+      "noComments": "Sii il primo a commentare e a incoraggiare con una parola."
+    }
   }
 }

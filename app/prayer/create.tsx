@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Alert, KeyboardAvoidingView, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from 'convex/react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -17,22 +18,22 @@ import {
   PRAYER_CATEGORIES,
   PRAYER_CATEGORY_COLORS,
   PRAYER_LIMITS,
-  PRAYER_TYPE_LABELS,
   type PrayerCategory,
   type PrayerType,
 } from '../../lib/prayerCategories';
+import { categoryLabel, anonymousName } from '../../lib/prayerLabels';
 import { colors, fonts, radius, spacing } from '../../theme/tokens';
 import { AppPressable } from '../../components/ui/AppPressable';
 
-const TYPE_OPTIONS: { id: PrayerType; label: string; icon: 'hands-pray' | 'star-four-points' }[] = [
-  { id: 'request', label: 'Pedido de Oração', icon: 'hands-pray' },
-  { id: 'testimony', label: 'Testemunho', icon: 'star-four-points' },
+const TYPE_OPTIONS: { id: PrayerType; labelKey: 'prayer.types.requestLong' | 'prayer.types.testimony'; icon: 'hands-pray' | 'star-four-points' }[] = [
+  { id: 'request', labelKey: 'prayer.types.requestLong', icon: 'hands-pray' },
+  { id: 'testimony', labelKey: 'prayer.types.testimony', icon: 'star-four-points' },
 ];
 
 /** Keeps the readable part of a Convex server error. */
-const errorMessage = (error: unknown): string => {
+const errorMessage = (error: unknown, fallback: string): string => {
   const text = error instanceof Error ? error.message : '';
-  return text.match(/Uncaught Error: (.+?)(?: at |$|\n)/)?.[1] ?? 'Tente novamente em instantes.';
+  return text.match(/Uncaught Error: (.+?)(?: at |$|\n)/)?.[1] ?? fallback;
 };
 
 /** Form to publish a prayer request or a testimony on the wall. */
@@ -40,6 +41,7 @@ export default function CreatePrayerScreen() {
   const { anonymousId } = useOnboarding();
   const { versionCode } = useBible();
   const toast = useToast();
+  const { t } = useTranslation();
   const user = useQuery(api.users.getUserByAnonymousId, anonymousId ? { anonymousId } : 'skip');
   const createPrayer = useMutation(api.prayers.createPrayer);
 
@@ -59,12 +61,17 @@ export default function CreatePrayerScreen() {
 
   const goBack = () => (router.canGoBack() ? router.back() : router.replace('/diary'));
 
+  // Examples use book names of the open Bible version, which is what the reference parser understands best.
+  const sampleBook = (id: number) => loadVersion(versionCode).books[id]?.name ?? loadVersion(versionCode).books[0]?.name ?? '';
+  const examplePsalm = `${sampleBook(18)} 23:1-2`;
+  const exampleJohn = `${sampleBook(42)} 3:16`;
+
   /** Fills the verse text from the Bible version the user reads, using the typed reference. */
   const fillVerse = () => {
     const split = splitReference(reference);
     const parsed = parseReference(reference, versionCode);
     if (!split || !parsed || parsed.bookMissing || split.versiculoInicial === undefined) {
-      Alert.alert('Versículo não encontrado', 'Digite a referência com o versículo, por exemplo "João 3:16" ou "Salmos 23:1-2".');
+      Alert.alert(t('prayer.create.verseNotFound'), t('prayer.create.verseNeedsVerse', { first: exampleJohn, second: examplePsalm }));
       return;
     }
     const version = loadVersion(versionCode);
@@ -76,7 +83,7 @@ export default function CreatePrayerScreen() {
     const to = split.versiculoFinal ?? from;
     const verses = chapter.verses.filter((verse) => verse.number >= from && verse.number <= to);
     if (verses.length === 0) {
-      Alert.alert('Versículo não encontrado', 'Esse versículo não existe nesta versão da Bíblia.');
+      Alert.alert(t('prayer.create.verseNotFound'), t('prayer.create.verseNotInVersion'));
       return;
     }
     setReference(`${book.name} ${parsed.chapter}:${from}${to > from ? `-${to}` : ''}`);
@@ -86,9 +93,9 @@ export default function CreatePrayerScreen() {
   const handleSubmit = async () => {
     if (!anonymousId || submitting) return;
     const next: typeof errors = {};
-    if (!title.trim()) next.title = 'Escreva um título.';
-    if (!category) next.category = 'Escolha uma categoria.';
-    if (!content.trim()) next.content = 'Escreva sua mensagem.';
+    if (!title.trim()) next.title = t('prayer.create.titleRequired');
+    if (!category) next.category = t('prayer.create.categoryRequired');
+    if (!content.trim()) next.content = t('prayer.create.contentRequired');
     setErrors(next);
     if (next.title || next.category || next.content || !category) return;
 
@@ -105,11 +112,11 @@ export default function CreatePrayerScreen() {
         isAnonymous: anonymous,
       });
       haptics.success();
-      toast('Publicado no mural!');
+      toast(t('prayer.create.published'));
       goBack();
     } catch (error) {
       haptics.error();
-      Alert.alert('Não foi possível publicar', errorMessage(error));
+      Alert.alert(t('prayer.create.publishFailed'), errorMessage(error, t('prayer.create.tryLater')));
       setSubmitting(false);
     }
   };
@@ -117,10 +124,10 @@ export default function CreatePrayerScreen() {
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <View style={styles.header}>
-        <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Fechar" style={styles.headerButton}>
+        <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel={t('common.close')} style={styles.headerButton}>
           <MaterialCommunityIcons name="close" size={24} color={colors.onSurface} />
         </AppPressable>
-        <Text style={styles.headerTitle}>Nova publicação</Text>
+        <Text style={styles.headerTitle}>{t('prayer.create.headerTitle')}</Text>
         <View style={styles.headerButton} />
       </View>
 
@@ -138,26 +145,26 @@ export default function CreatePrayerScreen() {
                   style={[styles.typeOption, selected && styles.typeOptionSelected]}
                 >
                   <MaterialCommunityIcons name={option.icon} size={18} color={selected ? colors.onPrimary : colors.outline} />
-                  <Text style={[styles.typeText, selected && styles.typeTextSelected]}>{option.label}</Text>
+                  <Text style={[styles.typeText, selected && styles.typeTextSelected]}>{t(option.labelKey)}</Text>
                 </AppPressable>
               );
             })}
           </View>
 
           <ProfileTextField
-            label="Título"
+            label={t('prayer.create.title')}
             value={title}
             onChangeText={(value) => {
               setTitle(value);
               if (errors.title) setErrors({ ...errors, title: undefined });
             }}
-            placeholder={type === 'request' ? 'Ex.: Restauração da saúde da minha mãe' : 'Ex.: Gratidão pelo novo emprego'}
+            placeholder={type === 'request' ? t('prayer.create.titlePlaceholderRequest') : t('prayer.create.titlePlaceholderTestimony')}
             maxLength={PRAYER_LIMITS.title}
             error={errors.title}
           />
 
           <View style={styles.group}>
-            <Text style={styles.label}>Categoria</Text>
+            <Text style={styles.label}>{t('prayer.create.category')}</Text>
             <View style={styles.chips}>
               {PRAYER_CATEGORIES.map((item) => {
                 const selected = item === category;
@@ -173,7 +180,7 @@ export default function CreatePrayerScreen() {
                     accessibilityState={{ selected }}
                     style={[styles.chip, { backgroundColor: tone.background }, selected && { borderColor: tone.text }]}
                   >
-                    <Text style={[styles.chipText, { color: tone.text }]}>{item}</Text>
+                    <Text style={[styles.chipText, { color: tone.text }]}>{categoryLabel(item)}</Text>
                   </AppPressable>
                 );
               })}
@@ -182,19 +189,19 @@ export default function CreatePrayerScreen() {
           </View>
 
           <View style={styles.group}>
-            <Text style={styles.label}>Mensagem</Text>
+            <Text style={styles.label}>{t('prayer.create.message')}</Text>
             <TextInput
               value={content}
               onChangeText={(value) => {
                 setContent(value);
                 if (errors.content) setErrors({ ...errors, content: undefined });
               }}
-              placeholder={type === 'request' ? 'Compartilhe o seu pedido de oração...' : 'Conte o que Deus fez na sua vida...'}
+              placeholder={type === 'request' ? t('prayer.create.messagePlaceholderRequest') : t('prayer.create.messagePlaceholderTestimony')}
               placeholderTextColor={colors.outline}
               multiline
               maxLength={PRAYER_LIMITS.content}
               textAlignVertical="top"
-              accessibilityLabel="Mensagem"
+              accessibilityLabel={t('prayer.create.message')}
               style={[styles.input, styles.multiline, errors.content ? styles.inputError : null]}
             />
             <View style={styles.counterRow}>
@@ -206,38 +213,36 @@ export default function CreatePrayerScreen() {
           </View>
 
           <View style={styles.group}>
-            <Text style={styles.label}>Versículo (opcional)</Text>
+            <Text style={styles.label}>{t('prayer.create.verseOptional')}</Text>
             <ProfileTextField
-              label="Referência"
+              label={t('prayer.create.reference')}
               value={reference}
               onChangeText={setReference}
-              placeholder="Ex.: Salmos 23:1-2"
+              placeholder={t('prayer.create.referencePlaceholder', { example: examplePsalm })}
               maxLength={PRAYER_LIMITS.scriptureReference}
             />
             <AppPressable onPress={fillVerse} accessibilityRole="button" style={({ pressed }) => [styles.verseButton, pressed && { opacity: 0.85 }]}>
               <MaterialCommunityIcons name="book-search-outline" size={18} color={colors.primary} />
-              <Text style={styles.verseButtonText}>Preencher com o texto da Bíblia</Text>
+              <Text style={styles.verseButtonText}>{t('prayer.create.fillVerse')}</Text>
             </AppPressable>
             <TextInput
               value={verseText}
               onChangeText={setVerseText}
-              placeholder="Texto do versículo"
+              placeholder={t('prayer.create.verseTextPlaceholder')}
               placeholderTextColor={colors.outline}
               multiline
               maxLength={PRAYER_LIMITS.scriptureText}
               textAlignVertical="top"
-              accessibilityLabel="Texto do versículo"
+              accessibilityLabel={t('prayer.create.verseTextPlaceholder')}
               style={[styles.input, styles.verseInput]}
             />
           </View>
 
           <View style={styles.anonymousRow}>
             <View style={styles.anonymousTexts}>
-              <Text style={styles.anonymousTitle}>Publicar como anônimo</Text>
+              <Text style={styles.anonymousTitle}>{t('prayer.create.anonymousTitle')}</Text>
               <Text style={styles.anonymousBody}>
-                {hasName
-                  ? `Seu nome, cidade e foto não aparecerão. Será exibido "Irmão em Cristo".`
-                  : 'Defina seu nome em "Editar Perfil" para publicar com o seu nome. Por enquanto, a publicação será anônima.'}
+                {hasName ? t('prayer.create.anonymousBody', { name: anonymousName() }) : t('prayer.create.noName')}
               </Text>
             </View>
             <Switch
@@ -249,22 +254,22 @@ export default function CreatePrayerScreen() {
               }}
               trackColor={{ false: colors.outlineVariant, true: colors.primary }}
               thumbColor={colors.onPrimary}
-              accessibilityLabel="Publicar como anônimo"
+              accessibilityLabel={t('prayer.create.anonymousTitle')}
             />
           </View>
 
           {!hasName ? (
             <AppPressable onPress={() => router.push('/profile/edit')} accessibilityRole="link">
-              <Text style={styles.link}>Editar perfil</Text>
+              <Text style={styles.link}>{t('prayer.create.editProfile')}</Text>
             </AppPressable>
           ) : null}
           <Text style={styles.rules}>
-            Publicações podem ser denunciadas e ocultadas pela comunidade. Seja respeitoso e não compartilhe dados pessoais de terceiros.
+            {t('prayer.create.rules')}
           </Text>
         </ScrollView>
 
         <View style={styles.footer}>
-          <PrimaryButton label={`Publicar ${PRAYER_TYPE_LABELS[type].toLowerCase()}`} showArrow={false} onPress={handleSubmit} loading={submitting} />
+          <PrimaryButton label={type === 'request' ? t('prayer.create.publishRequest') : t('prayer.create.publishTestimony')} showArrow={false} onPress={handleSubmit} loading={submitting} />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

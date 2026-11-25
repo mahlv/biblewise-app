@@ -8,11 +8,6 @@
 export const PRAYER_TYPES = ['request', 'testimony'] as const;
 export type PrayerType = (typeof PRAYER_TYPES)[number];
 
-export const PRAYER_TYPE_LABELS: Record<PrayerType, string> = {
-  request: 'Oração',
-  testimony: 'Testemunho',
-};
-
 /** Stored (and shown) as these uppercase labels. */
 export const PRAYER_CATEGORIES = [
   'FAMÍLIA & SAÚDE',
@@ -59,7 +54,7 @@ export const PRAYER_LIMITS = {
   unreadCap: 100,
 } as const;
 
-/** Name shown for anonymous posts. */
+/** Name stored for anonymous posts; the app shows its translation instead (see `lib/prayerLabels.ts`). */
 export const ANONYMOUS_AUTHOR_NAME = 'Irmão em Cristo';
 
 export function isPrayerType(value: unknown): value is PrayerType {

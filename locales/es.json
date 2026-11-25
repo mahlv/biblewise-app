@@ -406,5 +406,112 @@
       "card": "Tarjeta",
       "story": "Story"
     }
+  },
+  "time": {
+    "now": "Ahora",
+    "minutesAgo": "Hace {{count}} min",
+    "hoursAgo": "Hace {{count}} h",
+    "yesterday": "Ayer",
+    "daysAgo_one": "Hace {{count}} día",
+    "daysAgo_other": "Hace {{count}} días"
+  },
+  "prayer": {
+    "types": {
+      "request": "Oración",
+      "testimony": "Testimonio",
+      "requestLong": "Petición de oración"
+    },
+    "categories": {
+      "familyHealth": "FAMILIA Y SALUD",
+      "career": "VIDA PROFESIONAL",
+      "peaceDirection": "PAZ Y DIRECCIÓN",
+      "reconciliation": "RECONCILIACIÓN",
+      "finances": "FINANZAS",
+      "gratitude": "GRATITUD",
+      "faithGrowth": "FE Y CRECIMIENTO",
+      "other": "OTROS"
+    },
+    "anonymousName": "Hermano en Cristo",
+    "card": {
+      "yourPost": "Tu publicación",
+      "post": "Publicación",
+      "deleteTitle": "¿Eliminar publicación?",
+      "deleteBody": "Dejará de aparecer en el muro para todos.",
+      "reportTitle": "¿Denunciar publicación?",
+      "reportBody": "Avisaremos a moderación. Las publicaciones denunciadas por varias personas se ocultan.",
+      "report": "Denunciar",
+      "open": "Abrir {{title}}",
+      "like": "Me gusta",
+      "unlike": "Quitar me gusta",
+      "comments": "Comentarios: {{count}}"
+    },
+    "comment": {
+      "menuTitle": "Comentario",
+      "deleteTitle": "¿Eliminar comentario?",
+      "reportTitle": "¿Denunciar comentario?",
+      "reportBody": "Los comentarios denunciados por varias personas se ocultan.",
+      "author": "Autor",
+      "moreOptions": "Más opciones del comentario",
+      "placeholder": "Escribe un comentario...",
+      "inputLabel": "Escribe un comentario",
+      "send": "Enviar comentario",
+      "failed": "No se pudo comentar.",
+      "reportThanks": "Gracias. Revisaremos este comentario."
+    },
+    "feed": {
+      "all": "Todos",
+      "mine": "Mis peticiones",
+      "cta": "Nueva oración o testimonio",
+      "searchPlaceholder": "Buscar petición, oración o autor...",
+      "searchLabel": "Buscar petición, oración o autor",
+      "clearSearch": "Borrar búsqueda",
+      "emptyMine": "Aún no has publicado nada",
+      "emptyAll": "No se encontraron oraciones",
+      "emptySearch": "Prueba otras palabras en la búsqueda.",
+      "emptyMineBody": "Comparte una petición de oración o un testimonio con la comunidad.",
+      "emptyAllBody": "Sé el primero en compartir una petición o un testimonio.",
+      "likeFailed": "No se pudo dar me gusta.",
+      "reportThanks": "Gracias. Revisaremos esta publicación.",
+      "reportFailed": "No se pudo denunciar",
+      "deleteFailed": "No se pudo eliminar",
+      "deleted": "Publicación eliminada"
+    },
+    "create": {
+      "headerTitle": "Nueva publicación",
+      "title": "Título",
+      "titlePlaceholderRequest": "Ej.: Restauración de la salud de mi madre",
+      "titlePlaceholderTestimony": "Ej.: Gratitud por el nuevo trabajo",
+      "category": "Categoría",
+      "message": "Mensaje",
+      "messagePlaceholderRequest": "Comparte tu petición de oración...",
+      "messagePlaceholderTestimony": "Cuenta lo que Dios hizo en tu vida...",
+      "verseOptional": "Versículo (opcional)",
+      "reference": "Referencia",
+      "referencePlaceholder": "Ej.: {{example}}",
+      "fillVerse": "Rellenar con el texto de la Biblia",
+      "verseTextPlaceholder": "Texto del versículo",
+      "verseNotFound": "Versículo no encontrado",
+      "verseNeedsVerse": "Escribe la referencia con el versículo, por ejemplo \"{{first}}\" o \"{{second}}\".",
+      "verseNotInVersion": "Ese versículo no existe en esta versión de la Biblia.",
+      "anonymousTitle": "Publicar de forma anónima",
+      "anonymousBody": "Tu nombre, ciudad y foto no aparecerán. Se mostrará \"{{name}}\".",
+      "noName": "Define tu nombre en el perfil para publicar con tu nombre. Por ahora, la publicación será anónima.",
+      "editProfile": "Editar perfil",
+      "rules": "Las publicaciones pueden ser denunciadas y ocultadas por la comunidad. Sé respetuoso y no compartas datos personales de terceros.",
+      "publishRequest": "Publicar oración",
+      "publishTestimony": "Publicar testimonio",
+      "titleRequired": "Escribe un título.",
+      "categoryRequired": "Elige una categoría.",
+      "contentRequired": "Escribe tu mensaje.",
+      "published": "¡Publicado en el muro!",
+      "publishFailed": "No se pudo publicar",
+      "tryLater": "Inténtalo de nuevo en unos instantes."
+    },
+    "detail": {
+      "comments": "Comentarios",
+      "unavailable": "Publicación no disponible",
+      "unavailableBody": "Puede haberse eliminado u ocultado.",
+      "noComments": "Sé el primero en comentar y animar con una palabra."
+    }
   }
 }

@@ -406,5 +406,112 @@
       "card": "Karte",
       "story": "Story"
     }
+  },
+  "time": {
+    "now": "Gerade eben",
+    "minutesAgo": "Vor {{count}} Min.",
+    "hoursAgo": "Vor {{count}} Std.",
+    "yesterday": "Gestern",
+    "daysAgo_one": "Vor {{count}} Tag",
+    "daysAgo_other": "Vor {{count}} Tagen"
+  },
+  "prayer": {
+    "types": {
+      "request": "Gebet",
+      "testimony": "Zeugnis",
+      "requestLong": "Gebetsanliegen"
+    },
+    "categories": {
+      "familyHealth": "FAMILIE & GESUNDHEIT",
+      "career": "BERUFSLEBEN",
+      "peaceDirection": "FRIEDEN & FÜHRUNG",
+      "reconciliation": "VERSÖHNUNG",
+      "finances": "FINANZEN",
+      "gratitude": "DANKBARKEIT",
+      "faithGrowth": "GLAUBE & WACHSTUM",
+      "other": "SONSTIGES"
+    },
+    "anonymousName": "Bruder in Christus",
+    "card": {
+      "yourPost": "Dein Beitrag",
+      "post": "Beitrag",
+      "deleteTitle": "Beitrag löschen?",
+      "deleteBody": "Er wird für niemanden mehr auf der Wand erscheinen.",
+      "reportTitle": "Beitrag melden?",
+      "reportBody": "Wir benachrichtigen die Moderation. Von mehreren Personen gemeldete Beiträge werden ausgeblendet.",
+      "report": "Melden",
+      "open": "{{title}} öffnen",
+      "like": "Gefällt mir",
+      "unlike": "Gefällt mir entfernen",
+      "comments": "Kommentare: {{count}}"
+    },
+    "comment": {
+      "menuTitle": "Kommentar",
+      "deleteTitle": "Kommentar löschen?",
+      "reportTitle": "Kommentar melden?",
+      "reportBody": "Von mehreren Personen gemeldete Kommentare werden ausgeblendet.",
+      "author": "Autor",
+      "moreOptions": "Weitere Kommentaroptionen",
+      "placeholder": "Schreibe einen Kommentar ...",
+      "inputLabel": "Schreibe einen Kommentar",
+      "send": "Kommentar senden",
+      "failed": "Kommentieren nicht möglich.",
+      "reportThanks": "Danke. Wir prüfen diesen Kommentar."
+    },
+    "feed": {
+      "all": "Alle",
+      "mine": "Meine Anliegen",
+      "cta": "Neues Gebet oder Zeugnis",
+      "searchPlaceholder": "Anliegen, Gebet oder Autor suchen ...",
+      "searchLabel": "Anliegen, Gebet oder Autor suchen",
+      "clearSearch": "Suche löschen",
+      "emptyMine": "Du hast noch nichts veröffentlicht",
+      "emptyAll": "Keine Gebete gefunden",
+      "emptySearch": "Versuche andere Suchbegriffe.",
+      "emptyMineBody": "Teile ein Gebetsanliegen oder ein Zeugnis mit der Gemeinschaft.",
+      "emptyAllBody": "Sei der Erste, der ein Anliegen oder Zeugnis teilt.",
+      "likeFailed": "Gefällt mir war nicht möglich.",
+      "reportThanks": "Danke. Wir prüfen diesen Beitrag.",
+      "reportFailed": "Melden nicht möglich",
+      "deleteFailed": "Löschen nicht möglich",
+      "deleted": "Beitrag gelöscht"
+    },
+    "create": {
+      "headerTitle": "Neuer Beitrag",
+      "title": "Titel",
+      "titlePlaceholderRequest": "z. B. Genesung meiner Mutter",
+      "titlePlaceholderTestimony": "z. B. Dankbar für die neue Arbeit",
+      "category": "Kategorie",
+      "message": "Nachricht",
+      "messagePlaceholderRequest": "Teile dein Gebetsanliegen ...",
+      "messagePlaceholderTestimony": "Erzähle, was Gott in deinem Leben getan hat ...",
+      "verseOptional": "Vers (optional)",
+      "reference": "Stelle",
+      "referencePlaceholder": "z. B. {{example}}",
+      "fillVerse": "Mit Bibeltext füllen",
+      "verseTextPlaceholder": "Verstext",
+      "verseNotFound": "Vers nicht gefunden",
+      "verseNeedsVerse": "Gib die Stelle mit Vers ein, zum Beispiel \"{{first}}\" oder \"{{second}}\".",
+      "verseNotInVersion": "Dieser Vers existiert in dieser Bibelübersetzung nicht.",
+      "anonymousTitle": "Anonym veröffentlichen",
+      "anonymousBody": "Dein Name, deine Stadt und dein Foto erscheinen nicht. Stattdessen wird \"{{name}}\" angezeigt.",
+      "noName": "Lege deinen Namen im Profil fest, um unter deinem Namen zu veröffentlichen. Vorerst ist der Beitrag anonym.",
+      "editProfile": "Profil bearbeiten",
+      "rules": "Beiträge können von der Gemeinschaft gemeldet und ausgeblendet werden. Sei respektvoll und teile keine persönlichen Daten Dritter.",
+      "publishRequest": "Gebet veröffentlichen",
+      "publishTestimony": "Zeugnis veröffentlichen",
+      "titleRequired": "Schreibe einen Titel.",
+      "categoryRequired": "Wähle eine Kategorie.",
+      "contentRequired": "Schreibe deine Nachricht.",
+      "published": "Auf der Wand veröffentlicht!",
+      "publishFailed": "Veröffentlichen nicht möglich",
+      "tryLater": "Versuche es gleich noch einmal."
+    },
+    "detail": {
+      "comments": "Kommentare",
+      "unavailable": "Beitrag nicht verfügbar",
+      "unavailableBody": "Er wurde möglicherweise gelöscht oder ausgeblendet.",
+      "noComments": "Sei der Erste, der kommentiert und mit einem Wort ermutigt."
+    }
   }
 }
