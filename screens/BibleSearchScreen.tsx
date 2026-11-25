@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Keyboard,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,6 +11,7 @@ import { useQuery } from 'convex/react';
 import { api } from '../convex/_generated/api';
 import { parseBibleReference } from '../lib/bibleReference';
 import { VerseCard, VerseCardLoading, VerseCardVazio } from '../components/VerseCard';
+import { AppPressable } from '../components/ui/AppPressable';
 
 /** Intervalo de atualização do relógio do app (1 minuto). */
 const INTERVALO_RELOGIO_MS = 60_000;
@@ -198,9 +198,9 @@ export function BibleSearchScreen() {
 
         {/* Botão de limpar, útil no teste manual no dispositivo. */}
         {termoDigitado ? (
-          <Pressable onPress={limparBusca} style={styles.limpar}>
+          <AppPressable onPress={limparBusca} style={styles.limpar}>
             <Text style={styles.limparTexto}>Limpar busca</Text>
-          </Pressable>
+          </AppPressable>
         ) : null}
       </ScrollView>
     </View>

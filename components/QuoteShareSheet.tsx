@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BottomSheet } from './BottomSheet';
@@ -14,6 +14,7 @@ import {
   type QuoteStyle,
 } from '../lib/quoteStyle';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   visible: boolean;
@@ -107,9 +108,9 @@ function QuoteShareContent({ onClose, quote, attribution, dateLabel, style, onCh
     <>
       <View style={styles.header}>
         <Text style={styles.title}>Customizar Arte</Text>
-        <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Fechar" style={styles.close}>
+        <AppPressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Fechar" style={styles.close}>
           <MaterialCommunityIcons name="close" size={18} color={colors.primary} />
-        </Pressable>
+        </AppPressable>
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
@@ -129,7 +130,7 @@ function QuoteShareContent({ onClose, quote, attribution, dateLabel, style, onCh
           {QUOTE_BACKGROUNDS.map((item) => {
             const selected = item.id === style.backgroundId;
             return (
-              <Pressable
+              <AppPressable haptic="selection"
                 key={item.id}
                 onPress={() => update({ backgroundId: item.id })}
                 accessibilityRole="radio"
@@ -138,7 +139,7 @@ function QuoteShareContent({ onClose, quote, attribution, dateLabel, style, onCh
                 style={[styles.swatchRing, selected && styles.swatchRingSelected]}
               >
                 <LinearGradient colors={item.colors} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.swatch} />
-              </Pressable>
+              </AppPressable>
             );
           })}
         </ScrollView>
@@ -159,16 +160,16 @@ function QuoteShareContent({ onClose, quote, attribution, dateLabel, style, onCh
       </ScrollView>
 
       <View style={styles.footer}>
-        <Pressable onPress={handleShare} disabled={busy !== null} accessibilityRole="button" accessibilityLabel="Compartilhar" style={styles.flex}>
+        <AppPressable onPress={handleShare} disabled={busy !== null} accessibilityRole="button" accessibilityLabel="Compartilhar" style={styles.flex}>
           <LinearGradient colors={['#E8265E', '#F7568A']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.primaryButton}>
             {busy === 'share' ? <ActivityIndicator color={colors.onPrimary} /> : <MaterialCommunityIcons name="share-variant" size={18} color={colors.onPrimary} />}
             <Text style={styles.primaryText}>Compartilhar</Text>
           </LinearGradient>
-        </Pressable>
-        <Pressable onPress={handleSave} disabled={busy !== null} accessibilityRole="button" accessibilityLabel="Baixar imagem" style={styles.secondaryButton}>
+        </AppPressable>
+        <AppPressable onPress={handleSave} disabled={busy !== null} accessibilityRole="button" accessibilityLabel="Baixar imagem" style={styles.secondaryButton}>
           {busy === 'save' ? <ActivityIndicator color={colors.primary} /> : <MaterialCommunityIcons name="download" size={20} color={colors.primary} />}
           <Text style={styles.secondaryText}>Baixar</Text>
-        </Pressable>
+        </AppPressable>
       </View>
     </>
   );
@@ -185,9 +186,9 @@ export function QuoteShareSheet({ visible, ...rest }: Props) {
 
 function Chip({ label, selected, onPress, fontFamily }: { label: string; selected: boolean; onPress: () => void; fontFamily?: string }) {
   return (
-    <Pressable onPress={onPress} accessibilityRole="radio" accessibilityState={{ checked: selected }} style={[styles.chip, selected && styles.chipSelected]}>
+    <AppPressable haptic="selection" onPress={onPress} accessibilityRole="radio" accessibilityState={{ checked: selected }} style={[styles.chip, selected && styles.chipSelected]}>
       <Text style={[styles.chipText, fontFamily ? { fontFamily } : null, selected && styles.chipTextSelected]}>{label}</Text>
-    </Pressable>
+    </AppPressable>
   );
 }
 

@@ -1,10 +1,12 @@
-import { Alert, Image, Pressable, Share, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, Share, StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { FunctionReturnType } from 'convex/server';
 import type { api } from '../convex/_generated/api';
 import { PRAYER_CATEGORY_COLORS, PRAYER_TYPE_LABELS } from '../lib/prayerCategories';
+import { haptics } from '../lib/haptics';
 import { formatTimeAgo } from '../lib/timeAgo';
 import { colors, fonts, radius, shadow, spacing } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 export type PrayerView = FunctionReturnType<typeof api.prayers.listPrayers>['page'][number];
 
@@ -78,7 +80,14 @@ export function PrayerCard({ prayer, onToggleAmen, onReport, onDelete, onOpen }:
           onPress: () =>
             Alert.alert('Excluir publicação?', 'Ela deixará de aparecer no mural para todos.', [
               { text: 'Cancelar', style: 'cancel' },
-              { text: 'Excluir', style: 'destructive', onPress: () => onDelete(prayer._id) },
+              {
+                text: 'Excluir',
+                style: 'destructive',
+                onPress: () => {
+                  haptics.warning();
+                  onDelete(prayer._id);
+                },
+              },
             ]),
         },
         { text: 'Cancelar', style: 'cancel' },
@@ -92,7 +101,14 @@ export function PrayerCard({ prayer, onToggleAmen, onReport, onDelete, onOpen }:
         onPress: () =>
           Alert.alert('Denunciar publicação?', 'Avisaremos a moderação. Publicações denunciadas por várias pessoas são ocultadas.', [
             { text: 'Cancelar', style: 'cancel' },
-            { text: 'Denunciar', style: 'destructive', onPress: () => onReport(prayer._id) },
+            {
+              text: 'Denunciar',
+              style: 'destructive',
+              onPress: () => {
+                haptics.warning();
+                onReport(prayer._id);
+              },
+            },
           ]),
       },
       { text: 'Cancelar', style: 'cancel' },
@@ -121,7 +137,7 @@ export function PrayerCard({ prayer, onToggleAmen, onReport, onDelete, onOpen }:
         <Text style={[styles.categoryText, { color: category.text }]}>{prayer.category}</Text>
       </View>
 
-      <Pressable
+      <AppPressable
         onPress={onOpen ? () => onOpen(prayer._id) : undefined}
         disabled={!onOpen}
         accessibilityRole={onOpen ? 'button' : undefined}
@@ -130,7 +146,7 @@ export function PrayerCard({ prayer, onToggleAmen, onReport, onDelete, onOpen }:
       >
         <Text style={styles.title}>{prayer.title}</Text>
         <Text style={styles.body}>{prayer.content}</Text>
-      </Pressable>
+      </AppPressable>
 
       {hasScripture ? (
         <View style={[styles.scripture, { backgroundColor: scripture.background }]}>
@@ -145,7 +161,7 @@ export function PrayerCard({ prayer, onToggleAmen, onReport, onDelete, onOpen }:
       ) : null}
 
       <View style={styles.footer}>
-        <Pressable
+        <AppPressable haptic="selection"
           onPress={() => onToggleAmen(prayer._id)}
           accessibilityRole="button"
           accessibilityLabel={prayer.amenedByMe ? 'Remover curtida' : 'Curtir'}
@@ -156,10 +172,10 @@ export function PrayerCard({ prayer, onToggleAmen, onReport, onDelete, onOpen }:
           <View style={[styles.amenCount, prayer.amenedByMe && styles.amenCountActive]}>
             <Text style={[styles.amenCountText, prayer.amenedByMe && styles.amenLabelActive]}>{prayer.amenCount}</Text>
           </View>
-        </Pressable>
+        </AppPressable>
 
         <View style={styles.actions}>
-          <Pressable
+          <AppPressable
             onPress={onOpen ? () => onOpen(prayer._id) : undefined}
             disabled={!onOpen}
             accessibilityRole="button"
@@ -169,13 +185,13 @@ export function PrayerCard({ prayer, onToggleAmen, onReport, onDelete, onOpen }:
           >
             <MaterialCommunityIcons name="comment-outline" size={20} color={colors.onSurfaceVariant} />
             <Text style={styles.actionCount}>{prayer.commentCount}</Text>
-          </Pressable>
-          <Pressable onPress={share} accessibilityRole="button" accessibilityLabel="Compartilhar" hitSlop={8}>
+          </AppPressable>
+          <AppPressable onPress={share} accessibilityRole="button" accessibilityLabel="Compartilhar" hitSlop={8}>
             <MaterialCommunityIcons name="share-variant-outline" size={20} color={colors.onSurfaceVariant} />
-          </Pressable>
-          <Pressable onPress={openMenu} accessibilityRole="button" accessibilityLabel="Mais opções" hitSlop={8}>
+          </AppPressable>
+          <AppPressable onPress={openMenu} accessibilityRole="button" accessibilityLabel="Mais opções" hitSlop={8}>
             <MaterialCommunityIcons name="dots-horizontal" size={22} color={colors.onSurfaceVariant} />
-          </Pressable>
+          </AppPressable>
         </View>
       </View>
     </View>

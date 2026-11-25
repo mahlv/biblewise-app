@@ -1,6 +1,7 @@
-import { Pressable, ScrollView, StyleSheet, Text } from 'react-native';
+import { ScrollView, StyleSheet, Text } from 'react-native';
 import { QUICK_REFERENCES } from '../constants/quickReferences';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   onSelect: (query: string) => void;
@@ -12,14 +13,14 @@ export function QuickReferenceChips({ onSelect }: Props) {
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.row} keyboardShouldPersistTaps="handled">
       <Text style={styles.label}>RÁPIDO:</Text>
       {QUICK_REFERENCES.map((item) => (
-        <Pressable
+        <AppPressable haptic="selection"
           key={item.label}
           onPress={() => onSelect(item.query)}
           accessibilityRole="button"
           style={({ pressed }) => [styles.chip, pressed && { opacity: 0.8 }]}
         >
           <Text style={styles.chipText}>{item.label}</Text>
-        </Pressable>
+        </AppPressable>
       ))}
     </ScrollView>
   );

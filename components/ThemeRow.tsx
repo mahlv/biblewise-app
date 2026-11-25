@@ -1,8 +1,9 @@
 import type { ComponentProps } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
 import type { BibleTheme } from '../types/bible';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   theme: BibleTheme;
@@ -14,7 +15,7 @@ interface Props {
 
 export function ThemeRow({ theme, selected, locked, onPress }: Props) {
   return (
-    <Pressable
+    <AppPressable haptic="selection"
       onPress={onPress}
       accessibilityRole="radio"
       accessibilityState={{ checked: selected }}
@@ -52,7 +53,7 @@ export function ThemeRow({ theme, selected, locked, onPress }: Props) {
       ) : locked ? (
         <MaterialCommunityIcons name="lock-outline" size={20} color={colors.outline} />
       ) : null}
-    </Pressable>
+    </AppPressable>
   );
 }
 

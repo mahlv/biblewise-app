@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { getLastRotationLabel } from '../../lib/widgetQuotes';
 import { colors, fonts, radius, spacing } from '../../theme/tokens';
+import { AppPressable } from '../ui/AppPressable';
 
 export type WidgetStatus = 'active' | 'paused' | 'not_added';
 
@@ -45,14 +46,14 @@ export function WidgetBanner({ status, onAdjust }: Props) {
         </Text>
       </View>
 
-      <Pressable
+      <AppPressable
         onPress={onAdjust}
         accessibilityRole="button"
         accessibilityLabel="Ajustar widget"
         style={({ pressed }) => [styles.button, pressed && { opacity: 0.85 }]}
       >
         <Text style={styles.buttonText}>Ajustar</Text>
-      </Pressable>
+      </AppPressable>
     </LinearGradient>
   );
 }

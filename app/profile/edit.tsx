@@ -4,9 +4,9 @@ import {
   Alert,
   Image,
   KeyboardAvoidingView,
-  Pressable,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   View,
 } from 'react-native';
@@ -21,9 +21,11 @@ import { PrimaryButton } from '../../components/PrimaryButton';
 import { ProfileTextField } from '../../components/ProfileTextField';
 import { useOnboarding } from '../../hooks/useOnboarding';
 import { useToast } from '../../hooks/useToast';
+import { haptics, isHapticsEnabled, setHapticsEnabled } from '../../lib/haptics';
 import { AGE_RANGES, type AgeRange } from '../../lib/onboardingOptions';
 import { isMissingNativeModule, pickAndUploadProfileImage } from '../../lib/profileImage';
 import { brandGradient, colors, fonts, radius, spacing } from '../../theme/tokens';
+import { AppPressable } from '../../components/ui/AppPressable';
 
 const EMAIL_FORMAT = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const AVATAR_SIZE = 120;
@@ -36,6 +38,7 @@ export default function EditProfileScreen() {
   const generateUploadUrl = useMutation(api.users.generateProfileImageUploadUrl);
   const updateProfile = useMutation(api.users.updateUserProfile);
 
+  const [vibration, setVibration] = useState(isHapticsEnabled());
   const [name, setName] = useState('');
   const [ageRange, setAgeRange] = useState<AgeRange | null>(null);
   const [email, setEmail] = useState('');
@@ -104,9 +107,11 @@ export default function EditProfileScreen() {
         ...(ageRange ? { ageRange } : {}),
         ...(newImageId ? { profileImageId: newImageId as Id<'_storage'> } : {}),
       });
+      haptics.success();
       toast('Perfil atualizado com sucesso!');
       goBack();
     } catch (error) {
+      haptics.error();
       Alert.alert('Não foi possível salvar', error instanceof Error ? error.message : 'Tente novamente.');
       setSaving(false);
     }
@@ -118,9 +123,9 @@ export default function EditProfileScreen() {
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <View style={styles.header}>
-        <Pressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Voltar" style={styles.headerButton}>
+        <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Voltar" style={styles.headerButton}>
           <MaterialCommunityIcons name="arrow-left" size={24} color={colors.onSurface} />
-        </Pressable>
+        </AppPressable>
         <Text style={styles.headerTitle}>Editar Perfil</Text>
         <View style={styles.headerButton} />
       </View>
@@ -136,7 +141,7 @@ export default function EditProfileScreen() {
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
           >
-            <Pressable
+            <AppPressable
               onPress={handlePickImage}
               accessibilityRole="button"
               accessibilityLabel="Alterar foto do perfil"
@@ -167,7 +172,7 @@ export default function EditProfileScreen() {
               <View style={styles.cameraBadge}>
                 <MaterialCommunityIcons name="camera" size={16} color={colors.onPrimary} />
               </View>
-            </Pressable>
+            </AppPressable>
 
             <View style={styles.form}>
               <ProfileTextField label="Nome" value={name} onChangeText={setName} placeholder="Seu nome" autoComplete="name" maxLength={80} />
@@ -178,7 +183,7 @@ export default function EditProfileScreen() {
                   {AGE_RANGES.map((range) => {
                     const selected = ageRange === range;
                     return (
-                      <Pressable
+                      <AppPressable haptic="selection"
                         key={range}
                         onPress={() => setAgeRange(range)}
                         accessibilityRole="button"
@@ -186,7 +191,7 @@ export default function EditProfileScreen() {
                         style={[styles.chip, selected && styles.chipSelected]}
                       >
                         <Text style={[styles.chipText, selected && styles.chipTextSelected]}>{range}</Text>
-                      </Pressable>
+                      </AppPressable>
                     );
                   })}
                 </View>
@@ -213,6 +218,25 @@ export default function EditProfileScreen() {
                 onChangeText={setChurchName}
                 placeholder="Sua igreja"
                 maxLength={120}
+              />
+            </View>
+
+            <View style={styles.preference}>
+              <View style={styles.preferenceTexts}>
+                <Text style={styles.preferenceTitle}>Vibração ao tocar</Text>
+                <Text style={styles.preferenceBody}>Resposta tátil nos botões e ações do app.</Text>
+              </View>
+              <Switch
+                value={vibration}
+                onValueChange={(value) => {
+                  setVibration(value);
+                  void setHapticsEnabled(value).then(() => {
+                    if (value) haptics.selection();
+                  });
+                }}
+                trackColor={{ false: colors.outlineVariant, true: colors.primary }}
+                thumbColor={colors.onPrimary}
+                accessibilityLabel="Vibração ao tocar"
               />
             </View>
           </ScrollView>
@@ -264,6 +288,10 @@ const styles = StyleSheet.create({
     borderColor: colors.background,
   },
   form: { gap: spacing.lg },
+  preference: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.surfaceContainerLowest, borderRadius: radius.lg, padding: spacing.lg },
+  preferenceTexts: { flex: 1, gap: 2 },
+  preferenceTitle: { fontFamily: fonts.bodyBold, fontSize: 15, color: colors.onSurface },
+  preferenceBody: { fontFamily: fonts.body, fontSize: 12, color: colors.onSurfaceVariant },
   ageGroup: { gap: 6 },
   ageLabel: { fontFamily: fonts.bodySemiBold, fontSize: 13, color: colors.onSurfaceVariant },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },

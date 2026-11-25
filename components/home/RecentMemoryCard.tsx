@@ -1,9 +1,10 @@
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { FunctionReturnType } from 'convex/server';
 import type { api } from '../../convex/_generated/api';
 import { MEETING_TYPE_OPTIONS } from '../../lib/recordingSummary';
 import { colors, fonts, radius, shadow, spacing } from '../../theme/tokens';
+import { AppPressable } from '../ui/AppPressable';
 
 export type LatestRecording = FunctionReturnType<typeof api.recordings.getLatestRecording>;
 
@@ -42,7 +43,7 @@ export function RecentMemoryCard({ recording, onOpen, onRecord, onMore }: Props)
       <View style={[styles.card, styles.center, styles.emptyGap]}>
         <MaterialCommunityIcons name="microphone-outline" size={32} color={colors.outline} />
         <Text style={styles.emptyText}>Nenhuma gravação ainda. Grave seu primeiro culto!</Text>
-        <Pressable
+        <AppPressable
           onPress={onRecord}
           accessibilityRole="button"
           accessibilityLabel="Gravar culto"
@@ -50,7 +51,7 @@ export function RecentMemoryCard({ recording, onOpen, onRecord, onMore }: Props)
         >
           <MaterialCommunityIcons name="microphone" size={18} color={colors.onPrimary} />
           <Text style={styles.recordButtonText}>Gravar culto</Text>
-        </Pressable>
+        </AppPressable>
       </View>
     );
   }
@@ -60,7 +61,7 @@ export function RecentMemoryCard({ recording, onOpen, onRecord, onMore }: Props)
 
   return (
     <View style={styles.card}>
-      <Pressable
+      <AppPressable
         onPress={() => onOpen(recording._id)}
         accessibilityRole="button"
         accessibilityLabel={recording.title ?? 'Abrir gravação'}
@@ -78,7 +79,7 @@ export function RecentMemoryCard({ recording, onOpen, onRecord, onMore }: Props)
           {meetingLabel(recording.meetingType)}
           {'  •  '}Gravado em {formatRecordedAt(recording.createdAt)}
         </Text>
-      </Pressable>
+      </AppPressable>
 
       <View style={styles.summaryBox}>
         {completed && recording.keyPoints.length > 0 ? (
@@ -102,22 +103,22 @@ export function RecentMemoryCard({ recording, onOpen, onRecord, onMore }: Props)
       </View>
 
       <View style={styles.footer}>
-        <Pressable
+        <AppPressable
           onPress={() => onOpen(recording._id)}
           accessibilityRole="link"
           style={styles.link}
         >
           <MaterialCommunityIcons name="book-open-page-variant-outline" size={16} color={colors.secondary} />
           <Text style={styles.linkText}>{completed ? 'Ler transcrição completa' : 'Ver gravação'}</Text>
-        </Pressable>
-        <Pressable
+        </AppPressable>
+        <AppPressable
           onPress={onMore}
           accessibilityRole="button"
           accessibilityLabel="Mais opções"
           style={styles.moreButton}
         >
           <MaterialCommunityIcons name="dots-horizontal" size={18} color={colors.onSurfaceVariant} />
-        </Pressable>
+        </AppPressable>
       </View>
     </View>
   );

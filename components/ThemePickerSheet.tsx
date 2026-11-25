@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BottomSheet } from './BottomSheet';
@@ -7,6 +7,7 @@ import { ThemeRow } from './ThemeRow';
 import { BIBLE_THEMES, isThemeUnlocked } from '../constants/bibleThemes';
 import { useToast } from '../hooks/useToast';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   visible: boolean;
@@ -45,9 +46,9 @@ export function ThemePickerSheet({ visible, appliedThemeId, onApply, onClose }: 
           <Text style={styles.title}>Temas da Bíblia</Text>
           <Text style={styles.subtitle}>Personalize a atmosfera visual da sua leitura</Text>
         </View>
-        <Pressable onPress={close} accessibilityRole="button" accessibilityLabel="Fechar" style={styles.close}>
+        <AppPressable onPress={close} accessibilityRole="button" accessibilityLabel="Fechar" style={styles.close}>
           <MaterialCommunityIcons name="close" size={18} color={colors.primary} />
-        </Pressable>
+        </AppPressable>
       </View>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
@@ -57,9 +58,9 @@ export function ThemePickerSheet({ visible, appliedThemeId, onApply, onClose }: 
             <Text style={styles.bannerTitle}>Recurso Premium</Text>
             <Text style={styles.bannerBody}>Assinantes têm acesso ilimitado a todos os temas e atmosferas customizadas.</Text>
           </View>
-          <Pressable onPress={() => toast(COMING_SOON)} accessibilityRole="button" style={styles.unlock}>
+          <AppPressable onPress={() => toast(COMING_SOON)} accessibilityRole="button" style={styles.unlock}>
             <Text style={styles.unlockText}>Desbloquear</Text>
-          </Pressable>
+          </AppPressable>
         </LinearGradient>
 
         <View style={styles.sectionRow}>
@@ -81,7 +82,7 @@ export function ThemePickerSheet({ visible, appliedThemeId, onApply, onClose }: 
       </ScrollView>
 
       <View style={styles.footer}>
-        <Pressable
+        <AppPressable haptic="success"
           onPress={() => {
             onApply(pendingId);
             onClose();
@@ -93,10 +94,10 @@ export function ThemePickerSheet({ visible, appliedThemeId, onApply, onClose }: 
             <MaterialCommunityIcons name="check-all" size={20} color={colors.onPrimary} />
             <Text style={styles.applyText}>Aplicar Tema Selecionado</Text>
           </LinearGradient>
-        </Pressable>
-        <Pressable onPress={() => toast(COMING_SOON)} accessibilityRole="button">
+        </AppPressable>
+        <AppPressable onPress={() => toast(COMING_SOON)} accessibilityRole="button">
           <Text style={styles.trial}>✨ Experimentar Premium por 7 dias grátis</Text>
-        </Pressable>
+        </AppPressable>
       </View>
     </BottomSheet>
   );

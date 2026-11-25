@@ -1,7 +1,8 @@
 import type { ComponentProps } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, fonts, radius, shadow, spacing } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 export type IconName = ComponentProps<typeof MaterialCommunityIcons>['name'];
 
@@ -35,7 +36,7 @@ export function OnboardingOption({
   variant = 'default',
 }: Props) {
   return (
-    <Pressable
+    <AppPressable haptic="selection"
       onPress={onPress}
       accessibilityRole="radio"
       accessibilityState={{ checked: selected }}
@@ -73,7 +74,7 @@ export function OnboardingOption({
       <View style={[styles.radio, selected && styles.radioSelected]}>
         {selected ? <MaterialCommunityIcons name="check" size={16} color={colors.onPrimary} /> : null}
       </View>
-    </Pressable>
+    </AppPressable>
   );
 }
 

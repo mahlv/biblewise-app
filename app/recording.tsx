@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Alert, BackHandler, Linking, Platform, Pressable, StyleSheet, Switch, Text, View } from 'react-native';
+import { Alert, BackHandler, Linking, Platform, StyleSheet, Switch, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
@@ -21,6 +21,7 @@ import { useOnboarding } from '../hooks/useOnboarding';
 import { useToast } from '../hooks/useToast';
 import { MAX_RECORDING_SECONDS, formatClock } from '../lib/recordingSummary';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
+import { AppPressable } from '../components/ui/AppPressable';
 
 /**
  * Speech-optimized recording: mono, 16 kHz, ~24 kbps AAC (.m4a), about 11 MB per hour.
@@ -239,7 +240,7 @@ export default function RecordingScreen() {
           <RecordingWaveform active={isRecording} level={level} />
           <Text style={styles.caption}>Captação de voz em alta fidelidade ativa</Text>
 
-          <Pressable
+          <AppPressable haptic="medium"
             onPress={handleToggle}
             disabled={phase === 'starting' || phase === 'saved'}
             accessibilityRole="button"
@@ -249,7 +250,7 @@ export default function RecordingScreen() {
             <LinearGradient colors={['#FF4D6D', '#C1123F']} style={styles.mainButton}>
               <MaterialCommunityIcons name={isRecording ? 'pause' : 'play'} size={44} color={colors.onPrimary} />
             </LinearGradient>
-          </Pressable>
+          </AppPressable>
 
           <Text style={styles.helper}>
             Gravando a mensagem pastoral. Ao concluir, os resumos temáticos, tópicos oratórios e referências bíblicas serão
@@ -276,7 +277,7 @@ export default function RecordingScreen() {
           />
         </View>
 
-        <Pressable
+        <AppPressable haptic="medium"
           onPress={handleSave}
           disabled={phase === 'starting' || phase === 'saved'}
           accessibilityRole="button"
@@ -287,11 +288,11 @@ export default function RecordingScreen() {
             <MaterialCommunityIcons name="check" size={20} color={colors.onPrimary} />
             <Text style={styles.saveText}>Salvar e Resumir Palavra</Text>
           </LinearGradient>
-        </Pressable>
+        </AppPressable>
 
-        <Pressable onPress={confirmDiscard} disabled={phase === 'saved'} accessibilityRole="button" hitSlop={8}>
+        <AppPressable onPress={confirmDiscard} disabled={phase === 'saved'} accessibilityRole="button" hitSlop={8}>
           <Text style={styles.discard}>Descartar Gravação</Text>
-        </Pressable>
+        </AppPressable>
       </View>
 
       {file && anonymousId ? (

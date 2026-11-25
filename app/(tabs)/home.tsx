@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Pressable,ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useQuery } from 'convex/react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,6 +16,7 @@ import { useVerseMark } from '../../hooks/useVerseMark';
 import { useWidgetSettings } from '../../hooks/useWidgetSettings';
 import { getDailyVerse } from '../../lib/dailyVerse';
 import { colors, fonts, spacing } from '../../theme/tokens';
+import { AppPressable } from '../../components/ui/AppPressable';
 
 /** Home dashboard: daily verse, quick access, latest recording and widget banner. */
 export default function HomeScreen() {
@@ -74,9 +75,9 @@ export default function HomeScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Últimas Memórias</Text>
-            <Pressable onPress={() => router.push('/diary')} accessibilityRole="link" accessibilityLabel="Ver tudo">
+            <AppPressable onPress={() => router.push('/diary')} accessibilityRole="link" accessibilityLabel="Ver tudo">
               <Text style={styles.sectionLink}>Ver tudo</Text>
-            </Pressable>
+            </AppPressable>
           </View>
           <RecentMemoryCard
             recording={latestRecording}

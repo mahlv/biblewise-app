@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { File } from 'expo-file-system';
@@ -20,6 +20,7 @@ import {
   type RecordingStatus,
 } from '../lib/recordingSummary';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   anonymousId: string;
@@ -206,7 +207,7 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
           {MEETING_TYPE_OPTIONS.map((option) => {
             const selected = option.id === meetingType;
             return (
-              <Pressable
+              <AppPressable haptic="selection"
                 key={option.id}
                 onPress={() => handleMeetingType(option.id)}
                 accessibilityRole="radio"
@@ -215,7 +216,7 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
               >
                 {selected ? <MaterialCommunityIcons name="check" size={14} color={colors.onPrimary} /> : null}
                 <Text style={[styles.typeText, selected && styles.typeTextSelected]}>{option.label}</Text>
-              </Pressable>
+              </AppPressable>
             );
           })}
         </View>
@@ -223,12 +224,12 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
 
       <View style={styles.footer}>
         {failed ? (
-          <Pressable onPress={handleRetry} accessibilityRole="button" style={styles.retry}>
+          <AppPressable onPress={handleRetry} accessibilityRole="button" style={styles.retry}>
             <MaterialCommunityIcons name="refresh" size={18} color={colors.onPrimary} />
             <Text style={styles.saveText}>Tentar novamente</Text>
-          </Pressable>
+          </AppPressable>
         ) : (
-          <Pressable
+          <AppPressable
             onPress={handleSave}
             disabled={!completed}
             accessibilityRole="button"
@@ -239,7 +240,7 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
               <MaterialCommunityIcons name="check" size={18} color={colors.onPrimary} />
               <Text style={styles.saveText}>Salvar</Text>
             </LinearGradient>
-          </Pressable>
+          </AppPressable>
         )}
         <Text style={styles.footnote}>
           As anotações e o resumo serão salvos automaticamente em Meu Diário assim que a transcrição for concluída.
@@ -260,7 +261,7 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
 
 function FieldCard({ icon, label, value, placeholder, onPress }: { icon: 'church' | 'account-voice'; label: string; value: string; placeholder: string; onPress: () => void }) {
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${label}: ${value || placeholder}`} style={styles.field}>
+    <AppPressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${label}: ${value || placeholder}`} style={styles.field}>
       <View style={styles.fieldIcon}>
         <MaterialCommunityIcons name={icon} size={20} color={colors.primary} />
       </View>
@@ -271,7 +272,7 @@ function FieldCard({ icon, label, value, placeholder, onPress }: { icon: 'church
         </Text>
       </View>
       <MaterialCommunityIcons name="pencil-outline" size={18} color={colors.outline} />
-    </Pressable>
+    </AppPressable>
   );
 }
 

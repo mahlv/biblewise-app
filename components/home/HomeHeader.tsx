@@ -1,7 +1,8 @@
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { brandGradient, colors, fonts, spacing } from '../../theme/tokens';
+import { AppPressable } from '../ui/AppPressable';
 
 interface Props {
   /** User name from Convex; the greeting drops it when missing. */
@@ -39,16 +40,16 @@ export function HomeHeader({ name, imageUrl, unreadCount, onPressBell, onPressAv
         </Text>
       </View>
 
-      <Pressable onPress={onPressBell} accessibilityRole="button" accessibilityLabel="Notificações" style={styles.bell}>
+      <AppPressable onPress={onPressBell} accessibilityRole="button" accessibilityLabel="Notificações" style={styles.bell}>
         <MaterialCommunityIcons name="bell-outline" size={22} color={colors.onSurface} />
         {unreadCount > 0 ? (
           <View style={styles.badge}>
             <Text style={styles.badgeText}>{unreadCount > 99 ? '99+' : unreadCount}</Text>
           </View>
         ) : null}
-      </Pressable>
+      </AppPressable>
 
-      <Pressable
+      <AppPressable
         onPress={onPressAvatar}
         onLongPress={onLongPressAvatar}
         accessibilityRole="button"
@@ -71,7 +72,7 @@ export function HomeHeader({ name, imageUrl, unreadCount, onPressBell, onPressAv
             )}
           </LinearGradient>
         )}
-      </Pressable>
+      </AppPressable>
     </View>
   );
 }

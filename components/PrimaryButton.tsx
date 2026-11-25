@@ -1,6 +1,7 @@
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, fonts, radius, shadow } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   label: string;
@@ -23,7 +24,7 @@ export function PrimaryButton({ label, onPress, disabled = false, loading = fals
   const inactive = disabled || loading;
 
   return (
-    <Pressable
+    <AppPressable
       onPress={onPress}
       disabled={inactive}
       accessibilityRole="button"
@@ -43,7 +44,7 @@ export function PrimaryButton({ label, onPress, disabled = false, loading = fals
           {showArrow ? <MaterialCommunityIcons name="arrow-right" size={20} color={colors.onPrimary} /> : null}
         </View>
       )}
-    </Pressable>
+    </AppPressable>
   );
 }
 

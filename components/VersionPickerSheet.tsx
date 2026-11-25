@@ -1,9 +1,10 @@
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BottomSheet } from './BottomSheet';
 import { languageName } from '../lib/bibleVersions';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
 import type { BibleVersionMeta } from '../types/bible';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   visible: boolean;
@@ -42,9 +43,9 @@ export function VersionPickerSheet({ visible, versions, selectedCode, loadingCod
     <BottomSheet visible={visible} onClose={onClose} heightRatio={0.7}>
       <View style={styles.header}>
         <Text style={styles.title}>Versão da Bíblia</Text>
-        <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Fechar" hitSlop={8}>
+        <AppPressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Fechar" hitSlop={8}>
           <MaterialCommunityIcons name="close" size={22} color={colors.onSurfaceVariant} />
-        </Pressable>
+        </AppPressable>
       </View>
       <ScrollView contentContainerStyle={styles.list}>
         {groupByLanguage(versions).map((group) => (
@@ -55,7 +56,7 @@ export function VersionPickerSheet({ visible, versions, selectedCode, loadingCod
               const loading = version.code === loadingCode;
               const note = versionNote(version);
               return (
-                <Pressable
+                <AppPressable haptic="selection"
                   key={version.code}
                   disabled={loadingCode !== null}
                   onPress={async () => {
@@ -78,7 +79,7 @@ export function VersionPickerSheet({ visible, versions, selectedCode, loadingCod
                   ) : selected ? (
                     <MaterialCommunityIcons name="check-circle" size={22} color={colors.primary} />
                   ) : null}
-                </Pressable>
+                </AppPressable>
               );
             })}
           </View>

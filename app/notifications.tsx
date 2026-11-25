@@ -1,4 +1,4 @@
-import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useMutation, usePaginatedQuery, useQuery } from 'convex/react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,6 +9,7 @@ import { useOnboarding } from '../hooks/useOnboarding';
 import { notificationMessage } from '../lib/notificationText';
 import { formatTimeAgo } from '../lib/timeAgo';
 import { colors, fonts, radius, shadow, spacing } from '../theme/tokens';
+import { AppPressable } from '../components/ui/AppPressable';
 
 type NotificationView = FunctionReturnType<typeof api.notifications.listNotifications>['page'][number];
 
@@ -36,11 +37,11 @@ export default function NotificationsScreen() {
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <View style={styles.header}>
-        <Pressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Voltar" style={styles.headerButton}>
+        <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Voltar" style={styles.headerButton}>
           <MaterialCommunityIcons name="arrow-left" size={24} color={colors.onSurface} />
-        </Pressable>
+        </AppPressable>
         <Text style={styles.headerTitle}>Notificações</Text>
-        <Pressable
+        <AppPressable
           onPress={() => anonymousId && markAllRead({ anonymousId }).catch(() => undefined)}
           disabled={unreadCount === 0}
           accessibilityRole="button"
@@ -48,7 +49,7 @@ export default function NotificationsScreen() {
           style={styles.headerButton}
         >
           <MaterialCommunityIcons name="check-all" size={24} color={unreadCount === 0 ? colors.outlineVariant : colors.primary} />
-        </Pressable>
+        </AppPressable>
       </View>
 
       <FlatList
@@ -76,7 +77,7 @@ export default function NotificationsScreen() {
           const message = notificationMessage(item);
           const like = item.type === 'like';
           return (
-            <Pressable
+            <AppPressable
               onPress={() => open(item)}
               accessibilityRole="button"
               accessibilityLabel={`${message.headline}. ${item.isRead ? '' : 'Não lida.'}`}
@@ -93,7 +94,7 @@ export default function NotificationsScreen() {
                 <Text style={styles.time}>{formatTimeAgo(item.createdAt)}</Text>
               </View>
               {!item.isRead ? <View style={styles.dot} /> : null}
-            </Pressable>
+            </AppPressable>
           );
         }}
       />

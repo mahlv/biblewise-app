@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, KeyboardAvoidingView, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
 import { useMutation, useQuery } from 'convex/react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,6 +10,7 @@ import { ProfileTextField } from '../../components/ProfileTextField';
 import { useBible } from '../../hooks/useBible';
 import { useOnboarding } from '../../hooks/useOnboarding';
 import { useToast } from '../../hooks/useToast';
+import { haptics } from '../../lib/haptics';
 import { loadVersion, parseReference } from '../../lib/bibleLoader';
 import { splitReference } from '../../lib/bibleReference';
 import {
@@ -21,6 +22,7 @@ import {
   type PrayerType,
 } from '../../lib/prayerCategories';
 import { colors, fonts, radius, spacing } from '../../theme/tokens';
+import { AppPressable } from '../../components/ui/AppPressable';
 
 const TYPE_OPTIONS: { id: PrayerType; label: string; icon: 'hands-pray' | 'star-four-points' }[] = [
   { id: 'request', label: 'Pedido de Oração', icon: 'hands-pray' },
@@ -102,9 +104,11 @@ export default function CreatePrayerScreen() {
         scriptureText: verseText.trim() || undefined,
         isAnonymous: anonymous,
       });
+      haptics.success();
       toast('Publicado no mural!');
       goBack();
     } catch (error) {
+      haptics.error();
       Alert.alert('Não foi possível publicar', errorMessage(error));
       setSubmitting(false);
     }
@@ -113,9 +117,9 @@ export default function CreatePrayerScreen() {
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <View style={styles.header}>
-        <Pressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Fechar" style={styles.headerButton}>
+        <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Fechar" style={styles.headerButton}>
           <MaterialCommunityIcons name="close" size={24} color={colors.onSurface} />
-        </Pressable>
+        </AppPressable>
         <Text style={styles.headerTitle}>Nova publicação</Text>
         <View style={styles.headerButton} />
       </View>
@@ -126,7 +130,7 @@ export default function CreatePrayerScreen() {
             {TYPE_OPTIONS.map((option) => {
               const selected = option.id === type;
               return (
-                <Pressable
+                <AppPressable haptic="selection"
                   key={option.id}
                   onPress={() => setType(option.id)}
                   accessibilityRole="button"
@@ -135,7 +139,7 @@ export default function CreatePrayerScreen() {
                 >
                   <MaterialCommunityIcons name={option.icon} size={18} color={selected ? colors.onPrimary : colors.outline} />
                   <Text style={[styles.typeText, selected && styles.typeTextSelected]}>{option.label}</Text>
-                </Pressable>
+                </AppPressable>
               );
             })}
           </View>
@@ -159,7 +163,7 @@ export default function CreatePrayerScreen() {
                 const selected = item === category;
                 const tone = PRAYER_CATEGORY_COLORS[item];
                 return (
-                  <Pressable
+                  <AppPressable haptic="selection"
                     key={item}
                     onPress={() => {
                       setCategory(item);
@@ -170,7 +174,7 @@ export default function CreatePrayerScreen() {
                     style={[styles.chip, { backgroundColor: tone.background }, selected && { borderColor: tone.text }]}
                   >
                     <Text style={[styles.chipText, { color: tone.text }]}>{item}</Text>
-                  </Pressable>
+                  </AppPressable>
                 );
               })}
             </View>
@@ -210,10 +214,10 @@ export default function CreatePrayerScreen() {
               placeholder="Ex.: Salmos 23:1-2"
               maxLength={PRAYER_LIMITS.scriptureReference}
             />
-            <Pressable onPress={fillVerse} accessibilityRole="button" style={({ pressed }) => [styles.verseButton, pressed && { opacity: 0.85 }]}>
+            <AppPressable onPress={fillVerse} accessibilityRole="button" style={({ pressed }) => [styles.verseButton, pressed && { opacity: 0.85 }]}>
               <MaterialCommunityIcons name="book-search-outline" size={18} color={colors.primary} />
               <Text style={styles.verseButtonText}>Preencher com o texto da Bíblia</Text>
-            </Pressable>
+            </AppPressable>
             <TextInput
               value={verseText}
               onChangeText={setVerseText}
@@ -239,7 +243,10 @@ export default function CreatePrayerScreen() {
             <Switch
               value={anonymous}
               disabled={!hasName}
-              onValueChange={setAnonymousChoice}
+              onValueChange={(value) => {
+                haptics.selection();
+                setAnonymousChoice(value);
+              }}
               trackColor={{ false: colors.outlineVariant, true: colors.primary }}
               thumbColor={colors.onPrimary}
               accessibilityLabel="Publicar como anônimo"
@@ -247,9 +254,9 @@ export default function CreatePrayerScreen() {
           </View>
 
           {!hasName ? (
-            <Pressable onPress={() => router.push('/profile/edit')} accessibilityRole="link">
+            <AppPressable onPress={() => router.push('/profile/edit')} accessibilityRole="link">
               <Text style={styles.link}>Editar perfil</Text>
-            </Pressable>
+            </AppPressable>
           ) : null}
           <Text style={styles.rules}>
             Publicações podem ser denunciadas e ocultadas pela comunidade. Seja respeitoso e não compartilhe dados pessoais de terceiros.

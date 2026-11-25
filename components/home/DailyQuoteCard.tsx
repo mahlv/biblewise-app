@@ -1,8 +1,9 @@
-import { Pressable, Share, StyleSheet, Text, View } from 'react-native';
+import { Share, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useToast } from '../../hooks/useToast';
 import { colors, fonts, radius, spacing } from '../../theme/tokens';
+import { AppPressable } from '../ui/AppPressable';
 
 interface Props {
   quote: string;
@@ -30,21 +31,21 @@ export function DailyQuoteCard({ quote, reference, favorite, bookmarked, onToggl
           <MaterialCommunityIcons name="star-four-points" size={12} color={colors.onPrimary} />
           <Text style={styles.badgeText}>FRASE DO DIA</Text>
         </View>
-        <Pressable
+        <AppPressable
           onPress={() => toast('Em breve')}
           accessibilityRole="button"
           accessibilityLabel="Ouvir versículo"
           style={styles.roundButton}
         >
           <MaterialCommunityIcons name="volume-high" size={18} color={colors.onPrimary} />
-        </Pressable>
+        </AppPressable>
       </View>
 
       <Text style={styles.quote}>“{quote}”</Text>
       <Text style={styles.reference}>{reference}</Text>
 
       <View style={styles.bottomRow}>
-        <Pressable
+        <AppPressable
           onPress={handleShare}
           accessibilityRole="button"
           accessibilityLabel="Compartilhar"
@@ -52,10 +53,10 @@ export function DailyQuoteCard({ quote, reference, favorite, bookmarked, onToggl
         >
           <MaterialCommunityIcons name="share-variant-outline" size={18} color={colors.onSurface} />
           <Text style={styles.shareText}>Compartilhar</Text>
-        </Pressable>
+        </AppPressable>
 
         <View style={styles.actions}>
-          <Pressable
+          <AppPressable haptic="selection"
             onPress={onToggleFavorite}
             accessibilityRole="button"
             accessibilityLabel={favorite ? 'Remover dos favoritos' : 'Favoritar'}
@@ -67,8 +68,8 @@ export function DailyQuoteCard({ quote, reference, favorite, bookmarked, onToggl
               size={20}
               color={favorite ? '#FF6B8A' : colors.onPrimary}
             />
-          </Pressable>
-          <Pressable
+          </AppPressable>
+          <AppPressable haptic="selection"
             onPress={onToggleBookmark}
             accessibilityRole="button"
             accessibilityLabel={bookmarked ? 'Remover dos salvos' : 'Salvar'}
@@ -80,7 +81,7 @@ export function DailyQuoteCard({ quote, reference, favorite, bookmarked, onToggl
               size={20}
               color={bookmarked ? colors.badge : colors.onPrimary}
             />
-          </Pressable>
+          </AppPressable>
         </View>
       </View>
     </LinearGradient>

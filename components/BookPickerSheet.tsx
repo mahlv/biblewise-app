@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BottomSheet } from './BottomSheet';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
 import type { Book, ReadingPosition } from '../types/bible';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   visible: boolean;
@@ -24,7 +25,7 @@ export function BookPickerSheet({ visible, books, position, onSelect, onClose }:
   };
 
   const renderBook = (book: Book) => (
-    <Pressable
+    <AppPressable haptic="selection"
       key={book.id}
       onPress={() => setPickedBook(book)}
       accessibilityRole="button"
@@ -33,21 +34,21 @@ export function BookPickerSheet({ visible, books, position, onSelect, onClose }:
       <Text style={styles.bookNumber}>{book.id + 1}</Text>
       <Text style={styles.bookName}>{book.name}</Text>
       <MaterialCommunityIcons name="chevron-right" size={20} color={colors.outline} />
-    </Pressable>
+    </AppPressable>
   );
 
   return (
     <BottomSheet visible={visible} onClose={close}>
       <View style={styles.header}>
         {pickedBook ? (
-          <Pressable onPress={() => setPickedBook(null)} accessibilityRole="button" accessibilityLabel="Voltar para os livros" hitSlop={8}>
+          <AppPressable onPress={() => setPickedBook(null)} accessibilityRole="button" accessibilityLabel="Voltar para os livros" hitSlop={8}>
             <MaterialCommunityIcons name="arrow-left" size={22} color={colors.onSurface} />
-          </Pressable>
+          </AppPressable>
         ) : null}
         <Text style={styles.title}>{pickedBook ? pickedBook.name : 'Livros'}</Text>
-        <Pressable onPress={close} accessibilityRole="button" accessibilityLabel="Fechar" hitSlop={8} style={styles.close}>
+        <AppPressable onPress={close} accessibilityRole="button" accessibilityLabel="Fechar" hitSlop={8} style={styles.close}>
           <MaterialCommunityIcons name="close" size={22} color={colors.onSurfaceVariant} />
-        </Pressable>
+        </AppPressable>
       </View>
 
       {pickedBook ? (
@@ -55,7 +56,7 @@ export function BookPickerSheet({ visible, books, position, onSelect, onClose }:
           {pickedBook.chapters.map((chapter) => {
             const active = pickedBook.id === position.bookId && chapter.number === position.chapter;
             return (
-              <Pressable
+              <AppPressable haptic="selection"
                 key={chapter.number}
                 onPress={() => {
                   onSelect({ bookId: pickedBook.id, chapter: chapter.number });
@@ -66,7 +67,7 @@ export function BookPickerSheet({ visible, books, position, onSelect, onClose }:
                 style={[styles.cell, active && styles.cellActive]}
               >
                 <Text style={[styles.cellText, active && styles.cellTextActive]}>{chapter.number}</Text>
-              </Pressable>
+              </AppPressable>
             );
           })}
         </ScrollView>

@@ -1,6 +1,7 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { fonts, radius } from '../theme/tokens';
 import type { BibleTheme, Verse } from '../types/bible';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   verses: Verse[];
@@ -24,7 +25,7 @@ export function VerseList({ verses, theme, selectedVerse, highlightedVerses = []
         const selected = verse.number === selectedVerse;
         const highlighted = highlightedVerses.includes(verse.number);
         return (
-          <Pressable
+          <AppPressable
             key={verse.number}
             onPress={() => onToggleVerse(verse.number)}
             onLongPress={() => onLongPressVerse?.(verse.number)}
@@ -39,7 +40,7 @@ export function VerseList({ verses, theme, selectedVerse, highlightedVerses = []
               {'  '}
               {verse.text}
             </Text>
-          </Pressable>
+          </AppPressable>
         );
       })}
     </View>

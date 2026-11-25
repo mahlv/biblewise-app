@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, Platform, StyleSheet, Text, TextInput, View } from 'react-native';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   visible: boolean;
@@ -16,7 +17,7 @@ function PromptBody({ title, placeholder, initialValue, onSubmit, onCancel }: Om
 
   return (
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <Pressable style={styles.backdrop} onPress={onCancel} accessibilityLabel="Cancelar" />
+      <AppPressable haptic="none" feedback="none" style={styles.backdrop} onPress={onCancel} accessibilityLabel="Cancelar" />
       <View style={styles.card}>
         <Text style={styles.title}>{title}</Text>
         <TextInput
@@ -31,12 +32,12 @@ function PromptBody({ title, placeholder, initialValue, onSubmit, onCancel }: Om
           style={styles.input}
         />
         <View style={styles.actions}>
-          <Pressable onPress={onCancel} accessibilityRole="button" style={styles.cancel}>
+          <AppPressable onPress={onCancel} accessibilityRole="button" style={styles.cancel}>
             <Text style={styles.cancelText}>Cancelar</Text>
-          </Pressable>
-          <Pressable onPress={() => onSubmit(value)} accessibilityRole="button" style={styles.confirm}>
+          </AppPressable>
+          <AppPressable onPress={() => onSubmit(value)} accessibilityRole="button" style={styles.confirm}>
             <Text style={styles.confirmText}>Confirmar</Text>
-          </Pressable>
+          </AppPressable>
         </View>
       </View>
     </KeyboardAvoidingView>

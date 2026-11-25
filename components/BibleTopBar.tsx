@@ -1,6 +1,7 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   versionLabel: string;
@@ -13,7 +14,7 @@ interface Props {
 
 function Pill({ label, onPress, accessibilityLabel }: { label: string; onPress: () => void; accessibilityLabel: string }) {
   return (
-    <Pressable
+    <AppPressable
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
@@ -23,13 +24,13 @@ function Pill({ label, onPress, accessibilityLabel }: { label: string; onPress: 
         {label}
       </Text>
       <MaterialCommunityIcons name="chevron-down" size={16} color={colors.onSurfaceVariant} />
-    </Pressable>
+    </AppPressable>
   );
 }
 
 function RoundButton({ icon, onPress, label, badge }: { icon: 'bell-outline' | 'format-size'; onPress: () => void; label: string; badge?: boolean }) {
   return (
-    <Pressable
+    <AppPressable
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={label}
@@ -37,7 +38,7 @@ function RoundButton({ icon, onPress, label, badge }: { icon: 'bell-outline' | '
     >
       <MaterialCommunityIcons name={icon} size={20} color={colors.primary} />
       {badge ? <View style={styles.badge} /> : null}
-    </Pressable>
+    </AppPressable>
   );
 }
 

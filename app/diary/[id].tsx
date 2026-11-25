@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Pressable, ScrollView, Share, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, Alert, ScrollView, Share, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { useMutation, useQuery } from 'convex/react';
@@ -16,10 +16,12 @@ import { DEFAULT_QUOTE_STYLE, formatQuoteDate, type QuoteStyle } from '../../lib
 import { readQuoteStyle, saveQuoteStyle } from '../../lib/quoteStylePreferences';
 import { useOnboarding } from '../../hooks/useOnboarding';
 import { useToast } from '../../hooks/useToast';
+import { haptics } from '../../lib/haptics';
 import { buildRecordingShareText } from '../../lib/recordingShareText';
 import { MEETING_TYPE_OPTIONS, buildTeaser, formatClock, statusLabel } from '../../lib/recordingSummary';
 import { shareRecordingAudio } from '../../lib/shareRecording';
 import { colors, fonts, radius, shadow, spacing } from '../../theme/tokens';
+import { AppPressable } from '../../components/ui/AppPressable';
 
 /** Read-only detail of a recording: summary, scriptures, quote and audio player. */
 export default function RecordingDetailScreen() {
@@ -57,6 +59,7 @@ export default function RecordingDetailScreen() {
         text: 'Excluir',
         style: 'destructive',
         onPress: async () => {
+          haptics.warning();
           player.pause();
           await deleteRecording({ anonymousId, recordingId }).catch(() => undefined);
           goBack();
@@ -86,13 +89,13 @@ export default function RecordingDetailScreen() {
 
   const header = (
     <View style={styles.topBar}>
-      <Pressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Voltar" style={styles.roundButton}>
+      <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Voltar" style={styles.roundButton}>
         <MaterialCommunityIcons name="arrow-left" size={22} color={colors.onSurface} />
-      </Pressable>
+      </AppPressable>
       {recording ? (
-        <Pressable onPress={confirmDelete} accessibilityRole="button" accessibilityLabel="Excluir gravação" style={styles.roundButton}>
+        <AppPressable onPress={confirmDelete} accessibilityRole="button" accessibilityLabel="Excluir gravação" style={styles.roundButton}>
           <MaterialCommunityIcons name="trash-can-outline" size={20} color={colors.primary} />
-        </Pressable>
+        </AppPressable>
       ) : null}
     </View>
   );
@@ -138,9 +141,9 @@ export default function RecordingDetailScreen() {
 
         {recording.audioUrl ? (
           <View style={styles.player}>
-            <Pressable onPress={togglePlay} accessibilityRole="button" accessibilityLabel={playerStatus.playing ? 'Pausar áudio' : 'Ouvir áudio'} style={styles.playButton}>
+            <AppPressable haptic="medium" onPress={togglePlay} accessibilityRole="button" accessibilityLabel={playerStatus.playing ? 'Pausar áudio' : 'Ouvir áudio'} style={styles.playButton}>
               <MaterialCommunityIcons name={playerStatus.playing ? 'pause' : 'play'} size={26} color={colors.onPrimary} />
-            </Pressable>
+            </AppPressable>
             <View style={styles.playerBar}>
               <ProgressBar progress={progress} />
               <View style={styles.playerTimes}>
@@ -154,7 +157,7 @@ export default function RecordingDetailScreen() {
         {recording.audioUrl || summary ? (
           <View style={styles.shareRow}>
             {recording.audioUrl ? (
-              <Pressable
+              <AppPressable
                 onPress={shareAudio}
                 disabled={preparingAudio}
                 accessibilityRole="button"
@@ -168,10 +171,10 @@ export default function RecordingDetailScreen() {
                   <MaterialCommunityIcons name="share-variant" size={18} color={colors.primary} />
                 )}
                 <Text style={styles.shareButtonText}>{preparingAudio ? 'Preparando áudio…' : 'Compartilhar áudio'}</Text>
-              </Pressable>
+              </AppPressable>
             ) : null}
             {summary ? (
-              <Pressable
+              <AppPressable
                 onPress={shareSummary}
                 accessibilityRole="button"
                 accessibilityLabel="Compartilhar resumo"
@@ -179,7 +182,7 @@ export default function RecordingDetailScreen() {
               >
                 <MaterialCommunityIcons name="text-box-outline" size={18} color={colors.primary} />
                 <Text style={styles.shareButtonText}>Compartilhar resumo</Text>
-              </Pressable>
+              </AppPressable>
             ) : null}
           </View>
         ) : null}
@@ -251,12 +254,12 @@ export default function RecordingDetailScreen() {
                 style={quoteStyle}
                 width={screenWidth - spacing.xl * 2}
               />
-              <Pressable onPress={() => setQuoteSheetOpen(true)} accessibilityRole="button" accessibilityLabel="Customizar arte e compartilhar">
+              <AppPressable onPress={() => setQuoteSheetOpen(true)} accessibilityRole="button" accessibilityLabel="Customizar arte e compartilhar">
                 <LinearGradient colors={['#E8265E', '#7B3FA8', '#0051D4']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.quoteButton}>
                   <MaterialCommunityIcons name="palette-outline" size={18} color={colors.onPrimary} />
                   <Text style={styles.quoteButtonText}>Customizar Arte & Compartilhar</Text>
                 </LinearGradient>
-              </Pressable>
+              </AppPressable>
             </View>
           </>
         ) : null}

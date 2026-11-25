@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { brandGradient, colors } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   onPress: () => void;
@@ -10,7 +11,7 @@ interface Props {
 /** Floating microphone button with the brand gradient. */
 export function MicFab({ onPress }: Props) {
   return (
-    <Pressable
+    <AppPressable haptic="medium"
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel="Falar"
@@ -25,7 +26,7 @@ export function MicFab({ onPress }: Props) {
       >
         <MaterialCommunityIcons name="microphone" size={26} color={colors.onPrimary} />
       </LinearGradient>
-    </Pressable>
+    </AppPressable>
   );
 }
 

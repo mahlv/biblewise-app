@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TextInput, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { PRAYER_LIMITS } from '../lib/prayerCategories';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   /** Sends the text; reject to keep it in the box (the screen shows the error). */
@@ -47,7 +48,7 @@ export function CommentComposer({ onSubmit }: Props) {
           </Text>
         ) : null}
       </View>
-      <Pressable
+      <AppPressable
         onPress={send}
         disabled={!canSend}
         accessibilityRole="button"
@@ -55,7 +56,7 @@ export function CommentComposer({ onSubmit }: Props) {
         style={({ pressed }) => [styles.send, !canSend && styles.sendDisabled, pressed && { opacity: 0.85 }]}
       >
         {sending ? <ActivityIndicator color={colors.onPrimary} /> : <MaterialCommunityIcons name="send" size={20} color={colors.onPrimary} />}
-      </Pressable>
+      </AppPressable>
     </View>
   );
 }

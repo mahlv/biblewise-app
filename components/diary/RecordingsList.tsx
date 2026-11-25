@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useQuery } from 'convex/react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -7,6 +7,7 @@ import { api } from '../../convex/_generated/api';
 import { useOnboarding } from '../../hooks/useOnboarding';
 import { formatDuration, statusLabel, type RecordingStatus } from '../../lib/recordingSummary';
 import { colors, fonts, radius, shadow, spacing } from '../../theme/tokens';
+import { AppPressable } from '../ui/AppPressable';
 
 /** Fixed pseudo-random heights so each card shows the same mini waveform. */
 const MINI_BARS = [10, 18, 12, 24, 16, 28, 14, 22, 10, 20, 26, 12, 18, 8];
@@ -55,7 +56,7 @@ export function RecordingsList({ header }: Props) {
       renderItem={({ item }) => {
         const badge = BADGE_COLORS[item.status];
         return (
-          <Pressable
+          <AppPressable
             onPress={() => router.push({ pathname: '/diary/[id]', params: { id: item._id } })}
             accessibilityRole="button"
             accessibilityLabel={item.title ?? 'Gravação sem título'}
@@ -81,7 +82,7 @@ export function RecordingsList({ header }: Props) {
               </View>
               <Text style={styles.duration}>{formatDuration(item.durationSeconds)}</Text>
             </View>
-          </Pressable>
+          </AppPressable>
         );
       }}
     />

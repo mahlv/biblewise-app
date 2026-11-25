@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BrandLogo } from './BrandLogo';
 import { colors, fonts, radius } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   onBack: () => void;
@@ -13,7 +14,7 @@ interface Props {
 export function OnboardingHeader({ onBack, stepLabel }: Props) {
   return (
     <View style={styles.header}>
-      <Pressable
+      <AppPressable
         onPress={onBack}
         accessibilityRole="button"
         accessibilityLabel="Voltar"
@@ -21,7 +22,7 @@ export function OnboardingHeader({ onBack, stepLabel }: Props) {
         style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}
       >
         <MaterialCommunityIcons name="arrow-left" size={22} color={colors.onSurface} />
-      </Pressable>
+      </AppPressable>
 
       <BrandLogo size={36} />
 

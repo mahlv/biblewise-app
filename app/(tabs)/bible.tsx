@@ -15,6 +15,7 @@ import { useBible } from '../../hooks/useBible';
 import { readHighlights, saveHighlights, type VerseHighlights } from '../../lib/biblePreferences';
 import { useToast } from '../../hooks/useToast';
 import { clampPosition, getAdjacentChapter, loadVersion, parseReference } from '../../lib/bibleLoader';
+import { haptics } from '../../lib/haptics';
 import { colors, fonts, radius, spacing } from '../../theme/tokens';
 import type { ReadingPosition } from '../../types/bible';
 
@@ -105,6 +106,7 @@ export default function BibleScreen() {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const Clipboard = require('expo-clipboard') as typeof import('expo-clipboard');
       await Clipboard.setStringAsync(text);
+      haptics.success();
       toast('Versículo copiado');
     } catch {
       toast('Não foi possível copiar agora');

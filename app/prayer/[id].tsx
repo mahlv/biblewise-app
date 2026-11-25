@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { ActivityIndicator, Alert, FlatList, KeyboardAvoidingView, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useMutation, usePaginatedQuery, useQuery } from 'convex/react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -11,7 +11,9 @@ import { CommentItem, type CommentView } from '../../components/CommentItem';
 import { PrayerCard } from '../../components/PrayerCard';
 import { useOnboarding } from '../../hooks/useOnboarding';
 import { useToast } from '../../hooks/useToast';
+import { haptics } from '../../lib/haptics';
 import { colors, fonts, spacing } from '../../theme/tokens';
+import { AppPressable } from '../../components/ui/AppPressable';
 
 const PAGE_SIZE = 20;
 
@@ -60,9 +62,11 @@ export default function PrayerDetailScreen() {
     if (!anonymousId) return;
     try {
       await createComment({ anonymousId, prayerId, content });
+      haptics.success();
       // Wait for the new row to render, then bring the latest comment into view.
       setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 350);
     } catch (error) {
+      haptics.error();
       toast(errorMessage(error, 'Não foi possível comentar.'));
       throw error;
     }
@@ -98,9 +102,9 @@ export default function PrayerDetailScreen() {
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <View style={styles.topBar}>
-        <Pressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Voltar" style={styles.topButton}>
+        <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Voltar" style={styles.topButton}>
           <MaterialCommunityIcons name="arrow-left" size={24} color={colors.onSurface} />
-        </Pressable>
+        </AppPressable>
         <Text style={styles.topTitle}>Publicação</Text>
         <View style={styles.topButton} />
       </View>

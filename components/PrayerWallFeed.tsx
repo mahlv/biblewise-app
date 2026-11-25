@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState, type ReactElement } from 'react';
-import { ActivityIndicator, Alert, FlatList, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
 import { optimisticallyUpdateValueInPaginatedQuery, useMutation, usePaginatedQuery } from 'convex/react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { api } from '../convex/_generated/api';
 import { PrayerCard, type PrayerView } from './PrayerCard';
 import { useToast } from '../hooks/useToast';
+import { haptics } from '../lib/haptics';
 import { colors, fonts, radius, shadow, spacing } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 type Filter = 'all' | 'mine' | 'testimony';
 
@@ -66,7 +68,10 @@ export function PrayerWallFeed({ anonymousId, header, myPostsCount }: Props) {
 
   const handleToggleAmen = (prayerId: PrayerView['_id']) => {
     if (!anonymousId) return;
-    toggleAmen({ anonymousId, prayerId }).catch((error) => toast(errorMessage(error, 'Não foi possível registrar o Amém.')));
+    toggleAmen({ anonymousId, prayerId }).catch((error) => {
+      haptics.error();
+      toast(errorMessage(error, 'Não foi possível registrar o Amém.'));
+    });
   };
 
   const handleReport = (prayerId: PrayerView['_id']) => {
@@ -96,7 +101,7 @@ export function PrayerWallFeed({ anonymousId, header, myPostsCount }: Props) {
       {header}
 
       <View style={styles.ctaCard}>
-        <Pressable
+        <AppPressable
           onPress={() => router.push('/prayer/create')}
           accessibilityRole="button"
           accessibilityLabel="Nova Oração ou Testemunho"
@@ -104,7 +109,7 @@ export function PrayerWallFeed({ anonymousId, header, myPostsCount }: Props) {
         >
           <MaterialCommunityIcons name="plus" size={20} color={colors.onPrimary} />
           <Text style={styles.ctaText}>Nova Oração ou Testemunho</Text>
-        </Pressable>
+        </AppPressable>
       </View>
 
       <View style={styles.search}>
@@ -120,9 +125,9 @@ export function PrayerWallFeed({ anonymousId, header, myPostsCount }: Props) {
           style={styles.searchInput}
         />
         {searchText ? (
-          <Pressable onPress={() => setSearchText('')} accessibilityRole="button" accessibilityLabel="Limpar busca" hitSlop={8}>
+          <AppPressable onPress={() => setSearchText('')} accessibilityRole="button" accessibilityLabel="Limpar busca" hitSlop={8}>
             <MaterialCommunityIcons name="close-circle" size={18} color={colors.outline} />
-          </Pressable>
+          </AppPressable>
         ) : null}
       </View>
 
@@ -130,7 +135,7 @@ export function PrayerWallFeed({ anonymousId, header, myPostsCount }: Props) {
         {chips.map((chip) => {
           const selected = chip.id === filter;
           return (
-            <Pressable
+            <AppPressable haptic="selection"
               key={chip.id}
               onPress={() => setFilter(chip.id)}
               accessibilityRole="button"
@@ -144,7 +149,7 @@ export function PrayerWallFeed({ anonymousId, header, myPostsCount }: Props) {
                   <Text style={[styles.chipCountText, selected && styles.chipTextSelected]}>{chip.count}</Text>
                 </View>
               ) : null}
-            </Pressable>
+            </AppPressable>
           );
         })}
       </ScrollView>

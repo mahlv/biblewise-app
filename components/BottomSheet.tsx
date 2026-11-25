@@ -1,7 +1,8 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { Animated, Dimensions, Easing, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Animated, Dimensions, Easing, Modal, StyleSheet, View } from 'react-native';
 import { ToastProvider } from '../hooks/useToast';
 import { colors, radius } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   visible: boolean;
@@ -36,7 +37,7 @@ export function BottomSheet({ visible, onClose, children, heightRatio = 0.88 }: 
     <Modal visible={mounted} transparent animationType="none" onRequestClose={onClose} statusBarTranslucent>
       <View style={styles.root}>
         <Animated.View style={[styles.backdrop, { opacity: progress }]}>
-          <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessibilityLabel="Fechar" />
+          <AppPressable haptic="none" feedback="none" style={StyleSheet.absoluteFill} onPress={onClose} accessibilityLabel="Fechar" />
         </Animated.View>
         <Animated.View style={[styles.sheet, { height, transform: [{ translateY }] }]}>
           <View style={styles.handle} />

@@ -1,9 +1,10 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { BottomTabBarProps } from 'expo-router/tabs';
 import { colors, fonts } from '../theme/tokens';
 import type { IconName } from './OnboardingOption';
+import { AppPressable } from './ui/AppPressable';
 
 const TABS: Record<string, { label: string; icon: IconName; activeIcon: IconName }> = {
   home: { label: 'Início', icon: 'home-outline', activeIcon: 'home' },
@@ -24,7 +25,7 @@ export function AppTabBar({ state, navigation }: BottomTabBarProps) {
         const color = focused ? colors.primary : colors.outline;
 
         return (
-          <Pressable
+          <AppPressable haptic="selection"
             key={route.key}
             accessibilityRole="tab"
             accessibilityState={{ selected: focused }}
@@ -37,7 +38,7 @@ export function AppTabBar({ state, navigation }: BottomTabBarProps) {
           >
             <MaterialCommunityIcons name={focused ? tab.activeIcon : tab.icon} size={24} color={color} />
             <Text style={[styles.label, { color }, focused && styles.labelActive]}>{tab.label}</Text>
-          </Pressable>
+          </AppPressable>
         );
       })}
     </View>

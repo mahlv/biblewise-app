@@ -1,6 +1,7 @@
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   value: string;
@@ -25,9 +26,9 @@ export function BibleSearchBar({ value, onChangeText, onSubmit, onPressMic }: Pr
         style={styles.input}
         accessibilityLabel="Buscar passagem"
       />
-      <Pressable onPress={onPressMic} accessibilityRole="button" accessibilityLabel="Busca por voz" hitSlop={8}>
+      <AppPressable onPress={onPressMic} accessibilityRole="button" accessibilityLabel="Busca por voz" hitSlop={8}>
         <MaterialCommunityIcons name="microphone-outline" size={20} color={colors.outline} />
-      </Pressable>
+      </AppPressable>
     </View>
   );
 }

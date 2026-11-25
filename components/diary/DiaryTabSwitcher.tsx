@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, fonts, radius, spacing } from '../../theme/tokens';
 import type { IconName } from '../OnboardingOption';
 import type { DiaryView } from './DiaryStats';
+import { AppPressable } from '../ui/AppPressable';
 
 interface Props {
   view: DiaryView;
@@ -21,7 +22,7 @@ export function DiaryTabSwitcher({ view, onChange }: Props) {
       {TABS.map((tab) => {
         const active = tab.id === view;
         return (
-          <Pressable
+          <AppPressable haptic="selection"
             key={tab.id}
             onPress={() => onChange(tab.id)}
             accessibilityRole="tab"
@@ -32,7 +33,7 @@ export function DiaryTabSwitcher({ view, onChange }: Props) {
             <Text style={[styles.label, active && styles.labelActive]} numberOfLines={2}>
               {tab.label}
             </Text>
-          </Pressable>
+          </AppPressable>
         );
       })}
     </View>

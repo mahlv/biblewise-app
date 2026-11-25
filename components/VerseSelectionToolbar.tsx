@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { IconName } from './OnboardingOption';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   verse: number;
@@ -24,9 +25,9 @@ export function VerseSelectionToolbar({ verse, onCopy, onHighlight, onNote, onSh
     <View style={styles.pill} accessibilityRole="toolbar">
       <Text style={styles.label}>v. {verse} selecionado</Text>
       {actions.map((action) => (
-        <Pressable key={action.label} onPress={action.onPress} accessibilityRole="button" accessibilityLabel={action.label} hitSlop={6}>
+        <AppPressable key={action.label} onPress={action.onPress} accessibilityRole="button" accessibilityLabel={action.label} hitSlop={6}>
           <MaterialCommunityIcons name={action.icon} size={18} color={action.tint ?? colors.onPrimary} />
-        </Pressable>
+        </AppPressable>
       ))}
     </View>
   );

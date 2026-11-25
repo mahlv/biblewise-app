@@ -1,7 +1,8 @@
 import { useState, type ReactNode } from 'react';
-import { LayoutAnimation, Platform, Pressable, StyleSheet, Text, UIManager, View } from 'react-native';
+import { LayoutAnimation, Platform, StyleSheet, Text, UIManager, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, fonts, radius, shadow, spacing } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 // LayoutAnimation is opt-in on Android.
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -29,7 +30,7 @@ export function CollapsibleSection({ title, count, teaser, defaultOpen = false, 
 
   return (
     <View style={styles.card}>
-      <Pressable
+      <AppPressable haptic="selection"
         onPress={toggle}
         accessibilityRole="button"
         accessibilityLabel={`${open ? 'Recolher' : 'Expandir'} ${title}`}
@@ -52,14 +53,14 @@ export function CollapsibleSection({ title, count, teaser, defaultOpen = false, 
           ) : null}
         </View>
         <MaterialCommunityIcons name={open ? 'chevron-up' : 'chevron-down'} size={26} color={colors.primary} />
-      </Pressable>
+      </AppPressable>
 
       {open ? (
         <View style={styles.content}>
           {children}
-          <Pressable onPress={toggle} accessibilityRole="button" accessibilityLabel={`Recolher ${title}`} hitSlop={8}>
+          <AppPressable haptic="selection" onPress={toggle} accessibilityRole="button" accessibilityLabel={`Recolher ${title}`} hitSlop={8}>
             <Text style={styles.readLess}>Mostrar menos</Text>
-          </Pressable>
+          </AppPressable>
         </View>
       ) : null}
     </View>

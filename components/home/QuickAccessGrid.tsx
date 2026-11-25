@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { IconName } from '../OnboardingOption';
 import { colors, fonts, radius, shadow, spacing } from '../../theme/tokens';
+import { AppPressable } from '../ui/AppPressable';
 
 interface Props {
   onOpenBible: () => void;
@@ -21,7 +22,7 @@ interface ShortcutProps {
 
 function Shortcut({ icon, iconColor, iconBackground, title, subtitle, badge, onPress }: ShortcutProps) {
   return (
-    <Pressable
+    <AppPressable
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={title}
@@ -45,7 +46,7 @@ function Shortcut({ icon, iconColor, iconBackground, title, subtitle, badge, onP
       <Text style={styles.subtitle} numberOfLines={1}>
         {subtitle}
       </Text>
-    </Pressable>
+    </AppPressable>
   );
 }
 

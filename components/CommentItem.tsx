@@ -1,9 +1,11 @@
-import { Alert, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import type { FunctionReturnType } from 'convex/server';
 import type { api } from '../convex/_generated/api';
+import { haptics } from '../lib/haptics';
 import { formatTimeAgo } from '../lib/timeAgo';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
+import { AppPressable } from './ui/AppPressable';
 
 export type CommentView = FunctionReturnType<typeof api.comments.listComments>['page'][number];
 
@@ -42,7 +44,14 @@ export function CommentItem({ comment, viewerIsPostAuthor, onDelete, onReport }:
         onPress: () =>
           Alert.alert('Excluir comentário?', undefined, [
             { text: 'Cancelar', style: 'cancel' },
-            { text: 'Excluir', style: 'destructive', onPress: () => onDelete(comment._id) },
+            {
+              text: 'Excluir',
+              style: 'destructive',
+              onPress: () => {
+                haptics.warning();
+                onDelete(comment._id);
+              },
+            },
           ]),
       });
     }
@@ -53,7 +62,14 @@ export function CommentItem({ comment, viewerIsPostAuthor, onDelete, onReport }:
         onPress: () =>
           Alert.alert('Denunciar comentário?', 'Comentários denunciados por várias pessoas são ocultados.', [
             { text: 'Cancelar', style: 'cancel' },
-            { text: 'Denunciar', style: 'destructive', onPress: () => onReport(comment._id) },
+            {
+              text: 'Denunciar',
+              style: 'destructive',
+              onPress: () => {
+                haptics.warning();
+                onReport(comment._id);
+              },
+            },
           ]),
       });
     }
@@ -88,9 +104,9 @@ export function CommentItem({ comment, viewerIsPostAuthor, onDelete, onReport }:
             ) : null}
           </View>
           <Text style={styles.time}>{formatTimeAgo(comment.createdAt)}</Text>
-          <Pressable onPress={openMenu} accessibilityRole="button" accessibilityLabel="Mais opções do comentário" hitSlop={8}>
+          <AppPressable onPress={openMenu} accessibilityRole="button" accessibilityLabel="Mais opções do comentário" hitSlop={8}>
             <MaterialCommunityIcons name="dots-horizontal" size={20} color={colors.outline} />
-          </Pressable>
+          </AppPressable>
         </View>
         <Text style={styles.content}>{comment.content}</Text>
       </View>
