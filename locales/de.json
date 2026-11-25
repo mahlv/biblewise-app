@@ -576,5 +576,39 @@
     "hapticsBody": "Haptisches Feedback bei Schaltflächen und App-Aktionen.",
     "updated": "Profil erfolgreich aktualisiert!",
     "saveFailed": "Speichern nicht möglich"
+  },
+  "serverErrors": {
+    "userNotFound": "Benutzer nicht gefunden.",
+    "prayerNotFound": "Beitrag nicht gefunden.",
+    "commentNotFound": "Kommentar nicht gefunden.",
+    "notificationNotFound": "Benachrichtigung nicht gefunden.",
+    "recordingNotFound": "Aufnahme nicht gefunden.",
+    "audioNotFound": "Audio nicht gefunden.",
+    "imageNotFound": "Bild nicht gefunden.",
+    "titleRequired": "Schreibe einen Titel.",
+    "titleTooLong": "Der Titel darf bis zu {{max}} Zeichen lang sein.",
+    "messageRequired": "Schreibe deine Nachricht.",
+    "messageTooLong": "Die Nachricht darf bis zu {{max}} Zeichen lang sein.",
+    "scriptureTooLong": "Der Vers ist zu lang.",
+    "commentRequired": "Schreibe einen Kommentar.",
+    "commentTooLong": "Der Kommentar darf bis zu {{max}} Zeichen lang sein.",
+    "dailyPostLimit": "Du hast das heutige Limit für Beiträge erreicht. Versuche es morgen noch einmal.",
+    "dailyCommentLimit": "Du hast das heutige Limit für Kommentare erreicht. Versuche es morgen noch einmal.",
+    "reportOwnPrayer": "Du kannst deinen eigenen Beitrag nicht melden.",
+    "reportOwnComment": "Du kannst deinen eigenen Kommentar nicht melden.",
+    "dailyRecordingLimit": "Das tägliche Limit für Aufnahmen ist erreicht. Versuche es morgen noch einmal.",
+    "recordingDurationInvalid": "Ungültige Aufnahmedauer (maximal 2 Stunden).",
+    "audioTooLarge": "Die Audiodatei ist zu groß (maximal 25 MB).",
+    "meetingTypeInvalid": "Ungültige Art des Treffens.",
+    "signInToEditProfile": "Melde dich an, um das Profil zu bearbeiten.",
+    "emailInvalid": "Ungültige E-Mail-Adresse.",
+    "imageTooLarge": "Wähle ein Bild mit höchstens 5 MB.",
+    "pipeline": {
+      "transcribeFailed": "Das Audio konnte nicht transkribiert werden. Bitte versuche es erneut.",
+      "noSpeech": "In der Aufnahme wurde keine Sprache erkannt.",
+      "summaryFailed": "Die Zusammenfassung konnte nicht erstellt werden. Bitte versuche es erneut.",
+      "notConfigured": "Der Zusammenfassungsdienst ist noch nicht eingerichtet.",
+      "unexpected": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut."
+    }
   }
 }

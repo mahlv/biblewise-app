@@ -1,0 +1,10 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "Consenti a BibleWise di usare il microfono per registrare il messaggio.",
+    "NSPhotoLibraryUsageDescription": "Consenti a BibleWise di accedere alle tue foto per scegliere la foto del profilo.",
+    "NSPhotoLibraryAddUsageDescription": "Consenti a BibleWise di salvare le immagini delle frasi nella tua galleria."
+  },
+  "android": {
+    "widget_biblewisequote_description": "Versetti e frasi ispiratrici, aggiornati due volte al giorno."
+  }
+}

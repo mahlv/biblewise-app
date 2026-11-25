@@ -3,6 +3,7 @@ import type { Doc } from './_generated/dataModel';
 import { mutation, query } from './_generated/server';
 import type { MutationCtx, QueryCtx } from './_generated/server';
 import { ageRangeValidator, denominationValidator } from './schema';
+import { appError } from '../lib/serverErrors';
 
 /**
  * Anonymous users (anonymous-first).
@@ -138,8 +139,8 @@ async function requireEditableUser(ctx: QueryCtx | MutationCtx, anonymousId: str
     .query('users')
     .withIndex('by_anonymous_id', (q) => q.eq('anonymousId', anonymousId))
     .unique();
-  if (!user || !user.onboardingCompleted) throw new Error('Usuário não encontrado.');
-  if (user.clerkId) throw new Error('Entre na sua conta para editar o perfil.');
+  if (!user || !user.onboardingCompleted) throw appError('userNotFound');
+  if (user.clerkId) throw appError('signInToEditProfile');
   return user;
 }
 
@@ -182,7 +183,7 @@ export const updateUserProfile = mutation({
     if (args.ageRange !== undefined) patch.ageRange = args.ageRange;
     if (args.email !== undefined) {
       const email = cleanText(args.email, MAX_FIELD_LENGTH);
-      if (email && !EMAIL_FORMAT.test(email)) throw new Error('E-mail inválido.');
+      if (email && !EMAIL_FORMAT.test(email)) throw appError('emailInvalid');
       patch.email = email;
     }
     if (args.country !== undefined) patch.country = cleanText(args.country, MAX_FIELD_LENGTH);
@@ -191,10 +192,10 @@ export const updateUserProfile = mutation({
 
     if (args.profileImageId !== undefined && args.profileImageId !== user.profileImageId) {
       const file = await ctx.db.system.get('_storage', args.profileImageId);
-      if (!file) throw new Error('Imagem não encontrada.');
+      if (!file) throw appError('imageNotFound');
       if (!file.contentType?.startsWith('image/') || file.size > MAX_PROFILE_IMAGE_BYTES) {
         await ctx.storage.delete(args.profileImageId);
-        throw new Error('Escolha uma imagem de até 5 MB.');
+        throw appError('imageTooLarge');
       }
       if (user.profileImageId) await ctx.storage.delete(user.profileImageId);
       patch.profileImageId = args.profileImageId;

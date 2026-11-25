@@ -576,5 +576,39 @@
     "hapticsBody": "Haptisk tilbakemelding på knapper og handlinger i appen.",
     "updated": "Profilet er oppdatert!",
     "saveFailed": "Kunne ikke lagre"
+  },
+  "serverErrors": {
+    "userNotFound": "Fant ikke brukeren.",
+    "prayerNotFound": "Fant ikke innlegget.",
+    "commentNotFound": "Fant ikke kommentaren.",
+    "notificationNotFound": "Fant ikke varselet.",
+    "recordingNotFound": "Fant ikke opptaket.",
+    "audioNotFound": "Fant ikke lyden.",
+    "imageNotFound": "Fant ikke bildet.",
+    "titleRequired": "Skriv en tittel.",
+    "titleTooLong": "Tittelen kan være opptil {{max}} tegn.",
+    "messageRequired": "Skriv meldingen din.",
+    "messageTooLong": "Meldingen kan være opptil {{max}} tegn.",
+    "scriptureTooLong": "Verset er for langt.",
+    "commentRequired": "Skriv en kommentar.",
+    "commentTooLong": "Kommentaren kan være opptil {{max}} tegn.",
+    "dailyPostLimit": "Du har nådd dagens grense for innlegg. Prøv igjen i morgen.",
+    "dailyCommentLimit": "Du har nådd dagens grense for kommentarer. Prøv igjen i morgen.",
+    "reportOwnPrayer": "Du kan ikke rapportere ditt eget innlegg.",
+    "reportOwnComment": "Du kan ikke rapportere din egen kommentar.",
+    "dailyRecordingLimit": "Daglig grense for opptak er nådd. Prøv igjen i morgen.",
+    "recordingDurationInvalid": "Ugyldig opptakslengde (maks 2 timer).",
+    "audioTooLarge": "Lydfilen er for stor (maks 25 MB).",
+    "meetingTypeInvalid": "Ugyldig type samling.",
+    "signInToEditProfile": "Logg inn på kontoen din for å redigere profilen.",
+    "emailInvalid": "Ugyldig e-postadresse.",
+    "imageTooLarge": "Velg et bilde på opptil 5 MB.",
+    "pipeline": {
+      "transcribeFailed": "Kunne ikke transkribere lyden. Prøv igjen.",
+      "noSpeech": "Vi oppdaget ikke tale i opptaket.",
+      "summaryFailed": "Kunne ikke lage sammendraget. Prøv igjen.",
+      "notConfigured": "Sammendragstjenesten er ikke satt opp ennå.",
+      "unexpected": "Det oppstod en uventet feil. Prøv igjen."
+    }
   }
 }

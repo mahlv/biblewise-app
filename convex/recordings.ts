@@ -5,6 +5,14 @@ import { internalAction, internalMutation, mutation, query } from './_generated/
 import type { MutationCtx, QueryCtx } from './_generated/server';
 import { MEETING_TYPES, recordingStatusValidator, recordingSummaryValidator } from './schema';
 import { MAX_AUDIO_BYTES, MAX_RECORDING_SECONDS, parseSummary } from '../lib/recordingSummary';
+import {
+  appError,
+  DEFAULT_SUMMARY_LANGUAGE,
+  isSummaryLanguage,
+  SUMMARY_LANGUAGES,
+  type PipelineErrorCode,
+  type SummaryLanguage,
+} from '../lib/serverErrors';
 
 /**
  * Recorded messages: upload -> Groq Whisper transcript -> DeepSeek summary.
@@ -32,13 +40,13 @@ async function requireUser(ctx: Ctx, anonymousId: string): Promise<Doc<'users'>>
     .query('users')
     .withIndex('by_anonymous_id', (q) => q.eq('anonymousId', anonymousId))
     .unique();
-  if (!user || !user.onboardingCompleted) throw new Error('Usuário não encontrado.');
+  if (!user || !user.onboardingCompleted) throw appError('userNotFound');
   return user;
 }
 
 async function requireOwnedRecording(ctx: Ctx, anonymousId: string, recordingId: Id<'recordings'>) {
   const recording = await ctx.db.get('recordings', recordingId);
-  if (!recording || recording.anonymousId !== anonymousId) throw new Error('Gravação não encontrada.');
+  if (!recording || recording.anonymousId !== anonymousId) throw appError('recordingNotFound');
   return recording;
 }
 
@@ -67,7 +75,7 @@ export const generateUploadUrl = mutation({
   handler: async (ctx, args) => {
     await requireUser(ctx, args.anonymousId);
     if ((await countRecentRecordings(ctx, args.anonymousId)) >= MAX_RECORDINGS_PER_DAY) {
-      throw new Error('Limite diário de gravações atingido. Tente novamente amanhã.');
+      throw appError('dailyRecordingLimit');
     }
     return await ctx.storage.generateUploadUrl();
   },
@@ -78,23 +86,25 @@ export const createRecording = mutation({
     anonymousId: v.string(),
     audioStorageId: v.id('_storage'),
     durationSeconds: v.number(),
+    /** App language (`SUMMARY_LANGUAGES`); the summary is written in it. Unknown values mean Portuguese. */
+    language: v.optional(v.string()),
   },
   returns: v.id('recordings'),
   handler: async (ctx, args) => {
     const user = await requireUser(ctx, args.anonymousId);
 
     if (!Number.isFinite(args.durationSeconds) || args.durationSeconds < 1 || args.durationSeconds > MAX_RECORDING_SECONDS) {
-      throw new Error('Duração de gravação inválida (máximo 2 horas).');
+      throw appError('recordingDurationInvalid');
     }
     if ((await countRecentRecordings(ctx, args.anonymousId)) >= MAX_RECORDINGS_PER_DAY) {
-      throw new Error('Limite diário de gravações atingido. Tente novamente amanhã.');
+      throw appError('dailyRecordingLimit');
     }
 
     const file = await ctx.db.system.get('_storage', args.audioStorageId);
-    if (!file) throw new Error('Áudio não encontrado.');
+    if (!file) throw appError('audioNotFound');
     if (file.size > MAX_AUDIO_BYTES) {
       await ctx.storage.delete(args.audioStorageId);
-      throw new Error('O áudio é grande demais (máximo 25 MB).');
+      throw appError('audioTooLarge');
     }
 
     const now = Date.now();
@@ -106,6 +116,7 @@ export const createRecording = mutation({
       audioStorageId: args.audioStorageId,
       durationSeconds: Math.round(args.durationSeconds),
       meetingType: MEETING_TYPES[0],
+      language: isSummaryLanguage(args.language) ? args.language : DEFAULT_SUMMARY_LANGUAGE,
       createdAt: now,
       updatedAt: now,
     });
@@ -130,7 +141,7 @@ export const updateRecordingMetadata = mutation({
     if (args.church !== undefined) patch.church = cleanField(args.church);
     if (args.preacher !== undefined) patch.preacher = cleanField(args.preacher);
     if (args.meetingType !== undefined) {
-      if (!(MEETING_TYPES as readonly string[]).includes(args.meetingType)) throw new Error('Tipo de reunião inválido.');
+      if (!(MEETING_TYPES as readonly string[]).includes(args.meetingType)) throw appError('meetingTypeInvalid');
       patch.meetingType = args.meetingType;
     }
     await ctx.db.patch('recordings', args.recordingId, patch);
@@ -253,7 +264,7 @@ export const getLatestRecording = query({
 });
 
 export const retryRecording = mutation({
-  args: { anonymousId: v.string(), recordingId: v.id('recordings') },
+  args: { anonymousId: v.string(), recordingId: v.id('recordings'), language: v.optional(v.string()) },
   returns: v.null(),
   handler: async (ctx, args) => {
     const recording = await requireOwnedRecording(ctx, args.anonymousId, args.recordingId);
@@ -262,6 +273,8 @@ export const retryRecording = mutation({
       status: 'uploading',
       progress: 5,
       error: undefined,
+      // The user may have changed the app language since the failure.
+      ...(isSummaryLanguage(args.language) ? { language: args.language } : {}),
       updatedAt: Date.now(),
     });
     await ctx.scheduler.runAfter(0, internal.recordings.transcribeAndSummarize, { recordingId: args.recordingId });
@@ -286,14 +299,18 @@ export const deleteRecording = mutation({
 
 export const getForPipeline = internalMutation({
   args: { recordingId: v.id('recordings') },
-  returns: v.union(v.object({ audioUrl: v.string(), church: v.optional(v.string()), preacher: v.optional(v.string()) }), v.null()),
+  returns: v.union(
+    v.object({ audioUrl: v.string(), church: v.optional(v.string()), preacher: v.optional(v.string()), language: v.string() }),
+    v.null(),
+  ),
   handler: async (ctx, args) => {
     const recording = await ctx.db.get('recordings', args.recordingId);
     if (!recording) return null;
     const audioUrl = await ctx.storage.getUrl(recording.audioStorageId);
     if (!audioUrl) return null;
     await ctx.db.patch('recordings', args.recordingId, { status: 'transcribing', progress: 10, error: undefined, updatedAt: Date.now() });
-    return { audioUrl, church: recording.church, preacher: recording.preacher };
+    const language = isSummaryLanguage(recording.language) ? recording.language : DEFAULT_SUMMARY_LANGUAGE;
+    return { audioUrl, church: recording.church, preacher: recording.preacher, language };
   },
 });
 
@@ -337,25 +354,37 @@ export const markFailed = internalMutation({
   },
 });
 
-const SUMMARY_SYSTEM_PROMPT = `Você é um assistente que organiza mensagens pastorais cristãs em português do Brasil.
-Receba a transcrição de uma pregação e responda APENAS com um objeto JSON válido, sem texto fora do JSON, exatamente neste formato:
+/** The summary is written in the app language the recording was made in (Portuguese when unknown). */
+function summarySystemPrompt(language: SummaryLanguage): string {
+  const languageName = SUMMARY_LANGUAGES[language];
+  return `You are an assistant that organizes Christian pastoral messages.
+You receive the transcript of a sermon and reply ONLY with a valid JSON object, with no text outside the JSON, in exactly this format:
 {
-  "title": "título curto e inspirador da mensagem",
-  "theme": "tema central em uma frase",
-  "centralPoints": [{"title": "ponto", "description": "explicação em 1-3 frases"}],
-  "scripturesCited": [{"reference": "João 3:16", "text": "texto do versículo como foi citado, ou vazio"}],
-  "practicalTopics": ["aplicação prática curta"],
-  "impactQuote": "a frase de maior impacto dita na mensagem"
+  "title": "short, inspiring title of the message",
+  "theme": "central theme in one sentence",
+  "centralPoints": [{"title": "point", "description": "explanation in 1-3 sentences"}],
+  "scripturesCited": [{"reference": "John 3:16", "text": "text of the verse as it was quoted, or empty"}],
+  "practicalTopics": ["short practical application"],
+  "impactQuote": "the most impactful sentence said in the message"
 }
-Regras: use apenas o que está na transcrição, não invente versículos; 3 a 6 pontos centrais; 3 a 5 tópicos práticos; todos os textos em português.`;
+Rules: use only what is in the transcript, do not invent verses; 3 to 6 central points; 3 to 5 practical topics; keep the JSON keys exactly as shown; write ALL the text values in ${languageName}, whatever language the sermon was preached in (write Bible references the way they are written in ${languageName}).`;
+}
 
-class PipelineError extends Error {}
+class PipelineError extends Error {
+  constructor(readonly code: PipelineErrorCode) {
+    super(code);
+  }
+}
 
-/** Both calls only expose a generic reason to the user; details stay in server logs (never keys or transcripts). */
-async function transcribeWithGroq(audioUrl: string, apiKey: string): Promise<string> {
+/**
+ * Both calls only expose a generic reason to the user; details stay in server logs (never keys or transcripts).
+ * Speech language: Portuguese is hinted for Portuguese users (as before); otherwise the model detects it,
+ * because the app language says nothing about the language of the sermon.
+ */
+async function transcribeWithGroq(audioUrl: string, apiKey: string, language: SummaryLanguage): Promise<string> {
   const form = new FormData();
   form.append('model', 'whisper-large-v3-turbo');
-  form.append('language', 'pt');
+  if (language === 'pt-BR') form.append('language', 'pt');
   form.append('response_format', 'json');
   form.append('temperature', '0');
   form.append('url', audioUrl);
@@ -367,22 +396,22 @@ async function transcribeWithGroq(audioUrl: string, apiKey: string): Promise<str
   });
   if (!response.ok) {
     console.error('Groq transcription failed', response.status);
-    throw new PipelineError('Não foi possível transcrever o áudio. Tente novamente.');
+    throw new PipelineError('transcribeFailed');
   }
   const data = (await response.json()) as { text?: unknown };
   const transcript = typeof data.text === 'string' ? data.text.trim() : '';
-  if (!transcript) throw new PipelineError('Não detectamos fala na gravação.');
+  if (!transcript) throw new PipelineError('noSpeech');
   return transcript;
 }
 
-async function summarizeWithDeepSeek(transcript: string, apiKey: string, context: string) {
+async function summarizeWithDeepSeek(transcript: string, apiKey: string, context: string, language: SummaryLanguage) {
   const body = JSON.stringify({
     model: 'deepseek-chat',
     temperature: 0.3,
     response_format: { type: 'json_object' },
     messages: [
-      { role: 'system', content: SUMMARY_SYSTEM_PROMPT },
-      { role: 'user', content: `${context}Transcrição:\n${transcript.slice(0, MAX_TRANSCRIPT_CHARS)}` },
+      { role: 'system', content: summarySystemPrompt(language) },
+      { role: 'user', content: `${context}Transcript:\n${transcript.slice(0, MAX_TRANSCRIPT_CHARS)}` },
     ],
   });
 
@@ -402,7 +431,7 @@ async function summarizeWithDeepSeek(transcript: string, apiKey: string, context
     const summary = typeof content === 'string' ? parseSummary(content) : null;
     if (summary) return summary;
   }
-  throw new PipelineError('Não foi possível gerar o resumo. Tente novamente.');
+  throw new PipelineError('summaryFailed');
 }
 
 /** Keys come from Convex env vars: `npx convex env set GROQ_API_KEY ...` / `DEEPSEEK_API_KEY`. */
@@ -415,23 +444,25 @@ export const transcribeAndSummarize = internalAction({
       const deepseekKey = process.env.DEEPSEEK_API_KEY;
       if (!groqKey || !deepseekKey) {
         console.error('Missing GROQ_API_KEY or DEEPSEEK_API_KEY');
-        throw new PipelineError('O serviço de resumo ainda não está configurado.');
+        throw new PipelineError('notConfigured');
       }
 
       const recording = await ctx.runMutation(internal.recordings.getForPipeline, { recordingId: args.recordingId });
       if (!recording) return null;
+      const language = recording.language as SummaryLanguage;
 
-      const transcript = await transcribeWithGroq(recording.audioUrl, groqKey);
+      const transcript = await transcribeWithGroq(recording.audioUrl, groqKey, language);
       await ctx.runMutation(internal.recordings.saveTranscript, { recordingId: args.recordingId, transcript });
 
       const context = [
-        recording.preacher ? `Pregador(a): ${recording.preacher}\n` : '',
-        recording.church ? `Igreja: ${recording.church}\n` : '',
+        recording.preacher ? `Preacher: ${recording.preacher}\n` : '',
+        recording.church ? `Church: ${recording.church}\n` : '',
       ].join('');
-      const summary = await summarizeWithDeepSeek(transcript, deepseekKey, context);
+      const summary = await summarizeWithDeepSeek(transcript, deepseekKey, context, language);
       await ctx.runMutation(internal.recordings.saveResult, { recordingId: args.recordingId, summary });
     } catch (error) {
-      const message = error instanceof PipelineError ? error.message : 'Ocorreu um erro inesperado. Tente novamente.';
+      // The stored value is a code; the app translates it into the user's language.
+      const message: PipelineErrorCode = error instanceof PipelineError ? error.code : 'unexpected';
       if (!(error instanceof PipelineError)) console.error('Recording pipeline error', error instanceof Error ? error.name : 'unknown');
       await ctx.runMutation(internal.recordings.markFailed, { recordingId: args.recordingId, message });
     }

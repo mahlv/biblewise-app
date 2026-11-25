@@ -6,6 +6,7 @@ import type { QueryCtx } from './_generated/server';
 import { createNotification } from './lib/notify';
 import { findUser, requireUser } from './lib/requireUser';
 import { ANONYMOUS_AUTHOR_NAME, PRAYER_LIMITS } from '../lib/prayerCategories';
+import { appError } from '../lib/serverErrors';
 
 /**
  * Comments on prayer wall posts (flat, no replies).
@@ -58,12 +59,12 @@ export const createComment = mutation({
   handler: async (ctx, args) => {
     const user = await requireUser(ctx, args.anonymousId);
     const prayer = await ctx.db.get('prayers', args.prayerId);
-    if (!prayer || (prayer.isHidden && prayer.authorId !== user._id)) throw new Error('Publicação não encontrada.');
+    if (!prayer || (prayer.isHidden && prayer.authorId !== user._id)) throw appError('prayerNotFound');
 
     // Keep paragraphs: only collapse spaces and tabs.
     const content = args.content.replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
-    if (!content) throw new Error('Escreva um comentário.');
-    if (content.length > PRAYER_LIMITS.comment) throw new Error(`O comentário pode ter até ${PRAYER_LIMITS.comment} caracteres.`);
+    if (!content) throw appError('commentRequired');
+    if (content.length > PRAYER_LIMITS.comment) throw appError('commentTooLong', { max: PRAYER_LIMITS.comment });
 
     const now = Date.now();
     const recent = await ctx.db
@@ -71,7 +72,7 @@ export const createComment = mutation({
       .withIndex('by_authorId_and_createdAt', (q) => q.eq('authorId', user._id).gte('createdAt', now - DAY_MS))
       .take(PRAYER_LIMITS.dailyComments);
     if (recent.length >= PRAYER_LIMITS.dailyComments) {
-      throw new Error('Você atingiu o limite de comentários de hoje. Tente novamente amanhã.');
+      throw appError('dailyCommentLimit');
     }
 
     const name = user.name?.trim();
@@ -135,7 +136,7 @@ export const deleteComment = mutation({
     const comment = await ctx.db.get('prayerComments', args.commentId);
     if (!comment) return null;
     const prayer = await ctx.db.get('prayers', comment.prayerId);
-    if (comment.authorId !== user._id && prayer?.authorId !== user._id) throw new Error('Comentário não encontrado.');
+    if (comment.authorId !== user._id && prayer?.authorId !== user._id) throw appError('commentNotFound');
 
     const reports = await ctx.db
       .query('prayerCommentReports')
@@ -159,8 +160,8 @@ export const reportComment = mutation({
   handler: async (ctx, args) => {
     const user = await requireUser(ctx, args.anonymousId);
     const comment = await ctx.db.get('prayerComments', args.commentId);
-    if (!comment || comment.isHidden) throw new Error('Comentário não encontrado.');
-    if (comment.authorId === user._id) throw new Error('Você não pode denunciar o seu próprio comentário.');
+    if (!comment || comment.isHidden) throw appError('commentNotFound');
+    if (comment.authorId === user._id) throw appError('reportOwnComment');
 
     const already = await ctx.db
       .query('prayerCommentReports')

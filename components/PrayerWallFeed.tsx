@@ -8,6 +8,7 @@ import { api } from '../convex/_generated/api';
 import { PrayerCard, type PrayerView } from './PrayerCard';
 import { useToast } from '../hooks/useToast';
 import { haptics } from '../lib/haptics';
+import { serverErrorMessage as errorMessage } from '../lib/serverError';
 import { colors, fonts, radius, shadow, spacing } from '../theme/tokens';
 import { AppPressable } from './ui/AppPressable';
 
@@ -23,13 +24,6 @@ interface Props {
   /** Number shown on the "Meus Pedidos" chip (the user's own posts). */
   myPostsCount?: number;
 }
-
-const errorMessage = (error: unknown, fallback: string): string => {
-  // Convex wraps server errors; keep the readable part of our own messages.
-  const text = error instanceof Error ? error.message : '';
-  const match = text.match(/Uncaught Error: (.+?)(?: at |$|\n)/);
-  return match?.[1] ?? fallback;
-};
 
 /** "Prayer / Testimony wall": CTA, search, filter chips and the paginated feed. */
 export function PrayerWallFeed({ anonymousId, header, myPostsCount }: Props) {

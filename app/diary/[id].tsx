@@ -18,6 +18,7 @@ import { readQuoteStyle, saveQuoteStyle } from '../../lib/quoteStylePreferences'
 import { useOnboarding } from '../../hooks/useOnboarding';
 import { useToast } from '../../hooks/useToast';
 import { haptics } from '../../lib/haptics';
+import { recordingErrorMessage } from '../../lib/serverError';
 import { buildRecordingShareText } from '../../lib/recordingShareText';
 import { meetingTypeLabel, statusLabel } from '../../lib/recordingLabels';
 import { buildTeaser, formatClock } from '../../lib/recordingSummary';
@@ -191,7 +192,7 @@ export default function RecordingDetailScreen() {
         ) : null}
 
         {recording.status === 'failed' ? (
-          <Text style={styles.error}>{recording.error ?? t('diary.detail.summaryFailed')}</Text>
+          <Text style={styles.error}>{recordingErrorMessage(recording.error, t('diary.detail.summaryFailed'))}</Text>
         ) : null}
         {recording.status !== 'completed' && recording.status !== 'failed' ? (
           <Text style={styles.body}>{t('diary.detail.summaryPending')}</Text>

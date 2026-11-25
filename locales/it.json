@@ -576,5 +576,39 @@
     "hapticsBody": "Risposta tattile su pulsanti e azioni dell'app.",
     "updated": "Profilo aggiornato con successo!",
     "saveFailed": "Impossibile salvare"
+  },
+  "serverErrors": {
+    "userNotFound": "Utente non trovato.",
+    "prayerNotFound": "Post non trovato.",
+    "commentNotFound": "Commento non trovato.",
+    "notificationNotFound": "Notifica non trovata.",
+    "recordingNotFound": "Registrazione non trovata.",
+    "audioNotFound": "Audio non trovato.",
+    "imageNotFound": "Immagine non trovata.",
+    "titleRequired": "Scrivi un titolo.",
+    "titleTooLong": "Il titolo può contenere fino a {{max}} caratteri.",
+    "messageRequired": "Scrivi il tuo messaggio.",
+    "messageTooLong": "Il messaggio può contenere fino a {{max}} caratteri.",
+    "scriptureTooLong": "Il versetto è troppo lungo.",
+    "commentRequired": "Scrivi un commento.",
+    "commentTooLong": "Il commento può contenere fino a {{max}} caratteri.",
+    "dailyPostLimit": "Hai raggiunto il limite di pubblicazioni di oggi. Riprova domani.",
+    "dailyCommentLimit": "Hai raggiunto il limite di commenti di oggi. Riprova domani.",
+    "reportOwnPrayer": "Non puoi segnalare il tuo stesso post.",
+    "reportOwnComment": "Non puoi segnalare il tuo stesso commento.",
+    "dailyRecordingLimit": "Limite giornaliero di registrazioni raggiunto. Riprova domani.",
+    "recordingDurationInvalid": "Durata della registrazione non valida (massimo 2 ore).",
+    "audioTooLarge": "L’audio è troppo grande (massimo 25 MB).",
+    "meetingTypeInvalid": "Tipo di riunione non valido.",
+    "signInToEditProfile": "Accedi al tuo account per modificare il profilo.",
+    "emailInvalid": "Indirizzo email non valido.",
+    "imageTooLarge": "Scegli un’immagine fino a 5 MB.",
+    "pipeline": {
+      "transcribeFailed": "Impossibile trascrivere l’audio. Riprova.",
+      "noSpeech": "Nessun parlato rilevato nella registrazione.",
+      "summaryFailed": "Impossibile generare il riassunto. Riprova.",
+      "notConfigured": "Il servizio di riassunto non è ancora configurato.",
+      "unexpected": "Si è verificato un errore imprevisto. Riprova."
+    }
   }
 }

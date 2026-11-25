@@ -1,5 +1,6 @@
 import type { Doc } from '../_generated/dataModel';
 import type { MutationCtx, QueryCtx } from '../_generated/server';
+import { appError } from '../../lib/serverErrors';
 
 type Ctx = QueryCtx | MutationCtx;
 
@@ -19,6 +20,6 @@ export async function findUser(ctx: Ctx, anonymousId: string): Promise<Doc<'user
 /** Like `findUser`, but throws when the user does not exist. */
 export async function requireUser(ctx: Ctx, anonymousId: string): Promise<Doc<'users'>> {
   const user = await findUser(ctx, anonymousId);
-  if (!user) throw new Error('Usuário não encontrado.');
+  if (!user) throw appError('userNotFound');
   return user;
 }

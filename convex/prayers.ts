@@ -8,6 +8,7 @@ import { prayerCategoryValidator, prayerTypeValidator } from './schema';
 import { createNotification } from './lib/notify';
 import { findUser, requireUser } from './lib/requireUser';
 import { ANONYMOUS_AUTHOR_NAME, PRAYER_LIMITS } from '../lib/prayerCategories';
+import { appError } from '../lib/serverErrors';
 
 /**
  * Prayer wall (requests and testimonies).
@@ -78,7 +79,7 @@ async function toView(ctx: QueryCtx, prayer: Doc<'prayers'>, viewer: Doc<'users'
 /** A post is visible unless hidden by reports; the author always sees their own. */
 async function getVisiblePrayer(ctx: MutationCtx, prayerId: Id<'prayers'>, user: Doc<'users'>): Promise<Doc<'prayers'>> {
   const prayer = await ctx.db.get('prayers', prayerId);
-  if (!prayer || (prayer.isHidden && prayer.authorId !== user._id)) throw new Error('Publicação não encontrada.');
+  if (!prayer || (prayer.isHidden && prayer.authorId !== user._id)) throw appError('prayerNotFound');
   return prayer;
 }
 
@@ -109,12 +110,12 @@ export const createPrayer = mutation({
     const scriptureReference = clean(args.scriptureReference);
     const scriptureText = clean(args.scriptureText);
 
-    if (!title) throw new Error('Escreva um título.');
-    if (title.length > PRAYER_LIMITS.title) throw new Error(`O título pode ter até ${PRAYER_LIMITS.title} caracteres.`);
-    if (!content) throw new Error('Escreva sua mensagem.');
-    if (content.length > PRAYER_LIMITS.content) throw new Error(`A mensagem pode ter até ${PRAYER_LIMITS.content} caracteres.`);
+    if (!title) throw appError('titleRequired');
+    if (title.length > PRAYER_LIMITS.title) throw appError('titleTooLong', { max: PRAYER_LIMITS.title });
+    if (!content) throw appError('messageRequired');
+    if (content.length > PRAYER_LIMITS.content) throw appError('messageTooLong', { max: PRAYER_LIMITS.content });
     if (scriptureReference.length > PRAYER_LIMITS.scriptureReference || scriptureText.length > PRAYER_LIMITS.scriptureText) {
-      throw new Error('O versículo é longo demais.');
+      throw appError('scriptureTooLong');
     }
 
     const now = Date.now();
@@ -123,7 +124,7 @@ export const createPrayer = mutation({
       .withIndex('by_authorId_and_createdAt', (q) => q.eq('authorId', user._id).gte('createdAt', now - DAY_MS))
       .take(PRAYER_LIMITS.dailyPosts);
     if (recent.length >= PRAYER_LIMITS.dailyPosts) {
-      throw new Error('Você atingiu o limite de publicações de hoje. Tente novamente amanhã.');
+      throw appError('dailyPostLimit');
     }
 
     // Without a profile name the post is always anonymous.
@@ -257,7 +258,7 @@ export const reportPrayer = mutation({
   handler: async (ctx, args) => {
     const user = await requireUser(ctx, args.anonymousId);
     const prayer = await getVisiblePrayer(ctx, args.prayerId, user);
-    if (prayer.authorId === user._id) throw new Error('Você não pode denunciar a sua própria publicação.');
+    if (prayer.authorId === user._id) throw appError('reportOwnPrayer');
 
     const already = await ctx.db
       .query('prayerReports')
@@ -278,7 +279,7 @@ export const deletePrayer = mutation({
   handler: async (ctx, args) => {
     const user = await requireUser(ctx, args.anonymousId);
     const prayer = await ctx.db.get('prayers', args.prayerId);
-    if (!prayer || prayer.authorId !== user._id) throw new Error('Publicação não encontrada.');
+    if (!prayer || prayer.authorId !== user._id) throw appError('prayerNotFound');
 
     await ctx.db.delete('prayers', prayer._id);
     // Amens/reports can be many: remove them in batches outside this transaction.

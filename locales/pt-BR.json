@@ -576,5 +576,39 @@
     "hapticsBody": "Resposta tátil nos botões e ações do app.",
     "updated": "Perfil atualizado com sucesso!",
     "saveFailed": "Não foi possível salvar"
+  },
+  "serverErrors": {
+    "userNotFound": "Usuário não encontrado.",
+    "prayerNotFound": "Publicação não encontrada.",
+    "commentNotFound": "Comentário não encontrado.",
+    "notificationNotFound": "Notificação não encontrada.",
+    "recordingNotFound": "Gravação não encontrada.",
+    "audioNotFound": "Áudio não encontrado.",
+    "imageNotFound": "Imagem não encontrada.",
+    "titleRequired": "Escreva um título.",
+    "titleTooLong": "O título pode ter até {{max}} caracteres.",
+    "messageRequired": "Escreva sua mensagem.",
+    "messageTooLong": "A mensagem pode ter até {{max}} caracteres.",
+    "scriptureTooLong": "O versículo é longo demais.",
+    "commentRequired": "Escreva um comentário.",
+    "commentTooLong": "O comentário pode ter até {{max}} caracteres.",
+    "dailyPostLimit": "Você atingiu o limite de publicações de hoje. Tente novamente amanhã.",
+    "dailyCommentLimit": "Você atingiu o limite de comentários de hoje. Tente novamente amanhã.",
+    "reportOwnPrayer": "Você não pode denunciar a sua própria publicação.",
+    "reportOwnComment": "Você não pode denunciar o seu próprio comentário.",
+    "dailyRecordingLimit": "Limite diário de gravações atingido. Tente novamente amanhã.",
+    "recordingDurationInvalid": "Duração de gravação inválida (máximo 2 horas).",
+    "audioTooLarge": "O áudio é grande demais (máximo 25 MB).",
+    "meetingTypeInvalid": "Tipo de reunião inválido.",
+    "signInToEditProfile": "Entre na sua conta para editar o perfil.",
+    "emailInvalid": "E-mail inválido.",
+    "imageTooLarge": "Escolha uma imagem de até 5 MB.",
+    "pipeline": {
+      "transcribeFailed": "Não foi possível transcrever o áudio. Tente novamente.",
+      "noSpeech": "Não detectamos fala na gravação.",
+      "summaryFailed": "Não foi possível gerar o resumo. Tente novamente.",
+      "notConfigured": "O serviço de resumo ainda não está configurado.",
+      "unexpected": "Ocorreu um erro inesperado. Tente novamente."
+    }
   }
 }

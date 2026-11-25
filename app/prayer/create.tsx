@@ -12,6 +12,7 @@ import { useBible } from '../../hooks/useBible';
 import { useOnboarding } from '../../hooks/useOnboarding';
 import { useToast } from '../../hooks/useToast';
 import { haptics } from '../../lib/haptics';
+import { serverErrorMessage as errorMessage } from '../../lib/serverError';
 import { loadVersion, parseReference } from '../../lib/bibleLoader';
 import { splitReference } from '../../lib/bibleReference';
 import {
@@ -29,12 +30,6 @@ const TYPE_OPTIONS: { id: PrayerType; labelKey: 'prayer.types.requestLong' | 'pr
   { id: 'request', labelKey: 'prayer.types.requestLong', icon: 'hands-pray' },
   { id: 'testimony', labelKey: 'prayer.types.testimony', icon: 'star-four-points' },
 ];
-
-/** Keeps the readable part of a Convex server error. */
-const errorMessage = (error: unknown, fallback: string): string => {
-  const text = error instanceof Error ? error.message : '';
-  return text.match(/Uncaught Error: (.+?)(?: at |$|\n)/)?.[1] ?? fallback;
-};
 
 /** Form to publish a prayer request or a testimony on the wall. */
 export default function CreatePrayerScreen() {

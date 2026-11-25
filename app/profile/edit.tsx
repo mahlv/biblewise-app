@@ -27,6 +27,7 @@ import { haptics, isHapticsEnabled, setHapticsEnabled } from '../../lib/haptics'
 import { AGE_RANGES, type AgeRange } from '../../lib/onboardingOptions';
 import { isMissingNativeModule, pickAndUploadProfileImage } from '../../lib/profileImage';
 import { syncWidget } from '../../lib/widgetSync';
+import { serverErrorMessage } from '../../lib/serverError';
 import { brandGradient, colors, fonts, radius, spacing } from '../../theme/tokens';
 import { AppPressable } from '../../components/ui/AppPressable';
 
@@ -117,7 +118,7 @@ export default function EditProfileScreen() {
       goBack();
     } catch (error) {
       haptics.error();
-      Alert.alert(t('profile.saveFailed'), error instanceof Error ? error.message : t('common.tryAgain'));
+      Alert.alert(t('profile.saveFailed'), serverErrorMessage(error, t('common.tryAgain')));
       setSaving(false);
     }
   };

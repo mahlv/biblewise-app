@@ -119,7 +119,7 @@ private func manualOffset(slot: Int) -> Int {
 // MARK: - Refresh button (iOS 17+)
 
 struct NextQuoteIntent: AppIntent {
-  static var title: LocalizedStringResource = "Próxima frase"
+  static var title: LocalizedStringResource = "Next quote"
 
   func perform() async throws -> some IntentResult {
     let defaults = UserDefaults(suiteName: appGroup)
@@ -250,7 +250,7 @@ struct QuoteWidgetView: View {
                 .background(Circle().fill(secondaryButtonColor))
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Próxima frase")
+            .accessibilityLabel("Next quote")
           }
 
           Link(destination: bibleURL) {
@@ -260,7 +260,7 @@ struct QuoteWidgetView: View {
               .frame(width: 36, height: 36)
               .background(Circle().fill(buttonColor))
           }
-          .accessibilityLabel("Abrir a Bíblia")
+          .accessibilityLabel("Open the Bible")
         }
       }
     }
@@ -283,10 +283,10 @@ struct QuoteWidgetView: View {
 struct PausedWidgetView: View {
   var body: some View {
     VStack(spacing: 4) {
-      Text("Widget pausado")
+      Text("Widget paused")
         .font(.system(size: 14, weight: .bold))
         .foregroundColor(Color("quoteText"))
-      Text("Toque para ativar")
+      Text("Tap to activate")
         .font(.system(size: 12))
         .foregroundColor(Color("authorText"))
     }
@@ -317,7 +317,7 @@ struct QuoteWidget: Widget {
       }
     }
     .configurationDisplayName("Biblewise")
-    .description("Versículos e frases inspiradoras, atualizados duas vezes ao dia.")
+    .description("Inspiring verses and quotes, refreshed twice a day.")
     .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
   }
 }

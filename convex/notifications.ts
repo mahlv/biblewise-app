@@ -7,6 +7,7 @@ import type { MutationCtx } from './_generated/server';
 import { findUser, requireUser } from './lib/requireUser';
 import { prayerTypeValidator } from './schema';
 import { PRAYER_LIMITS } from '../lib/prayerCategories';
+import { appError } from '../lib/serverErrors';
 
 /**
  * In-app notifications (the bell): someone liked or commented on your post.
@@ -79,7 +80,7 @@ export const markNotificationRead = mutation({
   handler: async (ctx, args) => {
     const user = await requireUser(ctx, args.anonymousId);
     const notification = await ctx.db.get('notifications', args.notificationId);
-    if (!notification || notification.recipientId !== user._id) throw new Error('Notificação não encontrada.');
+    if (!notification || notification.recipientId !== user._id) throw appError('notificationNotFound');
     if (!notification.isRead) await ctx.db.patch('notifications', notification._id, { isRead: true });
     return null;
   },

@@ -12,7 +12,9 @@ import { BottomSheet } from './BottomSheet';
 import { BrandLogo } from './BrandLogo';
 import { ProgressBar } from './ProgressBar';
 import { TextPromptModal } from './TextPromptModal';
+import { currentLanguage } from '../lib/i18n';
 import { progressLabel } from '../lib/recordingLabels';
+import { recordingErrorMessage, serverErrorMessage } from '../lib/serverError';
 import {
   DEFAULT_MEETING_TYPE,
   MEETING_TYPE_OPTIONS,
@@ -72,7 +74,7 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
         const response = await fetch(uploadUrl, { method: 'POST', headers: { 'Content-Type': 'audio/mp4' }, body: new File(fileUri) });
         if (!response.ok) throw new Error('upload failed');
         const { storageId } = (await response.json()) as { storageId: Id<'_storage'> };
-        const id = await createRecording({ anonymousId, audioStorageId: storageId, durationSeconds });
+        const id = await createRecording({ anonymousId, audioStorageId: storageId, durationSeconds, language: currentLanguage() });
         if (cancelled) return;
         const form = formRef.current;
         if (form.church || form.preacher || form.meetingType !== DEFAULT_MEETING_TYPE) {
@@ -81,7 +83,7 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
         setRecordingId(id);
       } catch (error) {
         if (cancelled) return;
-        const message = error instanceof Error && /limite|inválid|grande/i.test(error.message) ? error.message : null;
+        const message = serverErrorMessage(error, '');
         // An empty string means "use the generic upload message".
         setUploadError(message ?? '');
       }
@@ -96,7 +98,7 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
   const failed = uploadError !== null || status === 'failed';
   const completed = status === 'completed';
   const errorMessage =
-    uploadError !== null ? uploadError || t('processing.uploadFailed') : (recording?.error ?? t('processing.failedGeneric'));
+    uploadError !== null ? uploadError || t('processing.uploadFailed') : recordingErrorMessage(recording?.error, t('processing.failedGeneric'));
 
   // Ease the shown percentage toward the server value, creeping toward the next milestone while a stage runs.
   useEffect(() => {
@@ -135,7 +137,7 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
       setAttempt((current) => current + 1);
       return;
     }
-    await retryRecording({ anonymousId, recordingId }).catch(() => undefined);
+    await retryRecording({ anonymousId, recordingId, language: currentLanguage() }).catch(() => undefined);
   };
 
   const handleSave = () => {

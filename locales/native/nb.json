@@ -1,0 +1,10 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "La BibleWise bruke mikrofonen til å ta opp meldingen.",
+    "NSPhotoLibraryUsageDescription": "La BibleWise få tilgang til bildene dine for å velge profilbilde.",
+    "NSPhotoLibraryAddUsageDescription": "La BibleWise lagre sitatbildene i galleriet ditt."
+  },
+  "android": {
+    "widget_biblewisequote_description": "Inspirerende vers og sitater, oppdatert to ganger om dagen."
+  }
+}

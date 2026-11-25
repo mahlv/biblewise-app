@@ -13,16 +13,11 @@ import { PrayerCard } from '../../components/PrayerCard';
 import { useOnboarding } from '../../hooks/useOnboarding';
 import { useToast } from '../../hooks/useToast';
 import { haptics } from '../../lib/haptics';
+import { serverErrorMessage as errorMessage } from '../../lib/serverError';
 import { colors, fonts, spacing } from '../../theme/tokens';
 import { AppPressable } from '../../components/ui/AppPressable';
 
 const PAGE_SIZE = 20;
-
-/** Keeps the readable part of a Convex server error. */
-const errorMessage = (error: unknown, fallback: string): string => {
-  const text = error instanceof Error ? error.message : '';
-  return text.match(/Uncaught Error: (.+?)(?: at |$|\n)/)?.[1] ?? fallback;
-};
 
 /** A post with its comments, and a composer to write a new one. */
 export default function PrayerDetailScreen() {

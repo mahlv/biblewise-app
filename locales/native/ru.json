@@ -1,0 +1,10 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "Разрешите BibleWise использовать микрофон для записи проповеди.",
+    "NSPhotoLibraryUsageDescription": "Разрешите BibleWise доступ к вашим фото, чтобы выбрать фото профиля.",
+    "NSPhotoLibraryAddUsageDescription": "Разрешите BibleWise сохранять изображения с цитатами в вашу галерею."
+  },
+  "android": {
+    "widget_biblewisequote_description": "Вдохновляющие стихи и цитаты, обновляются два раза в день."
+  }
+}

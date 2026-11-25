@@ -576,5 +576,39 @@
     "hapticsBody": "Respuesta háptica en los botones y acciones de la app.",
     "updated": "¡Perfil actualizado con éxito!",
     "saveFailed": "No se pudo guardar"
+  },
+  "serverErrors": {
+    "userNotFound": "Usuario no encontrado.",
+    "prayerNotFound": "Publicación no encontrada.",
+    "commentNotFound": "Comentario no encontrado.",
+    "notificationNotFound": "Notificación no encontrada.",
+    "recordingNotFound": "Grabación no encontrada.",
+    "audioNotFound": "Audio no encontrado.",
+    "imageNotFound": "Imagen no encontrada.",
+    "titleRequired": "Escribe un título.",
+    "titleTooLong": "El título puede tener hasta {{max}} caracteres.",
+    "messageRequired": "Escribe tu mensaje.",
+    "messageTooLong": "El mensaje puede tener hasta {{max}} caracteres.",
+    "scriptureTooLong": "El versículo es demasiado largo.",
+    "commentRequired": "Escribe un comentario.",
+    "commentTooLong": "El comentario puede tener hasta {{max}} caracteres.",
+    "dailyPostLimit": "Has alcanzado el límite de publicaciones de hoy. Inténtalo de nuevo mañana.",
+    "dailyCommentLimit": "Has alcanzado el límite de comentarios de hoy. Inténtalo de nuevo mañana.",
+    "reportOwnPrayer": "No puedes denunciar tu propia publicación.",
+    "reportOwnComment": "No puedes denunciar tu propio comentario.",
+    "dailyRecordingLimit": "Has alcanzado el límite diario de grabaciones. Inténtalo de nuevo mañana.",
+    "recordingDurationInvalid": "Duración de grabación no válida (máximo 2 horas).",
+    "audioTooLarge": "El audio es demasiado grande (máximo 25 MB).",
+    "meetingTypeInvalid": "Tipo de reunión no válido.",
+    "signInToEditProfile": "Inicia sesión en tu cuenta para editar el perfil.",
+    "emailInvalid": "Correo electrónico no válido.",
+    "imageTooLarge": "Elige una imagen de hasta 5 MB.",
+    "pipeline": {
+      "transcribeFailed": "No se pudo transcribir el audio. Inténtalo de nuevo.",
+      "noSpeech": "No detectamos voz en la grabación.",
+      "summaryFailed": "No se pudo generar el resumen. Inténtalo de nuevo.",
+      "notConfigured": "El servicio de resumen aún no está configurado.",
+      "unexpected": "Ocurrió un error inesperado. Inténtalo de nuevo."
+    }
   }
 }

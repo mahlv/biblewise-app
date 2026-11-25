@@ -7,6 +7,15 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "scheme": "biblewise",
+    "locales": {
+      "pt": "./locales/native/pt.json",
+      "es": "./locales/native/es.json",
+      "fr": "./locales/native/fr.json",
+      "it": "./locales/native/it.json",
+      "de": "./locales/native/de.json",
+      "nb": "./locales/native/nb.json",
+      "ru": "./locales/native/ru.json"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.mahlv.biblewise",
@@ -35,7 +44,7 @@
       [
         "expo-audio",
         {
-          "microphonePermission": "Permita que o BibleWise use o microfone para gravar a mensagem.",
+          "microphonePermission": "Allow BibleWise to use the microphone to record the message.",
           "enableBackgroundRecording": true,
           "enableBackgroundPlayback": true
         }
@@ -48,7 +57,7 @@
             {
               "name": "BiblewiseQuote",
               "label": "Biblewise",
-              "description": "Versículos e frases inspiradoras, atualizados duas vezes ao dia.",
+              "description": "Inspiring verses and quotes, refreshed twice a day.",
               "minWidth": "110dp",
               "minHeight": "110dp",
               "targetCellWidth": 2,
@@ -70,14 +79,14 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Permita que o BibleWise acesse suas fotos para escolher a foto do perfil."
+          "photosPermission": "Allow BibleWise to access your photos to choose your profile picture."
         }
       ],
       [
         "expo-media-library",
         {
-          "photosPermission": "Permita que o BibleWise acesse suas fotos.",
-          "savePhotosPermission": "Permita que o BibleWise salve as artes das frases na sua galeria.",
+          "photosPermission": "Allow BibleWise to access your photos to choose your profile picture.",
+          "savePhotosPermission": "Allow BibleWise to save the quote images to your gallery.",
           "isAccessMediaLocationEnabled": false
         }
       ],

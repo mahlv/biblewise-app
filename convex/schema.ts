@@ -328,8 +328,13 @@ export default defineSchema({
     durationSeconds: v.number(),
     transcript: v.optional(v.string()),
     summary: v.optional(recordingSummaryValidator),
-    /** User-safe failure reason; the audio is kept so the pipeline can be retried. */
+    /**
+     * Failure reason; the audio is kept so the pipeline can be retried. New rows store a code
+     * (`PIPELINE_ERROR_CODES`) that the app translates; older rows hold Portuguese text.
+     */
     error: v.optional(v.string()),
+    /** App language when the recording was made: the language of the AI summary (`SUMMARY_LANGUAGES`). */
+    language: v.optional(v.string()),
     church: v.optional(v.string()),
     preacher: v.optional(v.string()),
     meetingType: v.optional(v.string()),

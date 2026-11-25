@@ -576,5 +576,39 @@
     "hapticsBody": "Haptic feedback on buttons and app actions.",
     "updated": "Profile updated successfully!",
     "saveFailed": "Couldn't save"
+  },
+  "serverErrors": {
+    "userNotFound": "User not found.",
+    "prayerNotFound": "Post not found.",
+    "commentNotFound": "Comment not found.",
+    "notificationNotFound": "Notification not found.",
+    "recordingNotFound": "Recording not found.",
+    "audioNotFound": "Audio not found.",
+    "imageNotFound": "Image not found.",
+    "titleRequired": "Write a title.",
+    "titleTooLong": "The title can be up to {{max}} characters.",
+    "messageRequired": "Write your message.",
+    "messageTooLong": "The message can be up to {{max}} characters.",
+    "scriptureTooLong": "The verse is too long.",
+    "commentRequired": "Write a comment.",
+    "commentTooLong": "The comment can be up to {{max}} characters.",
+    "dailyPostLimit": "You've reached today's posting limit. Try again tomorrow.",
+    "dailyCommentLimit": "You've reached today's comment limit. Try again tomorrow.",
+    "reportOwnPrayer": "You can't report your own post.",
+    "reportOwnComment": "You can't report your own comment.",
+    "dailyRecordingLimit": "Daily recording limit reached. Try again tomorrow.",
+    "recordingDurationInvalid": "Invalid recording length (maximum 2 hours).",
+    "audioTooLarge": "The audio is too large (maximum 25 MB).",
+    "meetingTypeInvalid": "Invalid meeting type.",
+    "signInToEditProfile": "Sign in to your account to edit your profile.",
+    "emailInvalid": "Invalid email.",
+    "imageTooLarge": "Choose an image up to 5 MB.",
+    "pipeline": {
+      "transcribeFailed": "We couldn't transcribe the audio. Please try again.",
+      "noSpeech": "We didn't detect any speech in the recording.",
+      "summaryFailed": "We couldn't generate the summary. Please try again.",
+      "notConfigured": "The summary service is not set up yet.",
+      "unexpected": "An unexpected error occurred. Please try again."
+    }
   }
 }

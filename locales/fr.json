@@ -576,5 +576,39 @@
     "hapticsBody": "Retour haptique sur les boutons et les actions de l'app.",
     "updated": "Profil mis à jour avec succès !",
     "saveFailed": "Impossible d'enregistrer"
+  },
+  "serverErrors": {
+    "userNotFound": "Utilisateur introuvable.",
+    "prayerNotFound": "Publication introuvable.",
+    "commentNotFound": "Commentaire introuvable.",
+    "notificationNotFound": "Notification introuvable.",
+    "recordingNotFound": "Enregistrement introuvable.",
+    "audioNotFound": "Audio introuvable.",
+    "imageNotFound": "Image introuvable.",
+    "titleRequired": "Écrivez un titre.",
+    "titleTooLong": "Le titre peut contenir jusqu’à {{max}} caractères.",
+    "messageRequired": "Écrivez votre message.",
+    "messageTooLong": "Le message peut contenir jusqu’à {{max}} caractères.",
+    "scriptureTooLong": "Le verset est trop long.",
+    "commentRequired": "Écrivez un commentaire.",
+    "commentTooLong": "Le commentaire peut contenir jusqu’à {{max}} caractères.",
+    "dailyPostLimit": "Vous avez atteint la limite de publications pour aujourd’hui. Réessayez demain.",
+    "dailyCommentLimit": "Vous avez atteint la limite de commentaires pour aujourd’hui. Réessayez demain.",
+    "reportOwnPrayer": "Vous ne pouvez pas signaler votre propre publication.",
+    "reportOwnComment": "Vous ne pouvez pas signaler votre propre commentaire.",
+    "dailyRecordingLimit": "Limite quotidienne d’enregistrements atteinte. Réessayez demain.",
+    "recordingDurationInvalid": "Durée d’enregistrement invalide (2 heures maximum).",
+    "audioTooLarge": "Le fichier audio est trop volumineux (25 Mo maximum).",
+    "meetingTypeInvalid": "Type de réunion invalide.",
+    "signInToEditProfile": "Connectez-vous à votre compte pour modifier le profil.",
+    "emailInvalid": "Adresse e-mail invalide.",
+    "imageTooLarge": "Choisissez une image de 5 Mo maximum.",
+    "pipeline": {
+      "transcribeFailed": "Impossible de transcrire l’audio. Veuillez réessayer.",
+      "noSpeech": "Aucune parole détectée dans l’enregistrement.",
+      "summaryFailed": "Impossible de générer le résumé. Veuillez réessayer.",
+      "notConfigured": "Le service de résumé n’est pas encore configuré.",
+      "unexpected": "Une erreur inattendue s’est produite. Veuillez réessayer."
+    }
   }
 }
