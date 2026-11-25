@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'rgba(255,255,255,0.16)',
   },
-  quote: { fontFamily: fonts.verseItalic, fontSize: 26, lineHeight: 36, color: colors.onPrimary, marginTop: spacing.sm },
+  quote: { fontFamily: fonts.verseItalic, fontSize: 24, lineHeight: 34, color: colors.onPrimary, marginTop: spacing.sm },
   reference: { fontFamily: fonts.body, fontSize: 16, color: 'rgba(255,255,255,0.75)' },
   bottomRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: spacing.md },
   shareButton: {
