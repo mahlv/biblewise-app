@@ -1,6 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { BIBLE_THEMES, DEFAULT_THEME_ID, getTheme } from '../constants/bibleThemes';
 import { clampPosition, ensureVersionLoaded, isKnownVersion, loadAllVersions } from '../lib/bibleLoader';
+import { defaultVersionCodeFor } from '../lib/bibleVersions';
+import { currentLanguage } from '../lib/i18n';
 import { readBiblePreferences, savePosition, saveThemeId, saveVersionCode } from '../lib/biblePreferences';
 import type { BibleTheme, BibleVersionMeta, ReadingPosition } from '../types/bible';
 
@@ -34,11 +36,12 @@ export function BibleProvider({ children }: { children: ReactNode }) {
     let active = true;
     readBiblePreferences().then(async (stored) => {
       // Asset versions must be in memory before the Bible screen reads them.
+      // Without a saved choice, start with the version that matches the app language.
+      const wanted = isKnownVersion(stored.versionCode) ? stored.versionCode : defaultVersionCodeFor(currentLanguage());
       let savedVersion: string | null = null;
-      if (isKnownVersion(stored.versionCode)) {
-        const code = stored.versionCode;
-        savedVersion = await ensureVersionLoaded(code).then(
-          () => code,
+      if (isKnownVersion(wanted)) {
+        savedVersion = await ensureVersionLoaded(wanted).then(
+          () => wanted,
           () => null,
         );
       }

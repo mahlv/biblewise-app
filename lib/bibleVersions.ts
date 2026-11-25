@@ -84,6 +84,22 @@ export const BIBLE_VERSION_REGISTRY: readonly BibleVersionEntry[] = [
   { code: 'SVD-AR', label: 'SVD-AR', name: 'Smith & Van Dyck', language: 'ar', year: 1865, direction: 'rtl', asset: require('../assets/bible-data/svd-ar.bible') as number },
 ];
 
+/** First-run Bible version per app language. Only used when the user has not picked a version yet. */
+const DEFAULT_VERSION_BY_LANGUAGE: Record<string, string> = {
+  'pt-BR': 'TB-PT',
+  en: 'WEB-EN',
+  es: 'RV1909-ES',
+  fr: 'LSG-FR',
+  it: 'RIV-IT',
+  de: 'LUT-DE',
+  no: 'NO1930-NO',
+  ru: 'RST-RU',
+};
+
+export function defaultVersionCodeFor(language: string): string {
+  return DEFAULT_VERSION_BY_LANGUAGE[language] ?? DEFAULT_VERSION_BY_LANGUAGE.en!;
+}
+
 /** Languages the Bible versions are written in (the names are translated into the app language). */
 const LANGUAGE_KEYS = {
   pt: 'bible.languages.pt',
