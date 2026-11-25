@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import { File, Paths } from 'expo-file-system';
+import i18n from './i18n';
 import { recordingFileName } from './recordingShareText';
 
 export type ShareAudioResult = 'shared' | 'cancelled' | 'unavailable' | 'failed';
@@ -11,11 +12,11 @@ const LARGE_FILE_BYTES = 16 * 1024 * 1024;
 function confirmLargeFile(megabytes: number): Promise<boolean> {
   return new Promise((resolve) => {
     Alert.alert(
-      'Áudio grande',
-      `Este áudio tem ${megabytes.toFixed(0)} MB. Alguns aplicativos recusam arquivos desse tamanho. Compartilhar mesmo assim?`,
+      i18n.t('shareAudio.largeTitle'),
+      i18n.t('shareAudio.largeBody', { size: megabytes.toFixed(0) }),
       [
-        { text: 'Cancelar', style: 'cancel', onPress: () => resolve(false) },
-        { text: 'Compartilhar', onPress: () => resolve(true) },
+        { text: i18n.t('common.cancel'), style: 'cancel', onPress: () => resolve(false) },
+        { text: i18n.t('common.share'), onPress: () => resolve(true) },
       ],
       { cancelable: true, onDismiss: () => resolve(false) },
     );
@@ -45,7 +46,7 @@ export async function shareRecordingAudio(audioUrl: string, title: string | unde
     const size = file.size ?? 0;
     if (size > LARGE_FILE_BYTES && !(await confirmLargeFile(size / (1024 * 1024)))) return 'cancelled';
 
-    await Sharing.shareAsync(file.uri, { mimeType: 'audio/mp4', UTI: 'public.mpeg-4-audio', dialogTitle: 'Compartilhar áudio' });
+    await Sharing.shareAsync(file.uri, { mimeType: 'audio/mp4', UTI: 'public.mpeg-4-audio', dialogTitle: i18n.t('diary.detail.shareAudio') });
     return 'shared';
   } catch {
     return 'failed';

@@ -1,6 +1,7 @@
 import type { ComponentProps } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
 import type { BibleTheme } from '../types/bible';
 import { AppPressable } from './ui/AppPressable';
@@ -14,12 +15,16 @@ interface Props {
 }
 
 export function ThemeRow({ theme, selected, locked, onPress }: Props) {
+  const { t } = useTranslation();
+  const name = t(`bible.themes.${theme.i18nKey}.name`);
+  const description = t(`bible.themes.${theme.i18nKey}.description`);
+  const tier = theme.isPremium ? t('bible.themePicker.premium') : t('bible.themePicker.free');
   return (
     <AppPressable haptic="selection"
       onPress={onPress}
       accessibilityRole="radio"
       accessibilityState={{ checked: selected }}
-      accessibilityLabel={`${theme.name}. ${theme.description}. ${theme.isPremium ? 'Premium' : 'Livre'}`}
+      accessibilityLabel={`${name}. ${description}. ${tier}`}
       style={[styles.row, selected && styles.rowSelected]}
     >
       <View style={[styles.iconBox, { backgroundColor: theme.iconBackground }]}>
@@ -33,14 +38,14 @@ export function ThemeRow({ theme, selected, locked, onPress }: Props) {
       <View style={styles.texts}>
         <View style={styles.titleLine}>
           <Text style={styles.name} numberOfLines={1}>
-            {theme.name}
+            {name}
           </Text>
           <View style={[styles.badge, theme.isPremium ? styles.badgePremium : styles.badgeFree]}>
             {theme.isPremium ? <MaterialCommunityIcons name="crown" size={10} color={colors.primary} /> : null}
-            <Text style={[styles.badgeText, theme.isPremium && { color: colors.primary }]}>{theme.isPremium ? 'Premium' : 'Livre'}</Text>
+            <Text style={[styles.badgeText, theme.isPremium && { color: colors.primary }]}>{tier}</Text>
           </View>
         </View>
-        <Text style={styles.description}>{theme.description}</Text>
+        <Text style={styles.description}>{description}</Text>
         <View style={styles.dots}>
           {theme.colors.map((color) => (
             <View key={color} style={[styles.dot, { backgroundColor: color }]} />

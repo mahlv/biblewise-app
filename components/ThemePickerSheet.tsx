@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { BottomSheet } from './BottomSheet';
 import { ThemeRow } from './ThemeRow';
 import { BIBLE_THEMES, isThemeUnlocked } from '../constants/bibleThemes';
@@ -16,10 +17,9 @@ interface Props {
   onClose: () => void;
 }
 
-const COMING_SOON = 'Disponível em breve';
-
 export function ThemePickerSheet({ visible, appliedThemeId, onApply, onClose }: Props) {
   const toast = useToast();
+  const { t } = useTranslation();
   const [pendingId, setPendingId] = useState(appliedThemeId);
 
   // Discard an unapplied pick so the sheet reopens on the applied theme.
@@ -32,7 +32,7 @@ export function ThemePickerSheet({ visible, appliedThemeId, onApply, onClose }: 
     const theme = BIBLE_THEMES.find((item) => item.id === id);
     if (!theme) return;
     if (!isThemeUnlocked(theme)) {
-      toast(COMING_SOON);
+      toast(t('common.availableSoon'));
       return;
     }
     setPendingId(id);
@@ -43,10 +43,10 @@ export function ThemePickerSheet({ visible, appliedThemeId, onApply, onClose }: 
       <View style={styles.header}>
         <MaterialCommunityIcons name="book-open-page-variant" size={20} color={colors.primary} />
         <View style={styles.headerTexts}>
-          <Text style={styles.title}>Temas da Bíblia</Text>
-          <Text style={styles.subtitle}>Personalize a atmosfera visual da sua leitura</Text>
+          <Text style={styles.title}>{t('bible.themePicker.title')}</Text>
+          <Text style={styles.subtitle}>{t('bible.themePicker.subtitle')}</Text>
         </View>
-        <AppPressable onPress={close} accessibilityRole="button" accessibilityLabel="Fechar" style={styles.close}>
+        <AppPressable onPress={close} accessibilityRole="button" accessibilityLabel={t('common.close')} style={styles.close}>
           <MaterialCommunityIcons name="close" size={18} color={colors.primary} />
         </AppPressable>
       </View>
@@ -55,17 +55,17 @@ export function ThemePickerSheet({ visible, appliedThemeId, onApply, onClose }: 
         <LinearGradient colors={['#FFE3EC', '#E4ECFF']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.banner}>
           <MaterialCommunityIcons name="star-four-points" size={30} color={colors.primary} />
           <View style={styles.bannerTexts}>
-            <Text style={styles.bannerTitle}>Recurso Premium</Text>
-            <Text style={styles.bannerBody}>Assinantes têm acesso ilimitado a todos os temas e atmosferas customizadas.</Text>
+            <Text style={styles.bannerTitle}>{t('bible.themePicker.premiumTitle')}</Text>
+            <Text style={styles.bannerBody}>{t('bible.themePicker.premiumBody')}</Text>
           </View>
-          <AppPressable onPress={() => toast(COMING_SOON)} accessibilityRole="button" style={styles.unlock}>
-            <Text style={styles.unlockText}>Desbloquear</Text>
+          <AppPressable onPress={() => toast(t('common.availableSoon'))} accessibilityRole="button" style={styles.unlock}>
+            <Text style={styles.unlockText}>{t('bible.themePicker.unlock')}</Text>
           </AppPressable>
         </LinearGradient>
 
         <View style={styles.sectionRow}>
-          <Text style={styles.section}>ATMOSFERAS BÍBLICAS</Text>
-          <Text style={styles.counter}>{BIBLE_THEMES.length} Estilos Disponíveis</Text>
+          <Text style={styles.section}>{t('bible.themePicker.section')}</Text>
+          <Text style={styles.counter}>{t('bible.themePicker.counter', { count: BIBLE_THEMES.length })}</Text>
         </View>
 
         <View style={styles.list} accessibilityRole="radiogroup">
@@ -88,15 +88,15 @@ export function ThemePickerSheet({ visible, appliedThemeId, onApply, onClose }: 
             onClose();
           }}
           accessibilityRole="button"
-          accessibilityLabel="Aplicar Tema Selecionado"
+          accessibilityLabel={t('bible.themePicker.apply')}
         >
           <LinearGradient colors={['#E8265E', '#F7568A']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.apply}>
             <MaterialCommunityIcons name="check-all" size={20} color={colors.onPrimary} />
-            <Text style={styles.applyText}>Aplicar Tema Selecionado</Text>
+            <Text style={styles.applyText}>{t('bible.themePicker.apply')}</Text>
           </LinearGradient>
         </AppPressable>
-        <AppPressable onPress={() => toast(COMING_SOON)} accessibilityRole="button">
-          <Text style={styles.trial}>✨ Experimentar Premium por 7 dias grátis</Text>
+        <AppPressable onPress={() => toast(t('common.availableSoon'))} accessibilityRole="button">
+          <Text style={styles.trial}>{t('bible.themePicker.trial')}</Text>
         </AppPressable>
       </View>
     </BottomSheet>

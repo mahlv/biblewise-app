@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { BottomSheet } from './BottomSheet';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
 import type { Book, ReadingPosition } from '../types/bible';
@@ -16,6 +17,7 @@ interface Props {
 
 /** Step 1: book list grouped by testament. Step 2: chapter grid. */
 export function BookPickerSheet({ visible, books, position, onSelect, onClose }: Props) {
+  const { t } = useTranslation();
   const [pickedBook, setPickedBook] = useState<Book | null>(null);
 
   // Always reopen on the book list.
@@ -41,12 +43,12 @@ export function BookPickerSheet({ visible, books, position, onSelect, onClose }:
     <BottomSheet visible={visible} onClose={close}>
       <View style={styles.header}>
         {pickedBook ? (
-          <AppPressable onPress={() => setPickedBook(null)} accessibilityRole="button" accessibilityLabel="Voltar para os livros" hitSlop={8}>
+          <AppPressable onPress={() => setPickedBook(null)} accessibilityRole="button" accessibilityLabel={t('bible.bookPicker.back')} hitSlop={8}>
             <MaterialCommunityIcons name="arrow-left" size={22} color={colors.onSurface} />
           </AppPressable>
         ) : null}
-        <Text style={styles.title}>{pickedBook ? pickedBook.name : 'Livros'}</Text>
-        <AppPressable onPress={close} accessibilityRole="button" accessibilityLabel="Fechar" hitSlop={8} style={styles.close}>
+        <Text style={styles.title}>{pickedBook ? pickedBook.name : t('bible.bookPicker.title')}</Text>
+        <AppPressable onPress={close} accessibilityRole="button" accessibilityLabel={t('common.close')} hitSlop={8} style={styles.close}>
           <MaterialCommunityIcons name="close" size={22} color={colors.onSurfaceVariant} />
         </AppPressable>
       </View>
@@ -63,7 +65,7 @@ export function BookPickerSheet({ visible, books, position, onSelect, onClose }:
                   close();
                 }}
                 accessibilityRole="button"
-                accessibilityLabel={`${pickedBook.name} capítulo ${chapter.number}`}
+                accessibilityLabel={t('bible.bookPicker.chapter', { book: pickedBook.name, chapter: chapter.number })}
                 style={[styles.cell, active && styles.cellActive]}
               >
                 <Text style={[styles.cellText, active && styles.cellTextActive]}>{chapter.number}</Text>
@@ -73,9 +75,9 @@ export function BookPickerSheet({ visible, books, position, onSelect, onClose }:
         </ScrollView>
       ) : (
         <ScrollView contentContainerStyle={styles.list}>
-          <Text style={styles.section}>ANTIGO TESTAMENTO</Text>
+          <Text style={styles.section}>{t('bible.testament.old')}</Text>
           {books.filter((book) => book.testament === 'AT').map(renderBook)}
-          <Text style={styles.section}>NOVO TESTAMENTO</Text>
+          <Text style={styles.section}>{t('bible.testament.new')}</Text>
           {books.filter((book) => book.testament === 'NT').map(renderBook)}
         </ScrollView>
       )}

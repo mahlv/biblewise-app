@@ -1,16 +1,20 @@
 import { StyleSheet, TextInput, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
 import { AppPressable } from './ui/AppPressable';
 
 interface Props {
   value: string;
+  /** Hint text; built by the screen so its example uses a book name of the current Bible version. */
+  placeholder: string;
   onChangeText: (text: string) => void;
   onSubmit: () => void;
   onPressMic: () => void;
 }
 
-export function BibleSearchBar({ value, onChangeText, onSubmit, onPressMic }: Props) {
+export function BibleSearchBar({ value, placeholder, onChangeText, onSubmit, onPressMic }: Props) {
+  const { t } = useTranslation();
   return (
     <View style={styles.bar}>
       <MaterialCommunityIcons name="magnify" size={20} color={colors.outline} />
@@ -18,15 +22,15 @@ export function BibleSearchBar({ value, onChangeText, onSubmit, onPressMic }: Pr
         value={value}
         onChangeText={onChangeText}
         onSubmitEditing={onSubmit}
-        placeholder="Digite livro, capítulo ou versículo (ex: Gên..."
+        placeholder={placeholder}
         placeholderTextColor={colors.outline}
         returnKeyType="search"
         autoCorrect={false}
         autoCapitalize="words"
         style={styles.input}
-        accessibilityLabel="Buscar passagem"
+        accessibilityLabel={t('bible.search.label')}
       />
-      <AppPressable onPress={onPressMic} accessibilityRole="button" accessibilityLabel="Busca por voz" hitSlop={8}>
+      <AppPressable onPress={onPressMic} accessibilityRole="button" accessibilityLabel={t('bible.search.voice')} hitSlop={8}>
         <MaterialCommunityIcons name="microphone-outline" size={20} color={colors.outline} />
       </AppPressable>
     </View>

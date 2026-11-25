@@ -1,4 +1,5 @@
 import type { BibleVersionMeta } from '../types/bible';
+import i18n from './i18n';
 
 /** Raw shape of the bundled data (`.json` for the inline versions, `.bible` for the asset ones). */
 export type RawBook = { abbrev: string; name: string; chapters: string[][] };
@@ -83,20 +84,21 @@ export const BIBLE_VERSION_REGISTRY: readonly BibleVersionEntry[] = [
   { code: 'SVD-AR', label: 'SVD-AR', name: 'Smith & Van Dyck', language: 'ar', year: 1865, direction: 'rtl', asset: require('../assets/bible-data/svd-ar.bible') as number },
 ];
 
-/** Portuguese name of a language, from a BCP-47 tag ("pt-BR" -> "Português"). */
-const LANGUAGE_NAMES: Record<string, string> = {
-  pt: 'Português',
-  en: 'Inglês',
-  es: 'Espanhol',
-  fr: 'Francês',
-  it: 'Italiano',
-  de: 'Alemão',
-  nb: 'Norueguês',
-  ru: 'Russo',
-  ar: 'Árabe',
-};
+/** Languages the Bible versions are written in (the names are translated into the app language). */
+const LANGUAGE_KEYS = {
+  pt: 'bible.languages.pt',
+  en: 'bible.languages.en',
+  es: 'bible.languages.es',
+  fr: 'bible.languages.fr',
+  it: 'bible.languages.it',
+  de: 'bible.languages.de',
+  nb: 'bible.languages.nb',
+  ru: 'bible.languages.ru',
+  ar: 'bible.languages.ar',
+} as const;
 
+/** Name of a language in the app language, from a BCP-47 tag ("pt-BR" -> "Portuguese" in English). */
 export function languageName(tag: string): string {
   const primary = tag.split('-')[0] ?? tag;
-  return LANGUAGE_NAMES[primary] ?? tag;
+  return primary in LANGUAGE_KEYS ? i18n.t(LANGUAGE_KEYS[primary as keyof typeof LANGUAGE_KEYS]) : tag;
 }

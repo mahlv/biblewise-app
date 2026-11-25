@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { BottomSheet } from './BottomSheet';
 import { QuoteCard } from './QuoteCard';
 import { useToast } from '../hooks/useToast';
@@ -27,7 +28,6 @@ interface Props {
 }
 
 const EXPORT_WIDTH = 1080;
-const UPDATE_MESSAGE = 'Atualize o app (nova build) para compartilhar a arte';
 
 /** True when the error means a native module is missing from this build. */
 const isMissingModule = (error: unknown) => /cannot find native module|could not be found|is undefined|null is not an object|undefined is not an object/i.test(String(error instanceof Error ? error.message : error));
@@ -43,6 +43,7 @@ const logError = (label: string, error: unknown) => {
 /** Customize the quote art (background, font, size, format) and share or save it as an image. */
 function QuoteShareContent({ onClose, quote, attribution, dateLabel, style, onChangeStyle }: Omit<Props, 'visible'>) {
   const toast = useToast();
+  const { t } = useTranslation();
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
   const cardRef = useRef<View>(null);
   const [busy, setBusy] = useState<'share' | 'save' | null>(null);
@@ -68,14 +69,14 @@ function QuoteShareContent({ onClose, quote, attribution, dateLabel, style, onCh
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const Sharing = require('expo-sharing') as typeof import('expo-sharing');
       if (!(await Sharing.isAvailableAsync())) {
-        toast('Compartilhamento indisponível neste aparelho');
+        toast(t('quote.shareUnavailable'));
         return;
       }
       const uri = await capture();
-      await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: 'Compartilhar frase', UTI: 'public.png' });
+      await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: t('quote.shareDialog'), UTI: 'public.png' });
     } catch (error) {
       logError('Quote share failed', error);
-      toast(isMissingModule(error) ? UPDATE_MESSAGE : 'Não foi possível compartilhar agora');
+      toast(isMissingModule(error) ? t('quote.updateNeeded') : t('quote.shareFailed'));
     } finally {
       setBusy(null);
     }
@@ -90,15 +91,15 @@ function QuoteShareContent({ onClose, quote, attribution, dateLabel, style, onCh
       // Write-only access is enough to save an image.
       const permission = await MediaLibrary.requestPermissionsAsync(true);
       if (!permission.granted) {
-        toast('Permita o acesso à galeria para baixar a imagem');
+        toast(t('quote.galleryPermission'));
         return;
       }
       const uri = await capture();
       await MediaLibrary.saveToLibraryAsync(uri);
-      toast('Imagem salva na galeria');
+      toast(t('quote.saved'));
     } catch (error) {
       logError('Quote save failed', error);
-      toast(isMissingModule(error) ? UPDATE_MESSAGE : 'Não foi possível salvar a imagem');
+      toast(isMissingModule(error) ? t('quote.updateNeeded') : t('quote.saveFailed'));
     } finally {
       setBusy(null);
     }
@@ -107,8 +108,8 @@ function QuoteShareContent({ onClose, quote, attribution, dateLabel, style, onCh
   return (
     <>
       <View style={styles.header}>
-        <Text style={styles.title}>Customizar Arte</Text>
-        <AppPressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Fechar" style={styles.close}>
+        <Text style={styles.title}>{t('quote.title')}</Text>
+        <AppPressable onPress={onClose} accessibilityRole="button" accessibilityLabel={t('common.close')} style={styles.close}>
           <MaterialCommunityIcons name="close" size={18} color={colors.primary} />
         </AppPressable>
       </View>
@@ -118,14 +119,14 @@ function QuoteShareContent({ onClose, quote, attribution, dateLabel, style, onCh
           <QuoteCard quote={quote} attribution={attribution} dateLabel={dateLabel} style={style} width={previewWidth} captureRef={cardRef} />
         </View>
 
-        <Text style={styles.label}>FORMATO</Text>
+        <Text style={styles.label}>{t('quote.format')}</Text>
         <View style={styles.row} accessibilityRole="radiogroup">
           {QUOTE_FORMATS.map((item) => (
-            <Chip key={item.id} label={item.label} selected={item.id === style.formatId} onPress={() => update({ formatId: item.id })} />
+            <Chip key={item.id} label={t(item.labelKey)} selected={item.id === style.formatId} onPress={() => update({ formatId: item.id })} />
           ))}
         </View>
 
-        <Text style={styles.label}>FUNDO</Text>
+        <Text style={styles.label}>{t('quote.background')}</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.swatches}>
           {QUOTE_BACKGROUNDS.map((item) => {
             const selected = item.id === style.backgroundId;
@@ -135,7 +136,7 @@ function QuoteShareContent({ onClose, quote, attribution, dateLabel, style, onCh
                 onPress={() => update({ backgroundId: item.id })}
                 accessibilityRole="radio"
                 accessibilityState={{ checked: selected }}
-                accessibilityLabel={`Fundo ${item.label}`}
+                accessibilityLabel={t('quote.backgroundLabel', { name: t(item.labelKey) })}
                 style={[styles.swatchRing, selected && styles.swatchRingSelected]}
               >
                 <LinearGradient colors={item.colors} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.swatch} />
@@ -144,31 +145,31 @@ function QuoteShareContent({ onClose, quote, attribution, dateLabel, style, onCh
           })}
         </ScrollView>
 
-        <Text style={styles.label}>FONTE</Text>
+        <Text style={styles.label}>{t('quote.font')}</Text>
         <View style={styles.rowWrap} accessibilityRole="radiogroup">
           {QUOTE_FONTS.map((item) => (
-            <Chip key={item.id} label={item.label} fontFamily={item.family} selected={item.id === style.fontId} onPress={() => update({ fontId: item.id })} />
+            <Chip key={item.id} label={t(item.labelKey)} fontFamily={item.family} selected={item.id === style.fontId} onPress={() => update({ fontId: item.id })} />
           ))}
         </View>
 
-        <Text style={styles.label}>TAMANHO DO TEXTO</Text>
+        <Text style={styles.label}>{t('quote.textSize')}</Text>
         <View style={styles.row} accessibilityRole="radiogroup">
           {QUOTE_SIZES.map((item) => (
-            <Chip key={item.id} label={item.label} selected={item.id === style.sizeId} onPress={() => update({ sizeId: item.id })} />
+            <Chip key={item.id} label={t(item.labelKey)} selected={item.id === style.sizeId} onPress={() => update({ sizeId: item.id })} />
           ))}
         </View>
       </ScrollView>
 
       <View style={styles.footer}>
-        <AppPressable onPress={handleShare} disabled={busy !== null} accessibilityRole="button" accessibilityLabel="Compartilhar" style={styles.flex}>
+        <AppPressable onPress={handleShare} disabled={busy !== null} accessibilityRole="button" accessibilityLabel={t('common.share')} style={styles.flex}>
           <LinearGradient colors={['#E8265E', '#F7568A']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.primaryButton}>
             {busy === 'share' ? <ActivityIndicator color={colors.onPrimary} /> : <MaterialCommunityIcons name="share-variant" size={18} color={colors.onPrimary} />}
-            <Text style={styles.primaryText}>Compartilhar</Text>
+            <Text style={styles.primaryText}>{t('common.share')}</Text>
           </LinearGradient>
         </AppPressable>
-        <AppPressable onPress={handleSave} disabled={busy !== null} accessibilityRole="button" accessibilityLabel="Baixar imagem" style={styles.secondaryButton}>
+        <AppPressable onPress={handleSave} disabled={busy !== null} accessibilityRole="button" accessibilityLabel={t('quote.download')} style={styles.secondaryButton}>
           {busy === 'save' ? <ActivityIndicator color={colors.primary} /> : <MaterialCommunityIcons name="download" size={20} color={colors.primary} />}
-          <Text style={styles.secondaryText}>Baixar</Text>
+          <Text style={styles.secondaryText}>{t('quote.downloadShort')}</Text>
         </AppPressable>
       </View>
     </>

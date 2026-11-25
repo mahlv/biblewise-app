@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { PRAYER_LIMITS } from '../../lib/prayerCategories';
 import { colors, fonts, radius, shadow, spacing } from '../../theme/tokens';
 import type { IconName } from '../OnboardingOption';
@@ -41,13 +42,14 @@ function StatCard({ icon, iconColor, iconBackground, label, count, highlighted }
 
 /** Three rounded cards at the top of "Meu Diário". */
 export function DiaryStats({ stats, view }: Props) {
+  const { t } = useTranslation();
   return (
     <View style={styles.row}>
       <StatCard
         icon="waveform"
         iconColor={colors.secondary}
         iconBackground="#DDE8FF"
-        label="Cultos"
+        label={t('diary.stats.services')}
         count={formatCount(stats?.recordings)}
         highlighted={view === 'recordings'}
       />
@@ -55,7 +57,7 @@ export function DiaryStats({ stats, view }: Props) {
         icon="heart"
         iconColor={colors.primary}
         iconBackground={colors.selectedIconContainer}
-        label="Pedidos"
+        label={t('diary.stats.requests')}
         count={formatCount(stats?.prayers)}
         highlighted={view === 'wall'}
       />
@@ -63,7 +65,7 @@ export function DiaryStats({ stats, view }: Props) {
         icon="star-four-points"
         iconColor={colors.tertiary}
         iconBackground="#DDF3D6"
-        label="Testemunhos"
+        label={t('diary.stats.testimonies')}
         count={formatCount(stats?.testimonies)}
         highlighted={false}
       />

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useQuery } from 'convex/react';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { api } from '../../convex/_generated/api';
 import { DiaryStats, type DiaryView } from '../../components/diary/DiaryStats';
@@ -13,6 +14,7 @@ import { colors, fonts, spacing } from '../../theme/tokens';
 /** Diary tab: the user's recordings, or the community prayer wall. */
 export default function DiaryScreen() {
   const { anonymousId } = useOnboarding();
+  const { t } = useTranslation();
   const [view, setView] = useState<DiaryView>('wall');
   const stats = useQuery(api.prayers.getUserStats, anonymousId ? { anonymousId } : 'skip');
 
@@ -20,8 +22,8 @@ export default function DiaryScreen() {
   const header = (
     <View style={styles.header}>
       <View style={styles.titles}>
-        <Text style={styles.eyebrow}>MEMORIAL ESPIRITUAL</Text>
-        <Text style={styles.title}>Meu Diário</Text>
+        <Text style={styles.eyebrow}>{t('diary.eyebrow')}</Text>
+        <Text style={styles.title}>{t('home.quickAccess.diaryTitle')}</Text>
       </View>
       <DiaryStats stats={stats} view={view} />
       <DiaryTabSwitcher view={view} onChange={setView} />

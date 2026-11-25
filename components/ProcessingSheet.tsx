@@ -5,17 +5,18 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { File } from 'expo-file-system';
 import { useMutation, useQuery } from 'convex/react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { api } from '../convex/_generated/api';
 import type { Id } from '../convex/_generated/dataModel';
 import { BottomSheet } from './BottomSheet';
 import { BrandLogo } from './BrandLogo';
 import { ProgressBar } from './ProgressBar';
 import { TextPromptModal } from './TextPromptModal';
+import { progressLabel } from '../lib/recordingLabels';
 import {
   DEFAULT_MEETING_TYPE,
   MEETING_TYPE_OPTIONS,
   nextMilestone,
-  progressLabel,
   type MeetingType,
   type RecordingStatus,
 } from '../lib/recordingSummary';
@@ -38,6 +39,7 @@ type PromptField = 'church' | 'preacher' | null;
  * 10 -> 60 -> 90 -> 100 and the bar eases toward the next milestone meanwhile.
  */
 export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props) {
+  const { t } = useTranslation();
   const generateUploadUrl = useMutation(api.recordings.generateUploadUrl);
   const createRecording = useMutation(api.recordings.createRecording);
   const updateMetadata = useMutation(api.recordings.updateRecordingMetadata);
@@ -80,7 +82,8 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
       } catch (error) {
         if (cancelled) return;
         const message = error instanceof Error && /limite|inválid|grande/i.test(error.message) ? error.message : null;
-        setUploadError(message ?? 'Não foi possível enviar o áudio. Verifique sua conexão e tente novamente.');
+        // An empty string means "use the generic upload message".
+        setUploadError(message ?? '');
       }
     })();
     return () => {
@@ -92,7 +95,8 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
   const serverProgress = recording?.progress ?? 3;
   const failed = uploadError !== null || status === 'failed';
   const completed = status === 'completed';
-  const errorMessage = uploadError ?? recording?.error ?? 'Não foi possível concluir. Tente novamente.';
+  const errorMessage =
+    uploadError !== null ? uploadError || t('processing.uploadFailed') : (recording?.error ?? t('processing.failedGeneric'));
 
   // Ease the shown percentage toward the server value, creeping toward the next milestone while a stage runs.
   useEffect(() => {
@@ -152,13 +156,13 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <View style={styles.badge}>
           <MaterialCommunityIcons name="star-four-points" size={12} color={colors.primary} />
-          <Text style={styles.badgeText}>Santuário Digital AI</Text>
+          <Text style={styles.badgeText}>{t('processing.badge')}</Text>
         </View>
         <Text style={styles.title} accessibilityRole="header">
-          Preparando seu Resumo
+          {t('processing.title')}
         </Text>
         <Text style={styles.subtitle}>
-          Nossa inteligência artificial está estruturando os pontos centrais, versículos e frases de impacto.
+          {t('processing.subtitle')}
         </Text>
 
         <LinearGradient colors={['#FFE3EC', '#E4ECFF']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.progressCard}>
@@ -181,13 +185,13 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
               {showScriptureChip ? (
                 <View style={[styles.chip, { backgroundColor: '#DDF3D6' }]}>
                   <MaterialCommunityIcons name="book-open-variant" size={13} color={colors.tertiary} />
-                  <Text style={[styles.chipText, { color: colors.tertiary }]}>Detectando escrituras</Text>
+                  <Text style={[styles.chipText, { color: colors.tertiary }]}>{t('processing.chipScriptures')}</Text>
                 </View>
               ) : null}
               {topics > 0 ? (
                 <View style={[styles.chip, { backgroundColor: '#DDE8FF' }]}>
                   <MaterialCommunityIcons name="star-four-points" size={13} color={colors.secondary} />
-                  <Text style={[styles.chipText, { color: colors.secondary }]}>{`${topics} tópicos práticos`}</Text>
+                  <Text style={[styles.chipText, { color: colors.secondary }]}>{t('processing.chipTopics', { count: topics })}</Text>
                 </View>
               ) : null}
             </View>
@@ -195,14 +199,14 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
         </LinearGradient>
 
         <View style={styles.formHeader}>
-          <Text style={styles.formTitle}>Complete os dados do culto</Text>
-          <Text style={styles.optional}>Opcional agora</Text>
+          <Text style={styles.formTitle}>{t('processing.formTitle')}</Text>
+          <Text style={styles.optional}>{t('processing.optional')}</Text>
         </View>
 
-        <FieldCard icon="church" label="IGREJA / MINISTÉRIO" value={church} placeholder="Toque para informar" onPress={() => setPrompt('church')} />
-        <FieldCard icon="account-voice" label="PREGADOR(A) / MINISTRO" value={preacher} placeholder="Toque para informar" onPress={() => setPrompt('preacher')} />
+        <FieldCard icon="church" label={t('processing.fieldChurch')} value={church} placeholder={t('processing.tapToAdd')} onPress={() => setPrompt('church')} />
+        <FieldCard icon="account-voice" label={t('processing.fieldPreacher')} value={preacher} placeholder={t('processing.tapToAdd')} onPress={() => setPrompt('preacher')} />
 
-        <Text style={styles.fieldLabel}>TIPO DE REUNIÃO</Text>
+        <Text style={styles.fieldLabel}>{t('processing.meetingType')}</Text>
         <View style={styles.typeRow} accessibilityRole="radiogroup">
           {MEETING_TYPE_OPTIONS.map((option) => {
             const selected = option.id === meetingType;
@@ -215,7 +219,7 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
                 style={[styles.typeChip, selected && styles.typeChipSelected]}
               >
                 {selected ? <MaterialCommunityIcons name="check" size={14} color={colors.onPrimary} /> : null}
-                <Text style={[styles.typeText, selected && styles.typeTextSelected]}>{option.label}</Text>
+                <Text style={[styles.typeText, selected && styles.typeTextSelected]}>{t(`recording.meetingTypes.${option.id}`)}</Text>
               </AppPressable>
             );
           })}
@@ -226,7 +230,7 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
         {failed ? (
           <AppPressable onPress={handleRetry} accessibilityRole="button" style={styles.retry}>
             <MaterialCommunityIcons name="refresh" size={18} color={colors.onPrimary} />
-            <Text style={styles.saveText}>Tentar novamente</Text>
+            <Text style={styles.saveText}>{t('processing.retry')}</Text>
           </AppPressable>
         ) : (
           <AppPressable
@@ -238,19 +242,19 @@ export function ProcessingSheet({ anonymousId, fileUri, durationSeconds }: Props
           >
             <LinearGradient colors={['#E8265E', '#F7568A']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.saveButton}>
               <MaterialCommunityIcons name="check" size={18} color={colors.onPrimary} />
-              <Text style={styles.saveText}>Salvar</Text>
+              <Text style={styles.saveText}>{t('common.save')}</Text>
             </LinearGradient>
           </AppPressable>
         )}
         <Text style={styles.footnote}>
-          As anotações e o resumo serão salvos automaticamente em Meu Diário assim que a transcrição for concluída.
+          {t('processing.footnote')}
         </Text>
       </View>
 
       <TextPromptModal
         visible={prompt !== null}
-        title={prompt === 'church' ? 'Igreja / Ministério' : 'Pregador(a) / Ministro'}
-        placeholder={prompt === 'church' ? 'Nome da igreja' : 'Nome do pregador'}
+        title={prompt === 'church' ? t('processing.churchTitle') : t('processing.preacherTitle')}
+        placeholder={prompt === 'church' ? t('processing.churchPlaceholder') : t('processing.preacherPlaceholder')}
         initialValue={prompt === 'church' ? church : preacher}
         onSubmit={handlePromptSubmit}
         onCancel={() => setPrompt(null)}

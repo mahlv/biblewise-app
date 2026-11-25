@@ -1,27 +1,38 @@
 import { ScrollView, StyleSheet, Text } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { QUICK_REFERENCES } from '../constants/quickReferences';
+import { getBook } from '../lib/bibleLoader';
+import type { ReadingPosition } from '../types/bible';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
 import { AppPressable } from './ui/AppPressable';
 
 interface Props {
-  onSelect: (query: string) => void;
+  /** Version whose book names label the chips; chips for books it lacks are hidden. */
+  versionCode: string;
+  onSelect: (position: ReadingPosition, verse?: number) => void;
 }
 
-/** "RÁPIDO:" horizontally scrollable shortcuts. */
-export function QuickReferenceChips({ onSelect }: Props) {
+/** "QUICK:" horizontally scrollable shortcuts. */
+export function QuickReferenceChips({ versionCode, onSelect }: Props) {
+  const { t } = useTranslation();
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.row} keyboardShouldPersistTaps="handled">
-      <Text style={styles.label}>RÁPIDO:</Text>
-      {QUICK_REFERENCES.map((item) => (
-        <AppPressable haptic="selection"
-          key={item.label}
-          onPress={() => onSelect(item.query)}
-          accessibilityRole="button"
-          style={({ pressed }) => [styles.chip, pressed && { opacity: 0.8 }]}
-        >
-          <Text style={styles.chipText}>{item.label}</Text>
-        </AppPressable>
-      ))}
+      <Text style={styles.label}>{t('bible.quick.label')}</Text>
+      {QUICK_REFERENCES.map((item) => {
+        const book = getBook(versionCode, item.bookId);
+        if (!book || item.chapter > book.chapters.length) return null;
+        const label = `${book.name} ${item.chapter}${item.verse ? `:${item.verse}` : ''}`;
+        return (
+          <AppPressable haptic="selection"
+            key={label}
+            onPress={() => onSelect({ bookId: item.bookId, chapter: item.chapter }, item.verse)}
+            accessibilityRole="button"
+            style={({ pressed }) => [styles.chip, pressed && { opacity: 0.8 }]}
+          >
+            <Text style={styles.chipText}>{label}</Text>
+          </AppPressable>
+        );
+      })}
     </ScrollView>
   );
 }

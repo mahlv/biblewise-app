@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, BackHandler, Linking, Platform, StyleSheet, Switch, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { LinearGradient } from 'expo-linear-gradient';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { File } from 'expo-file-system';
@@ -51,6 +52,12 @@ type Phase = 'starting' | 'recording' | 'paused' | 'saved';
 /** Full-screen recorder. Starts automatically; transcript and summary happen only after saving. */
 export default function RecordingScreen() {
   const toast = useToast();
+  const { t } = useTranslation();
+  // The permission effect below must not restart when the language changes, so it reads `t` through a ref.
+  const tRef = useRef(t);
+  useEffect(() => {
+    tRef.current = t;
+  }, [t]);
   const { anonymousId } = useOnboarding();
   const recorder = useAudioRecorder(RECORDING_OPTIONS);
   const state = useAudioRecorderState(recorder, 250);
@@ -91,12 +98,12 @@ export default function RecordingScreen() {
       if (cancelled) return;
       if (!permission.granted) {
         Alert.alert(
-          'Microfone necessário',
-          'Permita o acesso ao microfone nas configurações para gravar a mensagem.',
+          tRef.current('recording.micRequired.title'),
+          tRef.current('recording.micRequired.body'),
           [
-            { text: 'Cancelar', style: 'cancel', onPress: () => router.back() },
+            { text: tRef.current('common.cancel'), style: 'cancel', onPress: () => router.back() },
             {
-              text: 'Abrir configurações',
+              text: tRef.current('recording.micRequired.openSettings'),
               onPress: () => {
                 void Linking.openSettings();
                 router.back();
@@ -121,7 +128,7 @@ export default function RecordingScreen() {
         setPhase('recording');
       } catch {
         if (cancelled) return;
-        Alert.alert('Não foi possível gravar', 'Verifique o microfone e tente novamente.', [
+        Alert.alert(tRef.current('recording.startFailed.title'), tRef.current('recording.startFailed.body'), [
           { text: 'OK', onPress: () => router.back() },
         ]);
       }
@@ -148,10 +155,10 @@ export default function RecordingScreen() {
   );
 
   const confirmDiscard = useCallback(() => {
-    Alert.alert('Descartar gravação?', 'A gravação atual será apagada e não poderá ser recuperada.', [
-      { text: 'Continuar gravando', style: 'cancel' },
+    Alert.alert(t('recording.discardConfirm.title'), t('recording.discardConfirm.body'), [
+      { text: t('recording.discardConfirm.keep'), style: 'cancel' },
       {
-        text: 'Descartar',
+        text: t('recording.discardConfirm.discard'),
         style: 'destructive',
         onPress: async () => {
           await discard();
@@ -159,7 +166,7 @@ export default function RecordingScreen() {
         },
       },
     ]);
-  }, [discard]);
+  }, [discard, t]);
 
   // Android back button asks before throwing the recording away (unless already saved).
   useEffect(() => {
@@ -193,9 +200,9 @@ export default function RecordingScreen() {
       setFile({ uri, durationSeconds: Math.max(1, durationRef.current) });
     } catch {
       savingRef.current = false;
-      toast('Não foi possível salvar a gravação');
+      toast(t('recording.saveFailed'));
     }
-  }, [recorder, toast]);
+  }, [recorder, toast, t]);
 
   // Stop automatically at the 2 h limit.
   useEffect(() => {
@@ -213,14 +220,14 @@ export default function RecordingScreen() {
     setSilentMode(value);
     if (!value) return;
     if (Platform.OS === 'android') {
-      Linking.sendIntent('android.settings.ZEN_MODE_PRIORITY_SETTINGS').catch(() => toast('Ative o modo Não Perturbe nas configurações'));
+      Linking.sendIntent('android.settings.ZEN_MODE_PRIORITY_SETTINGS').catch(() => toast(t('recording.silent.androidFailed')));
     } else {
-      toast('Ative um Foco (Não Perturbe) pela Central de Controle');
+      toast(t('recording.silent.ios'));
     }
   };
 
   const isRecording = phase === 'recording';
-  const label = isRecording ? 'Gravando' : phase === 'paused' ? 'Pausado' : 'Iniciando';
+  const label = isRecording ? t('recording.status.recording') : phase === 'paused' ? t('recording.status.paused') : t('recording.status.starting');
   const level = meteringToLevel(state.metering);
 
   return (
@@ -238,13 +245,13 @@ export default function RecordingScreen() {
             {formatClock(durationSeconds)}
           </Text>
           <RecordingWaveform active={isRecording} level={level} />
-          <Text style={styles.caption}>Captação de voz em alta fidelidade ativa</Text>
+          <Text style={styles.caption}>{t('recording.caption')}</Text>
 
           <AppPressable haptic="medium"
             onPress={handleToggle}
             disabled={phase === 'starting' || phase === 'saved'}
             accessibilityRole="button"
-            accessibilityLabel={isRecording ? 'Pausar gravação' : 'Retomar gravação'}
+            accessibilityLabel={isRecording ? t('recording.pause') : t('recording.resume')}
             style={({ pressed }) => [styles.mainButtonShadow, pressed && { opacity: 0.85 }]}
           >
             <LinearGradient colors={['#FF4D6D', '#C1123F']} style={styles.mainButton}>
@@ -253,8 +260,7 @@ export default function RecordingScreen() {
           </AppPressable>
 
           <Text style={styles.helper}>
-            Gravando a mensagem pastoral. Ao concluir, os resumos temáticos, tópicos oratórios e referências bíblicas serão
-            organizados em seu diário.
+            {t('recording.helper')}
           </Text>
         </View>
       </LinearGradient>
@@ -265,15 +271,15 @@ export default function RecordingScreen() {
             <MaterialCommunityIcons name="bell-off-outline" size={20} color={colors.primary} />
           </View>
           <View style={styles.silentTexts}>
-            <Text style={styles.silentTitle}>Modo Silencioso do Celular</Text>
-            <Text style={styles.silentBody}>Notificações e toques mutados durante o culto</Text>
+            <Text style={styles.silentTitle}>{t('recording.silent.title')}</Text>
+            <Text style={styles.silentBody}>{t('recording.silent.body')}</Text>
           </View>
           <Switch
             value={silentMode}
             onValueChange={handleSilentMode}
             trackColor={{ true: colors.primary, false: '#E7CFCF' }}
             thumbColor={colors.onPrimary}
-            accessibilityLabel="Modo silencioso do celular"
+            accessibilityLabel={t('recording.silent.label')}
           />
         </View>
 
@@ -281,17 +287,17 @@ export default function RecordingScreen() {
           onPress={handleSave}
           disabled={phase === 'starting' || phase === 'saved'}
           accessibilityRole="button"
-          accessibilityLabel="Salvar e Resumir Palavra"
+          accessibilityLabel={t('recording.save')}
           style={({ pressed }) => [(phase === 'starting' || phase === 'saved') && { opacity: 0.5 }, pressed && { opacity: 0.85 }]}
         >
           <LinearGradient colors={['#E8265E', '#F7568A']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.saveButton}>
             <MaterialCommunityIcons name="check" size={20} color={colors.onPrimary} />
-            <Text style={styles.saveText}>Salvar e Resumir Palavra</Text>
+            <Text style={styles.saveText}>{t('recording.save')}</Text>
           </LinearGradient>
         </AppPressable>
 
         <AppPressable onPress={confirmDiscard} disabled={phase === 'saved'} accessibilityRole="button" hitSlop={8}>
-          <Text style={styles.discard}>Descartar Gravação</Text>
+          <Text style={styles.discard}>{t('recording.discard')}</Text>
         </AppPressable>
       </View>
 

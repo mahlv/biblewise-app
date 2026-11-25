@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { requireOptionalNativeModule } from 'expo';
+import { useTranslation } from 'react-i18next';
 import { ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BibleSearchBar } from '../../components/BibleSearchBar';
@@ -25,6 +26,7 @@ type Sheet = 'version' | 'book' | 'theme' | null;
 export default function BibleScreen() {
   const { ready, versions, versionCode, theme, position, loadingVersionCode, setVersionCode, setThemeId, setPosition } = useBible();
   const toast = useToast();
+  const { t } = useTranslation();
 
   const [sheet, setSheet] = useState<Sheet>(null);
   const [query, setQuery] = useState('');
@@ -73,14 +75,19 @@ export default function BibleScreen() {
     return () => clearTimeout(timer);
   }, [pendingScrollVerse, safePosition]);
 
+  // Examples use book names of the open version, since that is what the search understands best.
+  const sampleBook = (id: number) => version.books[id]?.name ?? version.books[0]?.name ?? '';
+  const exampleVerse = `${sampleBook(42)} 3:16`;
+  const exampleChapter = `${sampleBook(0)} 1`;
+
   const search = (text: string) => {
     const parsed = parseReference(text, version.code);
     if (!parsed) {
-      setSearchError('Não encontrei essa passagem. Tente "João 3:16" ou "Gênesis 1".');
+      setSearchError(t('bible.search.notFound', { first: exampleVerse, second: exampleChapter }));
       return;
     }
     if (parsed.bookMissing) {
-      setSearchError('Esta versão não contém esse livro.');
+      setSearchError(t('bible.search.bookMissing'));
       return;
     }
     setSearchError(null);
@@ -99,7 +106,7 @@ export default function BibleScreen() {
     if (!text) return;
     // Builds made before expo-clipboard was added lack the native module.
     if (!requireOptionalNativeModule('ExpoClipboard')) {
-      toast('Copiar exige o app atualizado (nova build)');
+      toast(t('bible.toast.copyNeedsUpdate'));
       return;
     }
     try {
@@ -107,9 +114,9 @@ export default function BibleScreen() {
       const Clipboard = require('expo-clipboard') as typeof import('expo-clipboard');
       await Clipboard.setStringAsync(text);
       haptics.success();
-      toast('Versículo copiado');
+      toast(t('bible.toast.copied'));
     } catch {
-      toast('Não foi possível copiar agora');
+      toast(t('bible.toast.copyFailed'));
     }
   };
 
@@ -124,7 +131,7 @@ export default function BibleScreen() {
     if (updated.length === 0) delete next[chapterKey];
     setHighlights(next);
     void saveHighlights(next);
-    toast(already ? 'Destaque removido' : 'Versículo destacado');
+    toast(already ? t('bible.toast.highlightRemoved') : t('bible.toast.highlighted'));
   };
 
   const handleShare = async () => {
@@ -142,20 +149,21 @@ export default function BibleScreen() {
           bookLabel={`${book.id + 1} - ${book.name}`}
           onPressVersion={() => setSheet('version')}
           onPressBook={() => setSheet('book')}
-          onPressNotifications={() => toast('Disponível em breve')}
+          onPressNotifications={() => toast(t('common.availableSoon'))}
           onPressTheme={() => setSheet('theme')}
         />
         <BibleSearchBar
           value={query}
+          placeholder={t('bible.search.placeholder', { example: exampleVerse })}
           onChangeText={(text) => {
             setQuery(text);
             setSearchError(null);
           }}
           onSubmit={() => search(query)}
-          onPressMic={() => toast('Busca por voz em breve')}
+          onPressMic={() => toast(t('bible.search.voiceSoon'))}
         />
         {searchError ? <Text style={styles.error}>{searchError}</Text> : null}
-        <QuickReferenceChips onSelect={search} />
+        <QuickReferenceChips versionCode={version.code} onSelect={goTo} />
       </View>
 
       <ScrollView ref={scrollRef} contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
@@ -166,7 +174,7 @@ export default function BibleScreen() {
           }}
         >
           <Text style={[styles.testament, { color: theme.text }]}>
-            {book.testament === 'AT' ? 'ANTIGO TESTAMENTO' : 'NOVO TESTAMENTO'}
+            {book.testament === 'AT' ? t('bible.testament.old') : t('bible.testament.new')}
           </Text>
           <Text style={[styles.title, { color: theme.accent }]} accessibilityRole="header">
             {book.name} {safePosition.chapter}
@@ -179,7 +187,7 @@ export default function BibleScreen() {
                 verse={selectedVerse}
                 onCopy={handleCopy}
                 onHighlight={handleHighlight}
-                onNote={() => toast('Notas em breve')}
+                onNote={() => toast(t('bible.toast.notesSoon'))}
                 onShare={handleShare}
               />
             </View>
@@ -197,7 +205,7 @@ export default function BibleScreen() {
 
           <ChapterNavigation
             accent={theme.accent}
-            previousLabel={previous ? (previous.bookId === book.id ? 'Capítulo anterior' : 'Livro anterior') : null}
+            previousLabel={previous ? (previous.bookId === book.id ? t('bible.nav.previousChapter') : t('bible.nav.previousBook')) : null}
             nextLabel={next && nextBook ? `${nextBook.name} ${next.chapter}` : null}
             onPrevious={() => previous && goTo(previous)}
             onNext={() => next && goTo(next)}
@@ -212,7 +220,7 @@ export default function BibleScreen() {
         loadingCode={loadingVersionCode}
         onSelect={async (code) => {
           const applied = await setVersionCode(code);
-          if (!applied) toast('Não foi possível carregar esta versão');
+          if (!applied) toast(t('bible.toast.versionFailed'));
           return applied;
         }}
         onClose={() => setSheet(null)}

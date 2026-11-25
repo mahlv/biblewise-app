@@ -1,5 +1,7 @@
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import type { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { BottomSheet } from './BottomSheet';
 import { languageName } from '../lib/bibleVersions';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
@@ -18,11 +20,11 @@ interface Props {
 }
 
 /** Extra information shown under a version when it differs from a regular, complete Bible. */
-function versionNote(version: BibleVersionMeta): string | null {
+function versionNote(version: BibleVersionMeta, t: TFunction): string | null {
   const notes: string[] = [];
-  if (version.scope === 'ot') notes.push('Somente Antigo Testamento');
-  if (version.deuterocanon) notes.push('Inclui livros deuterocanônicos');
-  if (version.numbering === 'vulgate') notes.push('Salmos na numeração da Vulgata');
+  if (version.scope === 'ot') notes.push(t('bible.versionPicker.otOnly'));
+  if (version.deuterocanon) notes.push(t('bible.versionPicker.deuterocanon'));
+  if (version.numbering === 'vulgate') notes.push(t('bible.versionPicker.vulgate'));
   return notes.length > 0 ? notes.join(' · ') : null;
 }
 
@@ -39,11 +41,12 @@ function groupByLanguage(versions: BibleVersionMeta[]): { language: string; item
 }
 
 export function VersionPickerSheet({ visible, versions, selectedCode, loadingCode = null, onSelect, onClose }: Props) {
+  const { t } = useTranslation();
   return (
     <BottomSheet visible={visible} onClose={onClose} heightRatio={0.7}>
       <View style={styles.header}>
-        <Text style={styles.title}>Versão da Bíblia</Text>
-        <AppPressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Fechar" hitSlop={8}>
+        <Text style={styles.title}>{t('bible.versionPicker.title')}</Text>
+        <AppPressable onPress={onClose} accessibilityRole="button" accessibilityLabel={t('common.close')} hitSlop={8}>
           <MaterialCommunityIcons name="close" size={22} color={colors.onSurfaceVariant} />
         </AppPressable>
       </View>
@@ -54,7 +57,7 @@ export function VersionPickerSheet({ visible, versions, selectedCode, loadingCod
             {group.items.map((version) => {
               const selected = version.code === selectedCode;
               const loading = version.code === loadingCode;
-              const note = versionNote(version);
+              const note = versionNote(version, t);
               return (
                 <AppPressable haptic="selection"
                   key={version.code}

@@ -9,7 +9,8 @@
     "comingSoon": "Coming soon",
     "tryAgain": "Please try again.",
     "continue": "Continue",
-    "share": "Share"
+    "share": "Share",
+    "availableSoon": "Available soon"
   },
   "tabs": {
     "home": "Home",
@@ -114,7 +115,41 @@
       "youth_service": "Youth Service",
       "prayer": "Prayer",
       "fallback": "Service"
-    }
+    },
+    "status": {
+      "recording": "Recording",
+      "paused": "Paused",
+      "starting": "Starting"
+    },
+    "caption": "High-fidelity voice capture on",
+    "pause": "Pause recording",
+    "resume": "Resume recording",
+    "helper": "Recording the pastoral message. When you finish, the thematic summaries, speaking points and Bible references will be organized in your journal.",
+    "silent": {
+      "title": "Phone Silent Mode",
+      "body": "Notifications and ringtones muted during the service",
+      "label": "Phone silent mode",
+      "androidFailed": "Turn on Do Not Disturb in settings",
+      "ios": "Turn on a Focus (Do Not Disturb) from Control Center"
+    },
+    "save": "Save and Summarize Message",
+    "discard": "Discard Recording",
+    "micRequired": {
+      "title": "Microphone required",
+      "body": "Allow microphone access in settings to record the message.",
+      "openSettings": "Open settings"
+    },
+    "startFailed": {
+      "title": "Couldn't record",
+      "body": "Check the microphone and try again."
+    },
+    "discardConfirm": {
+      "title": "Discard recording?",
+      "body": "The current recording will be deleted and can't be recovered.",
+      "keep": "Keep recording",
+      "discard": "Discard"
+    },
+    "saveFailed": "Couldn't save the recording"
   },
   "widget": {
     "banner": {
@@ -131,6 +166,245 @@
     "rotation": {
       "today": "today at {{time}}",
       "yesterday": "yesterday at {{time}}"
+    }
+  },
+  "bible": {
+    "topBar": {
+      "version": "Bible version: {{version}}",
+      "book": "Book and chapter: {{book}}",
+      "themes": "Bible themes"
+    },
+    "search": {
+      "placeholder": "Type a book, chapter or verse (e.g. {{example}})",
+      "label": "Search passage",
+      "voice": "Voice search",
+      "voiceSoon": "Voice search coming soon",
+      "notFound": "I couldn't find that passage. Try \"{{first}}\" or \"{{second}}\".",
+      "bookMissing": "This version does not contain that book."
+    },
+    "quick": {
+      "label": "QUICK:"
+    },
+    "testament": {
+      "old": "OLD TESTAMENT",
+      "new": "NEW TESTAMENT"
+    },
+    "nav": {
+      "previousChapter": "Previous chapter",
+      "previousBook": "Previous book"
+    },
+    "verseLabel": "Verse {{number}}. {{text}}",
+    "selection": {
+      "selected": "v. {{verse}} selected",
+      "copy": "Copy verse",
+      "highlight": "Highlight verse",
+      "note": "Add note",
+      "share": "Share verse"
+    },
+    "toast": {
+      "copyNeedsUpdate": "Copying needs the updated app (new build)",
+      "copied": "Verse copied",
+      "copyFailed": "Couldn't copy right now",
+      "highlightRemoved": "Highlight removed",
+      "highlighted": "Verse highlighted",
+      "notesSoon": "Notes coming soon",
+      "versionFailed": "Couldn't load this version"
+    },
+    "versionPicker": {
+      "title": "Bible version",
+      "otOnly": "Old Testament only",
+      "deuterocanon": "Includes deuterocanonical books",
+      "vulgate": "Psalms in Vulgate numbering"
+    },
+    "bookPicker": {
+      "title": "Books",
+      "back": "Back to books",
+      "chapter": "{{book}} chapter {{chapter}}"
+    },
+    "themePicker": {
+      "title": "Bible Themes",
+      "subtitle": "Personalize the look of your reading",
+      "premiumTitle": "Premium Feature",
+      "premiumBody": "Subscribers get unlimited access to all themes and custom atmospheres.",
+      "unlock": "Unlock",
+      "section": "BIBLICAL ATMOSPHERES",
+      "counter": "Available styles: {{count}}",
+      "apply": "Apply Selected Theme",
+      "trial": "✨ Try Premium free for 7 days",
+      "free": "Free",
+      "premium": "Premium"
+    },
+    "themes": {
+      "alabaster": {
+        "name": "Default / Alabaster",
+        "description": "Classic, pure & serene"
+      },
+      "celestialRose": {
+        "name": "Celestial Rose",
+        "description": "Divine love & morning devotion"
+      },
+      "divineGlory": {
+        "name": "Divine Glory",
+        "description": "Noble gold & sacred parchment"
+      },
+      "slate": {
+        "name": "Slate Mode",
+        "description": "Modern focus with deep blue"
+      },
+      "cosmicLight": {
+        "name": "Cosmic Light",
+        "description": "Ethereal night & deep prayer"
+      },
+      "holyGreen": {
+        "name": "Green Sanctuary",
+        "description": "Peace, green pastures & restoration"
+      }
+    },
+    "languages": {
+      "pt": "Portuguese",
+      "en": "English",
+      "es": "Spanish",
+      "fr": "French",
+      "it": "Italian",
+      "de": "German",
+      "nb": "Norwegian",
+      "ru": "Russian",
+      "ar": "Arabic"
+    }
+  },
+  "processing": {
+    "badge": "Digital Sanctuary AI",
+    "title": "Preparing Your Summary",
+    "subtitle": "Our artificial intelligence is structuring the key points, verses and impact quotes.",
+    "chipScriptures": "Detecting scriptures",
+    "chipTopics_one": "{{count}} practical topic",
+    "chipTopics_other": "{{count}} practical topics",
+    "formTitle": "Complete the service details",
+    "optional": "Optional for now",
+    "fieldChurch": "CHURCH / MINISTRY",
+    "fieldPreacher": "PREACHER / MINISTER",
+    "tapToAdd": "Tap to add",
+    "meetingType": "MEETING TYPE",
+    "retry": "Try again",
+    "footnote": "Notes and the summary will be saved automatically to My Journal once the transcription finishes.",
+    "churchTitle": "Church / Ministry",
+    "preacherTitle": "Preacher / Minister",
+    "churchPlaceholder": "Church name",
+    "preacherPlaceholder": "Preacher's name",
+    "uploadFailed": "Couldn't upload the audio. Check your connection and try again.",
+    "failedGeneric": "Couldn't finish. Please try again."
+  },
+  "recordingStatus": {
+    "uploading": "Uploading",
+    "transcribing": "Transcribing",
+    "summarizing": "Transcription Complete",
+    "completed": "AI Summarized",
+    "failed": "Failed"
+  },
+  "recordingProgress": {
+    "uploading": "Uploading audio",
+    "transcribing": "High-fidelity transcription",
+    "summarizing": "Detecting scriptures",
+    "completed": "Summary ready",
+    "failed": "Couldn't finish"
+  },
+  "duration": {
+    "hoursMinutes": "{{hours}}h {{minutes}}min",
+    "minutes": "{{count}} min",
+    "seconds": "{{count}} s"
+  },
+  "diary": {
+    "eyebrow": "SPIRITUAL MEMORIAL",
+    "stats": {
+      "services": "Services",
+      "requests": "Requests",
+      "testimonies": "Testimonies"
+    },
+    "tabs": {
+      "recordings": "My Recordings",
+      "wall": "Prayer & Testimony Wall"
+    },
+    "list": {
+      "emptyTitle": "No recordings yet",
+      "emptyBody": "Tap the microphone to record a message. The summary will appear here.",
+      "untitled": "Untitled recording"
+    },
+    "detail": {
+      "notFound": "Recording not found",
+      "defaultTitle": "Recording",
+      "deleteTitle": "Delete recording?",
+      "deleteBody": "The audio and the summary will be permanently deleted.",
+      "deleteLabel": "Delete recording",
+      "play": "Play audio",
+      "pauseAudio": "Pause audio",
+      "shareAudio": "Share audio",
+      "preparingAudio": "Preparing audio…",
+      "shareSummary": "Share summary",
+      "needsUpdate": "Update the app (new build) to share",
+      "audioFailed": "Couldn't prepare the audio. Check your connection.",
+      "summaryFailed": "Couldn't summarize this recording.",
+      "summaryPending": "Your summary is still being prepared. Come back in a moment.",
+      "practicalTopics": "Practical topics",
+      "centralPoints": "Key points",
+      "scriptures": "Scriptures cited",
+      "impactQuote": "Impact Quote",
+      "impactSubtitle": "To inspire your circles of faith",
+      "customizeArt": "Customize Art & Share"
+    }
+  },
+  "collapsible": {
+    "readMore": "Read more",
+    "showLess": "Show less",
+    "collapse": "Collapse {{title}}",
+    "expand": "Expand {{title}}"
+  },
+  "shareText": {
+    "keyPoints": "Key points",
+    "scriptures": "Scriptures:",
+    "footer": "Summary made with Biblewise"
+  },
+  "shareAudio": {
+    "largeTitle": "Large audio",
+    "largeBody": "This audio is {{size}} MB. Some apps refuse files this large. Share anyway?"
+  },
+  "quote": {
+    "title": "Customize Art",
+    "format": "FORMAT",
+    "background": "BACKGROUND",
+    "font": "FONT",
+    "textSize": "TEXT SIZE",
+    "backgroundLabel": "Background {{name}}",
+    "download": "Download image",
+    "downloadShort": "Download",
+    "updateNeeded": "Update the app (new build) to share the art",
+    "shareUnavailable": "Sharing is not available on this device",
+    "shareFailed": "Couldn't share right now",
+    "shareDialog": "Share quote",
+    "galleryPermission": "Allow gallery access to download the image",
+    "saved": "Image saved to gallery",
+    "saveFailed": "Couldn't save the image",
+    "backgrounds": {
+      "night": "Night",
+      "dawn": "Dawn",
+      "forest": "Forest",
+      "royal": "Royal",
+      "parchment": "Parchment",
+      "rose": "Rose"
+    },
+    "fonts": {
+      "classic": "Classic",
+      "italic": "Italic",
+      "bold": "Bold",
+      "modern": "Modern"
+    },
+    "sizes": {
+      "small": "S",
+      "medium": "M",
+      "large": "L"
+    },
+    "formats": {
+      "card": "Card",
+      "story": "Story"
     }
   }
 }

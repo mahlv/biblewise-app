@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { colors, fonts, radius, spacing } from '../../theme/tokens';
 import type { IconName } from '../OnboardingOption';
 import type { DiaryView } from './DiaryStats';
@@ -10,13 +11,14 @@ interface Props {
   onChange: (view: DiaryView) => void;
 }
 
-const TABS: { id: DiaryView; label: string; icon: IconName }[] = [
-  { id: 'recordings', label: 'Minhas Gravações', icon: 'microphone-outline' },
-  { id: 'wall', label: 'Mural de Oração Testemunho', icon: 'heart-outline' },
+const TABS: { id: DiaryView; labelKey: 'diary.tabs.recordings' | 'diary.tabs.wall'; icon: IconName }[] = [
+  { id: 'recordings', labelKey: 'diary.tabs.recordings', icon: 'microphone-outline' },
+  { id: 'wall', labelKey: 'diary.tabs.wall', icon: 'heart-outline' },
 ];
 
-/** Pill switcher between "Minhas Gravações" and "Mural de Oração Testemunho". */
+/** Pill switcher between "My Recordings" and the prayer & testimony wall. */
 export function DiaryTabSwitcher({ view, onChange }: Props) {
+  const { t } = useTranslation();
   return (
     <View style={styles.pill} accessibilityRole="tablist">
       {TABS.map((tab) => {
@@ -31,7 +33,7 @@ export function DiaryTabSwitcher({ view, onChange }: Props) {
           >
             <MaterialCommunityIcons name={tab.icon} size={18} color={active ? colors.onPrimary : colors.outline} />
             <Text style={[styles.label, active && styles.labelActive]} numberOfLines={2}>
-              {tab.label}
+              {t(tab.labelKey)}
             </Text>
           </AppPressable>
         );

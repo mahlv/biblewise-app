@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { LayoutAnimation, Platform, StyleSheet, Text, UIManager, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { colors, fonts, radius, shadow, spacing } from '../theme/tokens';
 import { AppPressable } from './ui/AppPressable';
 
@@ -13,7 +14,7 @@ interface Props {
   title: string;
   /** Number of items inside, shown as a small badge. */
   count?: number;
-  /** One-line preview shown while collapsed, followed by "Ler mais". */
+  /** One-line preview shown while collapsed, followed by "Read more". */
   teaser?: string;
   defaultOpen?: boolean;
   children: ReactNode;
@@ -21,6 +22,7 @@ interface Props {
 
 /** A card that shows a title, count and teaser, and opens to reveal its content. */
 export function CollapsibleSection({ title, count, teaser, defaultOpen = false, children }: Props) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(defaultOpen);
 
   const toggle = () => {
@@ -33,7 +35,7 @@ export function CollapsibleSection({ title, count, teaser, defaultOpen = false, 
       <AppPressable haptic="selection"
         onPress={toggle}
         accessibilityRole="button"
-        accessibilityLabel={`${open ? 'Recolher' : 'Expandir'} ${title}`}
+        accessibilityLabel={open ? t('collapsible.collapse', { title }) : t('collapsible.expand', { title })}
         accessibilityState={{ expanded: open }}
         style={styles.header}
       >
@@ -48,7 +50,7 @@ export function CollapsibleSection({ title, count, teaser, defaultOpen = false, 
           </View>
           {!open && teaser ? (
             <Text style={styles.teaser} numberOfLines={1}>
-              {teaser} <Text style={styles.readMore}>Ler mais</Text>
+              {teaser} <Text style={styles.readMore}>{t('collapsible.readMore')}</Text>
             </Text>
           ) : null}
         </View>
@@ -58,8 +60,8 @@ export function CollapsibleSection({ title, count, teaser, defaultOpen = false, 
       {open ? (
         <View style={styles.content}>
           {children}
-          <AppPressable haptic="selection" onPress={toggle} accessibilityRole="button" accessibilityLabel={`Recolher ${title}`} hitSlop={8}>
-            <Text style={styles.readLess}>Mostrar menos</Text>
+          <AppPressable haptic="selection" onPress={toggle} accessibilityRole="button" accessibilityLabel={t('collapsible.collapse', { title })} hitSlop={8}>
+            <Text style={styles.readLess}>{t('collapsible.showLess')}</Text>
           </AppPressable>
         </View>
       ) : null}

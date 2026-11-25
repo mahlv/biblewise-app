@@ -9,7 +9,8 @@
     "comingSoon": "Kommer snart",
     "tryAgain": "Prøv igjen.",
     "continue": "Fortsett",
-    "share": "Del"
+    "share": "Del",
+    "availableSoon": "Tilgjengelig snart"
   },
   "tabs": {
     "home": "Hjem",
@@ -114,7 +115,41 @@
       "youth_service": "Ungdomsgudstjeneste",
       "prayer": "Bønn",
       "fallback": "Gudstjeneste"
-    }
+    },
+    "status": {
+      "recording": "Tar opp",
+      "paused": "På pause",
+      "starting": "Starter"
+    },
+    "caption": "Høykvalitets stemmeopptak er aktivt",
+    "pause": "Sett opptaket på pause",
+    "resume": "Fortsett opptaket",
+    "helper": "Budskapet tas opp. Når du er ferdig, blir de tematiske sammendragene, talepunktene og bibelreferansene samlet i dagboken din.",
+    "silent": {
+      "title": "Stille modus på telefonen",
+      "body": "Varsler og ringelyder dempes under gudstjenesten",
+      "label": "Stille modus på telefonen",
+      "androidFailed": "Slå på Ikke forstyrr i innstillingene",
+      "ios": "Slå på en fokusmodus (Ikke forstyrr) fra Kontrollsenter"
+    },
+    "save": "Lagre og oppsummer budskapet",
+    "discard": "Forkast opptaket",
+    "micRequired": {
+      "title": "Mikrofon kreves",
+      "body": "Gi tilgang til mikrofonen i innstillingene for å ta opp budskapet.",
+      "openSettings": "Åpne innstillinger"
+    },
+    "startFailed": {
+      "title": "Kunne ikke ta opp",
+      "body": "Sjekk mikrofonen og prøv igjen."
+    },
+    "discardConfirm": {
+      "title": "Forkaste opptaket?",
+      "body": "Det gjeldende opptaket slettes og kan ikke gjenopprettes.",
+      "keep": "Fortsett å ta opp",
+      "discard": "Forkast"
+    },
+    "saveFailed": "Kunne ikke lagre opptaket"
   },
   "widget": {
     "banner": {
@@ -131,6 +166,245 @@
     "rotation": {
       "today": "i dag kl. {{time}}",
       "yesterday": "i går kl. {{time}}"
+    }
+  },
+  "bible": {
+    "topBar": {
+      "version": "Bibeloversettelse: {{version}}",
+      "book": "Bok og kapittel: {{book}}",
+      "themes": "Bibeltemaer"
+    },
+    "search": {
+      "placeholder": "Skriv bok, kapittel eller vers (f.eks. {{example}})",
+      "label": "Søk etter passasje",
+      "voice": "Talesøk",
+      "voiceSoon": "Talesøk kommer snart",
+      "notFound": "Fant ikke denne passasjen. Prøv \"{{first}}\" eller \"{{second}}\".",
+      "bookMissing": "Denne oversettelsen inneholder ikke den boken."
+    },
+    "quick": {
+      "label": "RASKT:"
+    },
+    "testament": {
+      "old": "DET GAMLE TESTAMENTE",
+      "new": "DET NYE TESTAMENTE"
+    },
+    "nav": {
+      "previousChapter": "Forrige kapittel",
+      "previousBook": "Forrige bok"
+    },
+    "verseLabel": "Vers {{number}}. {{text}}",
+    "selection": {
+      "selected": "v. {{verse}} valgt",
+      "copy": "Kopier vers",
+      "highlight": "Marker vers",
+      "note": "Legg til notat",
+      "share": "Del vers"
+    },
+    "toast": {
+      "copyNeedsUpdate": "Kopiering krever oppdatert app (ny build)",
+      "copied": "Vers kopiert",
+      "copyFailed": "Kunne ikke kopiere akkurat nå",
+      "highlightRemoved": "Markering fjernet",
+      "highlighted": "Vers markert",
+      "notesSoon": "Notater kommer snart",
+      "versionFailed": "Kunne ikke laste denne oversettelsen"
+    },
+    "versionPicker": {
+      "title": "Bibeloversettelse",
+      "otOnly": "Bare Det gamle testamente",
+      "deuterocanon": "Inkluderer deuterokanoniske bøker",
+      "vulgate": "Salmer i Vulgatas nummerering"
+    },
+    "bookPicker": {
+      "title": "Bøker",
+      "back": "Tilbake til bøkene",
+      "chapter": "{{book}} kapittel {{chapter}}"
+    },
+    "themePicker": {
+      "title": "Bibeltemaer",
+      "subtitle": "Tilpass utseendet på lesingen din",
+      "premiumTitle": "Premium-funksjon",
+      "premiumBody": "Abonnenter får ubegrenset tilgang til alle temaer og egendefinerte stemninger.",
+      "unlock": "Lås opp",
+      "section": "BIBLISKE STEMNINGER",
+      "counter": "Tilgjengelige stiler: {{count}}",
+      "apply": "Bruk valgt tema",
+      "trial": "✨ Prøv Premium gratis i 7 dager",
+      "free": "Gratis",
+      "premium": "Premium"
+    },
+    "themes": {
+      "alabaster": {
+        "name": "Standard / Alabast",
+        "description": "Klassisk, ren og rolig"
+      },
+      "celestialRose": {
+        "name": "Himmelsk rose",
+        "description": "Guddommelig kjærlighet og morgenandakt"
+      },
+      "divineGlory": {
+        "name": "Guddommelig herlighet",
+        "description": "Edelt gull og hellig pergament"
+      },
+      "slate": {
+        "name": "Slate-modus",
+        "description": "Moderne fokus med dyp blå"
+      },
+      "cosmicLight": {
+        "name": "Kosmisk lys",
+        "description": "Eterisk natt og dyp bønn"
+      },
+      "holyGreen": {
+        "name": "Grønn helligdom",
+        "description": "Fred, grønne enger og gjenopprettelse"
+      }
+    },
+    "languages": {
+      "pt": "Portugisisk",
+      "en": "Engelsk",
+      "es": "Spansk",
+      "fr": "Fransk",
+      "it": "Italiensk",
+      "de": "Tysk",
+      "nb": "Norsk",
+      "ru": "Russisk",
+      "ar": "Arabisk"
+    }
+  },
+  "processing": {
+    "badge": "Digitalt helligdom KI",
+    "title": "Forbereder sammendraget ditt",
+    "subtitle": "Vår kunstige intelligens strukturerer hovedpunktene, versene og slagkraftige sitater.",
+    "chipScriptures": "Finner skriftsteder",
+    "chipTopics_one": "{{count}} praktisk tema",
+    "chipTopics_other": "{{count}} praktiske temaer",
+    "formTitle": "Fyll ut opplysninger om gudstjenesten",
+    "optional": "Valgfritt nå",
+    "fieldChurch": "MENIGHET / TJENESTE",
+    "fieldPreacher": "TALER / PREDIKANT",
+    "tapToAdd": "Trykk for å fylle inn",
+    "meetingType": "MØTETYPE",
+    "retry": "Prøv igjen",
+    "footnote": "Notatene og sammendraget lagres automatisk i Min dagbok når transkripsjonen er ferdig.",
+    "churchTitle": "Menighet / Tjeneste",
+    "preacherTitle": "Taler / Predikant",
+    "churchPlaceholder": "Navn på menigheten",
+    "preacherPlaceholder": "Navn på taleren",
+    "uploadFailed": "Kunne ikke laste opp lyden. Sjekk tilkoblingen og prøv igjen.",
+    "failedGeneric": "Kunne ikke fullføre. Prøv igjen."
+  },
+  "recordingStatus": {
+    "uploading": "Laster opp",
+    "transcribing": "Transkriberer",
+    "summarizing": "Transkripsjon fullført",
+    "completed": "Oppsummert av KI",
+    "failed": "Mislyktes"
+  },
+  "recordingProgress": {
+    "uploading": "Laster opp lyd",
+    "transcribing": "Transkribering i høy kvalitet",
+    "summarizing": "Finner skriftsteder",
+    "completed": "Sammendrag klart",
+    "failed": "Kunne ikke fullføre"
+  },
+  "duration": {
+    "hoursMinutes": "{{hours}} t {{minutes}} min",
+    "minutes": "{{count}} min",
+    "seconds": "{{count}} s"
+  },
+  "diary": {
+    "eyebrow": "ÅNDELIG MINNEBOK",
+    "stats": {
+      "services": "Gudstjenester",
+      "requests": "Forbønner",
+      "testimonies": "Vitnesbyrd"
+    },
+    "tabs": {
+      "recordings": "Mine opptak",
+      "wall": "Bønne- og vitnesbyrdvegg"
+    },
+    "list": {
+      "emptyTitle": "Ingen opptak ennå",
+      "emptyBody": "Trykk på mikrofonen for å ta opp et budskap. Sammendraget vises her.",
+      "untitled": "Opptak uten tittel"
+    },
+    "detail": {
+      "notFound": "Fant ikke opptaket",
+      "defaultTitle": "Opptak",
+      "deleteTitle": "Slette opptaket?",
+      "deleteBody": "Lyden og sammendraget slettes for godt.",
+      "deleteLabel": "Slett opptak",
+      "play": "Spill av lyd",
+      "pauseAudio": "Sett lyden på pause",
+      "shareAudio": "Del lyd",
+      "preparingAudio": "Forbereder lyd …",
+      "shareSummary": "Del sammendrag",
+      "needsUpdate": "Oppdater appen (ny build) for å dele",
+      "audioFailed": "Kunne ikke forberede lyden. Sjekk tilkoblingen.",
+      "summaryFailed": "Kunne ikke oppsummere dette opptaket.",
+      "summaryPending": "Sammendraget ditt blir fortsatt laget. Kom tilbake om litt.",
+      "practicalTopics": "Praktiske temaer",
+      "centralPoints": "Hovedpunkter",
+      "scriptures": "Siterte skriftsteder",
+      "impactQuote": "Slagkraftig sitat",
+      "impactSubtitle": "For å inspirere troskretsene dine",
+      "customizeArt": "Tilpass bilde og del"
+    }
+  },
+  "collapsible": {
+    "readMore": "Les mer",
+    "showLess": "Vis mindre",
+    "collapse": "Skjul {{title}}",
+    "expand": "Utvid {{title}}"
+  },
+  "shareText": {
+    "keyPoints": "Hovedpunkter",
+    "scriptures": "Skriftsteder:",
+    "footer": "Sammendrag laget med Biblewise"
+  },
+  "shareAudio": {
+    "largeTitle": "Stor lydfil",
+    "largeBody": "Denne lydfilen er {{size}} MB. Noen apper avviser filer av denne størrelsen. Dele likevel?"
+  },
+  "quote": {
+    "title": "Tilpass bilde",
+    "format": "FORMAT",
+    "background": "BAKGRUNN",
+    "font": "SKRIFT",
+    "textSize": "TEKSTSTØRRELSE",
+    "backgroundLabel": "Bakgrunn {{name}}",
+    "download": "Last ned bilde",
+    "downloadShort": "Last ned",
+    "updateNeeded": "Oppdater appen (ny build) for å dele bildet",
+    "shareUnavailable": "Deling er ikke tilgjengelig på denne enheten",
+    "shareFailed": "Kunne ikke dele akkurat nå",
+    "shareDialog": "Del sitatet",
+    "galleryPermission": "Gi tilgang til galleriet for å laste ned bildet",
+    "saved": "Bildet er lagret i galleriet",
+    "saveFailed": "Kunne ikke lagre bildet",
+    "backgrounds": {
+      "night": "Natt",
+      "dawn": "Daggry",
+      "forest": "Skog",
+      "royal": "Kongelig",
+      "parchment": "Pergament",
+      "rose": "Rosa"
+    },
+    "fonts": {
+      "classic": "Klassisk",
+      "italic": "Kursiv",
+      "bold": "Fet",
+      "modern": "Moderne"
+    },
+    "sizes": {
+      "small": "S",
+      "medium": "M",
+      "large": "L"
+    },
+    "formats": {
+      "card": "Kort",
+      "story": "Story"
     }
   }
 }

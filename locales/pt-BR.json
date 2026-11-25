@@ -9,7 +9,8 @@
     "comingSoon": "Em breve",
     "tryAgain": "Tente novamente.",
     "continue": "Continuar",
-    "share": "Compartilhar"
+    "share": "Compartilhar",
+    "availableSoon": "Disponível em breve"
   },
   "tabs": {
     "home": "Início",
@@ -114,7 +115,41 @@
       "youth_service": "Culto de Jovens",
       "prayer": "Oração",
       "fallback": "Culto"
-    }
+    },
+    "status": {
+      "recording": "Gravando",
+      "paused": "Pausado",
+      "starting": "Iniciando"
+    },
+    "caption": "Captação de voz em alta fidelidade ativa",
+    "pause": "Pausar gravação",
+    "resume": "Retomar gravação",
+    "helper": "Gravando a mensagem pastoral. Ao concluir, os resumos temáticos, tópicos oratórios e referências bíblicas serão organizados em seu diário.",
+    "silent": {
+      "title": "Modo Silencioso do Celular",
+      "body": "Notificações e toques mutados durante o culto",
+      "label": "Modo silencioso do celular",
+      "androidFailed": "Ative o modo Não Perturbe nas configurações",
+      "ios": "Ative um Foco (Não Perturbe) pela Central de Controle"
+    },
+    "save": "Salvar e Resumir Palavra",
+    "discard": "Descartar Gravação",
+    "micRequired": {
+      "title": "Microfone necessário",
+      "body": "Permita o acesso ao microfone nas configurações para gravar a mensagem.",
+      "openSettings": "Abrir configurações"
+    },
+    "startFailed": {
+      "title": "Não foi possível gravar",
+      "body": "Verifique o microfone e tente novamente."
+    },
+    "discardConfirm": {
+      "title": "Descartar gravação?",
+      "body": "A gravação atual será apagada e não poderá ser recuperada.",
+      "keep": "Continuar gravando",
+      "discard": "Descartar"
+    },
+    "saveFailed": "Não foi possível salvar a gravação"
   },
   "widget": {
     "banner": {
@@ -131,6 +166,245 @@
     "rotation": {
       "today": "hoje às {{time}}",
       "yesterday": "ontem às {{time}}"
+    }
+  },
+  "bible": {
+    "topBar": {
+      "version": "Versão da Bíblia: {{version}}",
+      "book": "Livro e capítulo: {{book}}",
+      "themes": "Temas da Bíblia"
+    },
+    "search": {
+      "placeholder": "Digite livro, capítulo ou versículo (ex: {{example}})",
+      "label": "Buscar passagem",
+      "voice": "Busca por voz",
+      "voiceSoon": "Busca por voz em breve",
+      "notFound": "Não encontrei essa passagem. Tente \"{{first}}\" ou \"{{second}}\".",
+      "bookMissing": "Esta versão não contém esse livro."
+    },
+    "quick": {
+      "label": "RÁPIDO:"
+    },
+    "testament": {
+      "old": "ANTIGO TESTAMENTO",
+      "new": "NOVO TESTAMENTO"
+    },
+    "nav": {
+      "previousChapter": "Capítulo anterior",
+      "previousBook": "Livro anterior"
+    },
+    "verseLabel": "Versículo {{number}}. {{text}}",
+    "selection": {
+      "selected": "v. {{verse}} selecionado",
+      "copy": "Copiar versículo",
+      "highlight": "Destacar versículo",
+      "note": "Adicionar nota",
+      "share": "Compartilhar versículo"
+    },
+    "toast": {
+      "copyNeedsUpdate": "Copiar exige o app atualizado (nova build)",
+      "copied": "Versículo copiado",
+      "copyFailed": "Não foi possível copiar agora",
+      "highlightRemoved": "Destaque removido",
+      "highlighted": "Versículo destacado",
+      "notesSoon": "Notas em breve",
+      "versionFailed": "Não foi possível carregar esta versão"
+    },
+    "versionPicker": {
+      "title": "Versão da Bíblia",
+      "otOnly": "Somente Antigo Testamento",
+      "deuterocanon": "Inclui livros deuterocanônicos",
+      "vulgate": "Salmos na numeração da Vulgata"
+    },
+    "bookPicker": {
+      "title": "Livros",
+      "back": "Voltar para os livros",
+      "chapter": "{{book}} capítulo {{chapter}}"
+    },
+    "themePicker": {
+      "title": "Temas da Bíblia",
+      "subtitle": "Personalize a atmosfera visual da sua leitura",
+      "premiumTitle": "Recurso Premium",
+      "premiumBody": "Assinantes têm acesso ilimitado a todos os temas e atmosferas customizadas.",
+      "unlock": "Desbloquear",
+      "section": "ATMOSFERAS BÍBLICAS",
+      "counter": "Estilos disponíveis: {{count}}",
+      "apply": "Aplicar Tema Selecionado",
+      "trial": "✨ Experimentar Premium por 7 dias grátis",
+      "free": "Livre",
+      "premium": "Premium"
+    },
+    "themes": {
+      "alabaster": {
+        "name": "Padrão / Alabastro",
+        "description": "Clássico, puro & sereno"
+      },
+      "celestialRose": {
+        "name": "Rosa Celestial",
+        "description": "Amor divino & devoção matinal"
+      },
+      "divineGlory": {
+        "name": "Glória Divina",
+        "description": "Ouro nobre & pergaminho sagrado"
+      },
+      "slate": {
+        "name": "Modo Slate",
+        "description": "Foco moderno com azul profundo"
+      },
+      "cosmicLight": {
+        "name": "Luz Cósmica",
+        "description": "Noite etérea & oração profunda"
+      },
+      "holyGreen": {
+        "name": "Santuário Verde",
+        "description": "Paz, pastos verdes e restauração"
+      }
+    },
+    "languages": {
+      "pt": "Português",
+      "en": "Inglês",
+      "es": "Espanhol",
+      "fr": "Francês",
+      "it": "Italiano",
+      "de": "Alemão",
+      "nb": "Norueguês",
+      "ru": "Russo",
+      "ar": "Árabe"
+    }
+  },
+  "processing": {
+    "badge": "Santuário Digital AI",
+    "title": "Preparando seu Resumo",
+    "subtitle": "Nossa inteligência artificial está estruturando os pontos centrais, versículos e frases de impacto.",
+    "chipScriptures": "Detectando escrituras",
+    "chipTopics_one": "{{count}} tópico prático",
+    "chipTopics_other": "{{count}} tópicos práticos",
+    "formTitle": "Complete os dados do culto",
+    "optional": "Opcional agora",
+    "fieldChurch": "IGREJA / MINISTÉRIO",
+    "fieldPreacher": "PREGADOR(A) / MINISTRO",
+    "tapToAdd": "Toque para informar",
+    "meetingType": "TIPO DE REUNIÃO",
+    "retry": "Tentar novamente",
+    "footnote": "As anotações e o resumo serão salvos automaticamente em Meu Diário assim que a transcrição for concluída.",
+    "churchTitle": "Igreja / Ministério",
+    "preacherTitle": "Pregador(a) / Ministro",
+    "churchPlaceholder": "Nome da igreja",
+    "preacherPlaceholder": "Nome do pregador",
+    "uploadFailed": "Não foi possível enviar o áudio. Verifique sua conexão e tente novamente.",
+    "failedGeneric": "Não foi possível concluir. Tente novamente."
+  },
+  "recordingStatus": {
+    "uploading": "Enviando",
+    "transcribing": "Transcrevendo",
+    "summarizing": "Transcrição Concluída",
+    "completed": "IA Resumido",
+    "failed": "Falhou"
+  },
+  "recordingProgress": {
+    "uploading": "Enviando áudio",
+    "transcribing": "Transcrevendo em alta fidelidade",
+    "summarizing": "Detectando escrituras",
+    "completed": "Resumo pronto",
+    "failed": "Não foi possível concluir"
+  },
+  "duration": {
+    "hoursMinutes": "{{hours}}h {{minutes}}min",
+    "minutes": "{{count}} min",
+    "seconds": "{{count}} s"
+  },
+  "diary": {
+    "eyebrow": "MEMORIAL ESPIRITUAL",
+    "stats": {
+      "services": "Cultos",
+      "requests": "Pedidos",
+      "testimonies": "Testemunhos"
+    },
+    "tabs": {
+      "recordings": "Minhas Gravações",
+      "wall": "Mural de Oração Testemunho"
+    },
+    "list": {
+      "emptyTitle": "Nenhuma gravação ainda",
+      "emptyBody": "Toque no microfone para gravar uma mensagem. O resumo aparecerá aqui.",
+      "untitled": "Gravação sem título"
+    },
+    "detail": {
+      "notFound": "Gravação não encontrada",
+      "defaultTitle": "Gravação",
+      "deleteTitle": "Excluir gravação?",
+      "deleteBody": "O áudio e o resumo serão apagados definitivamente.",
+      "deleteLabel": "Excluir gravação",
+      "play": "Ouvir áudio",
+      "pauseAudio": "Pausar áudio",
+      "shareAudio": "Compartilhar áudio",
+      "preparingAudio": "Preparando áudio…",
+      "shareSummary": "Compartilhar resumo",
+      "needsUpdate": "Atualize o app (nova build) para compartilhar",
+      "audioFailed": "Não foi possível preparar o áudio. Verifique a conexão.",
+      "summaryFailed": "Não foi possível resumir esta gravação.",
+      "summaryPending": "Seu resumo ainda está sendo preparado. Volte em instantes.",
+      "practicalTopics": "Tópicos práticos",
+      "centralPoints": "Pontos centrais",
+      "scriptures": "Escrituras citadas",
+      "impactQuote": "Frase de Impacto",
+      "impactSubtitle": "Para inspirar seus círculos de fé",
+      "customizeArt": "Customizar Arte & Compartilhar"
+    }
+  },
+  "collapsible": {
+    "readMore": "Ler mais",
+    "showLess": "Mostrar menos",
+    "collapse": "Recolher {{title}}",
+    "expand": "Expandir {{title}}"
+  },
+  "shareText": {
+    "keyPoints": "Pontos centrais",
+    "scriptures": "Escrituras:",
+    "footer": "Resumo feito com o Biblewise"
+  },
+  "shareAudio": {
+    "largeTitle": "Áudio grande",
+    "largeBody": "Este áudio tem {{size}} MB. Alguns aplicativos recusam arquivos desse tamanho. Compartilhar mesmo assim?"
+  },
+  "quote": {
+    "title": "Customizar Arte",
+    "format": "FORMATO",
+    "background": "FUNDO",
+    "font": "FONTE",
+    "textSize": "TAMANHO DO TEXTO",
+    "backgroundLabel": "Fundo {{name}}",
+    "download": "Baixar imagem",
+    "downloadShort": "Baixar",
+    "updateNeeded": "Atualize o app (nova build) para compartilhar a arte",
+    "shareUnavailable": "Compartilhamento indisponível neste aparelho",
+    "shareFailed": "Não foi possível compartilhar agora",
+    "shareDialog": "Compartilhar frase",
+    "galleryPermission": "Permita o acesso à galeria para baixar a imagem",
+    "saved": "Imagem salva na galeria",
+    "saveFailed": "Não foi possível salvar a imagem",
+    "backgrounds": {
+      "night": "Noite",
+      "dawn": "Amanhecer",
+      "forest": "Floresta",
+      "royal": "Real",
+      "parchment": "Pergaminho",
+      "rose": "Rosa"
+    },
+    "fonts": {
+      "classic": "Clássica",
+      "italic": "Itálica",
+      "bold": "Destaque",
+      "modern": "Moderna"
+    },
+    "sizes": {
+      "small": "P",
+      "medium": "M",
+      "large": "G"
+    },
+    "formats": {
+      "card": "Cartão",
+      "story": "Story"
     }
   }
 }

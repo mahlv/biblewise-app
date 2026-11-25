@@ -47,10 +47,12 @@ export interface BibleVersion extends BibleVersionMeta {
   books: Book[];
 }
 
+/** Key under `bible.themes.*` in the translation files (name + description). */
+export type BibleThemeKey = 'alabaster' | 'celestialRose' | 'divineGlory' | 'slate' | 'cosmicLight' | 'holyGreen';
+
 export interface BibleTheme {
   id: string;
-  name: string;
-  description: string;
+  i18nKey: BibleThemeKey;
   isPremium: boolean;
   /** Three palette dots shown in the picker. */
   colors: [string, string, string];

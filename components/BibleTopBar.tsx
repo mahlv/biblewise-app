@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { colors, fonts, radius, spacing } from '../theme/tokens';
 import { AppPressable } from './ui/AppPressable';
 
@@ -44,15 +45,16 @@ function RoundButton({ icon, onPress, label, badge }: { icon: 'bell-outline' | '
 
 /** Fixed top bar: version + book selectors on the left, notifications + theme on the right. */
 export function BibleTopBar({ versionLabel, bookLabel, onPressVersion, onPressBook, onPressNotifications, onPressTheme }: Props) {
+  const { t } = useTranslation();
   return (
     <View style={styles.row}>
       <View style={styles.left}>
-        <Pill label={versionLabel} onPress={onPressVersion} accessibilityLabel={`Versão da Bíblia: ${versionLabel}`} />
-        <Pill label={bookLabel} onPress={onPressBook} accessibilityLabel={`Livro e capítulo: ${bookLabel}`} />
+        <Pill label={versionLabel} onPress={onPressVersion} accessibilityLabel={t('bible.topBar.version', { version: versionLabel })} />
+        <Pill label={bookLabel} onPress={onPressBook} accessibilityLabel={t('bible.topBar.book', { book: bookLabel })} />
       </View>
       <View style={styles.right}>
-        <RoundButton icon="bell-outline" label="Notificações" onPress={onPressNotifications} badge />
-        <RoundButton icon="format-size" label="Temas da Bíblia" onPress={onPressTheme} />
+        <RoundButton icon="bell-outline" label={t('home.notifications')} onPress={onPressNotifications} badge />
+        <RoundButton icon="format-size" label={t('bible.topBar.themes')} onPress={onPressTheme} />
       </View>
     </View>
   );

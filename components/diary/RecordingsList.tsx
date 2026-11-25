@@ -3,9 +3,12 @@ import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-nativ
 import { router } from 'expo-router';
 import { useQuery } from 'convex/react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../convex/_generated/api';
 import { useOnboarding } from '../../hooks/useOnboarding';
-import { formatDuration, statusLabel, type RecordingStatus } from '../../lib/recordingSummary';
+import { localeTag } from '../../lib/i18n';
+import { formatDuration, statusLabel } from '../../lib/recordingLabels';
+import type { RecordingStatus } from '../../lib/recordingSummary';
 import { colors, fonts, radius, shadow, spacing } from '../../theme/tokens';
 import { AppPressable } from '../ui/AppPressable';
 
@@ -21,7 +24,7 @@ const BADGE_COLORS: Record<RecordingStatus, { background: string; text: string }
 };
 
 function formatDate(timestamp: number): string {
-  return new Date(timestamp).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+  return new Date(timestamp).toLocaleDateString(localeTag(), { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
 interface Props {
@@ -31,6 +34,7 @@ interface Props {
 
 /** "Minhas Gravações": the user's recorded messages with their AI summaries. */
 export function RecordingsList({ header }: Props) {
+  const { t } = useTranslation();
   const { anonymousId } = useOnboarding();
   const recordings = useQuery(api.recordings.listUserRecordings, anonymousId ? { anonymousId } : 'skip');
 
@@ -48,8 +52,8 @@ export function RecordingsList({ header }: Props) {
         ) : (
           <View style={styles.empty}>
             <MaterialCommunityIcons name="microphone-outline" size={36} color={colors.outline} />
-            <Text style={styles.emptyTitle}>Nenhuma gravação ainda</Text>
-            <Text style={styles.emptyBody}>Toque no microfone para gravar uma mensagem. O resumo aparecerá aqui.</Text>
+            <Text style={styles.emptyTitle}>{t('diary.list.emptyTitle')}</Text>
+            <Text style={styles.emptyBody}>{t('diary.list.emptyBody')}</Text>
           </View>
         )
       }
@@ -59,7 +63,7 @@ export function RecordingsList({ header }: Props) {
           <AppPressable
             onPress={() => router.push({ pathname: '/diary/[id]', params: { id: item._id } })}
             accessibilityRole="button"
-            accessibilityLabel={item.title ?? 'Gravação sem título'}
+            accessibilityLabel={item.title ?? t('diary.list.untitled')}
             style={({ pressed }) => [styles.card, pressed && { opacity: 0.9 }]}
           >
             <View style={styles.cardTop}>
@@ -69,10 +73,10 @@ export function RecordingsList({ header }: Props) {
               <Text style={styles.date}>{formatDate(item.createdAt)}</Text>
             </View>
             <Text style={styles.cardTitle} numberOfLines={2}>
-              {item.title ?? 'Gravação em processamento'}
+              {item.title ?? t('home.recent.processing')}
             </Text>
             <Text style={styles.cardMeta} numberOfLines={1}>
-              {[item.preacher, item.church].filter(Boolean).join(' · ') || 'Pregador não informado'}
+              {[item.preacher, item.church].filter(Boolean).join(' · ') || t('home.recent.unknownPreacher')}
             </Text>
             <View style={styles.cardBottom}>
               <View style={styles.mini}>

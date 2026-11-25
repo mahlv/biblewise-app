@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { fonts, radius } from '../theme/tokens';
 import type { BibleTheme, Verse } from '../types/bible';
 import { AppPressable } from './ui/AppPressable';
@@ -19,6 +20,7 @@ interface Props {
 
 /** Verses with a small superscript number. Tapping toggles selection. */
 export function VerseList({ verses, theme, selectedVerse, highlightedVerses = [], rtl = false, onToggleVerse, onLongPressVerse, onVerseLayout }: Props) {
+  const { t } = useTranslation();
   return (
     <View style={styles.list}>
       {verses.map((verse) => {
@@ -32,7 +34,7 @@ export function VerseList({ verses, theme, selectedVerse, highlightedVerses = []
             onLayout={(event) => onVerseLayout?.(verse.number, event.nativeEvent.layout.y)}
             accessibilityRole="button"
             accessibilityState={{ selected }}
-            accessibilityLabel={`Versículo ${verse.number}. ${verse.text}`}
+            accessibilityLabel={t('bible.verseLabel', { number: verse.number, text: verse.text })}
             style={[styles.row, highlighted && styles.highlighted, selected && { backgroundColor: theme.verseHighlight, borderLeftColor: theme.accent }]}
           >
             <Text style={[styles.text, { color: theme.text }, rtl && styles.rtl, selected && styles.selectedText]}>

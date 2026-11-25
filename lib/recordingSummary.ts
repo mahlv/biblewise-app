@@ -13,12 +13,8 @@ export interface RecordingSummary {
 
 export type RecordingStatus = 'uploading' | 'transcribing' | 'summarizing' | 'completed' | 'failed';
 
-export const MEETING_TYPE_OPTIONS = [
-  { id: 'celebration', label: 'Celebração' },
-  { id: 'bible_school', label: 'Escola Bíblica' },
-  { id: 'youth_service', label: 'Culto de Jovens' },
-  { id: 'prayer', label: 'Oração' },
-] as const;
+/** Meeting types; their names live in the translation files (`recording.meetingTypes.<id>`). */
+export const MEETING_TYPE_OPTIONS = [{ id: 'celebration' }, { id: 'bible_school' }, { id: 'youth_service' }, { id: 'prayer' }] as const;
 
 export type MeetingType = (typeof MEETING_TYPE_OPTIONS)[number]['id'];
 
@@ -89,52 +85,11 @@ export function parseSummary(raw: string): RecordingSummary | null {
   return { title, theme, centralPoints, scripturesCited, practicalTopics, impactQuote };
 }
 
-export function statusLabel(status: RecordingStatus): string {
-  switch (status) {
-    case 'uploading':
-      return 'Enviando';
-    case 'transcribing':
-      return 'Transcrevendo';
-    case 'summarizing':
-      return 'Transcrição Concluída';
-    case 'completed':
-      return 'IA Resumido';
-    case 'failed':
-      return 'Falhou';
-  }
-}
-
-/** Label shown next to the progress bar in the processing sheet. */
-export function progressLabel(status: RecordingStatus): string {
-  switch (status) {
-    case 'uploading':
-      return 'Enviando áudio';
-    case 'transcribing':
-      return 'Transcrevendo em alta fidelidade';
-    case 'summarizing':
-      return 'Detectando escrituras';
-    case 'completed':
-      return 'Resumo pronto';
-    case 'failed':
-      return 'Não foi possível concluir';
-  }
-}
-
 /** Seconds -> "HH:MM:SS". */
 export function formatClock(totalSeconds: number): string {
   const safe = Math.max(0, Math.floor(totalSeconds));
   const pad = (value: number) => String(value).padStart(2, '0');
   return `${pad(Math.floor(safe / 3600))}:${pad(Math.floor((safe % 3600) / 60))}:${pad(safe % 60)}`;
-}
-
-/** Seconds -> "1h 05min" / "12 min" / "45 s" for list cards. */
-export function formatDuration(totalSeconds: number): string {
-  const safe = Math.max(0, Math.round(totalSeconds));
-  const hours = Math.floor(safe / 3600);
-  const minutes = Math.floor((safe % 3600) / 60);
-  if (hours > 0) return `${hours}h ${String(minutes).padStart(2, '0')}min`;
-  if (minutes > 0) return `${minutes} min`;
-  return `${safe} s`;
 }
 
 /** Stage milestones (percent) that the sheet eases toward while a stage runs. */

@@ -124,5 +124,4 @@ export async function loadLanguagePreference(): Promise<LanguageCode> {
   return currentLanguage();
 }
 
-export { i18n };
 export default i18n;

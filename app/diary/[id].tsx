@@ -1,5 +1,6 @@
 import { ActivityIndicator, Alert, ScrollView, Share, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { useMutation, useQuery } from 'convex/react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -18,7 +19,8 @@ import { useOnboarding } from '../../hooks/useOnboarding';
 import { useToast } from '../../hooks/useToast';
 import { haptics } from '../../lib/haptics';
 import { buildRecordingShareText } from '../../lib/recordingShareText';
-import { MEETING_TYPE_OPTIONS, buildTeaser, formatClock, statusLabel } from '../../lib/recordingSummary';
+import { meetingTypeLabel, statusLabel } from '../../lib/recordingLabels';
+import { buildTeaser, formatClock } from '../../lib/recordingSummary';
 import { shareRecordingAudio } from '../../lib/shareRecording';
 import { colors, fonts, radius, shadow, spacing } from '../../theme/tokens';
 import { AppPressable } from '../../components/ui/AppPressable';
@@ -28,6 +30,7 @@ export default function RecordingDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { anonymousId } = useOnboarding();
   const toast = useToast();
+  const { t } = useTranslation();
   const recordingId = id as Id<'recordings'>;
   const recording = useQuery(api.recordings.getRecording, anonymousId ? { anonymousId, recordingId } : 'skip');
   const deleteRecording = useMutation(api.recordings.deleteRecording);
@@ -53,10 +56,10 @@ export default function RecordingDetailScreen() {
 
   const confirmDelete = () => {
     if (!anonymousId) return;
-    Alert.alert('Excluir gravação?', 'O áudio e o resumo serão apagados definitivamente.', [
-      { text: 'Cancelar', style: 'cancel' },
+    Alert.alert(t('diary.detail.deleteTitle'), t('diary.detail.deleteBody'), [
+      { text: t('common.cancel'), style: 'cancel' },
       {
-        text: 'Excluir',
+        text: t('common.delete'),
         style: 'destructive',
         onPress: async () => {
           haptics.warning();
@@ -77,8 +80,8 @@ export default function RecordingDetailScreen() {
     setPreparingAudio(true);
     const result = await shareRecordingAudio(recording.audioUrl, recording.summary?.title ?? recording.title);
     setPreparingAudio(false);
-    if (result === 'unavailable') toast('Atualize o app (nova build) para compartilhar');
-    else if (result === 'failed') toast('Não foi possível preparar o áudio. Verifique a conexão.');
+    if (result === 'unavailable') toast(t('diary.detail.needsUpdate'));
+    else if (result === 'failed') toast(t('diary.detail.audioFailed'));
   };
 
   const shareSummary = () => {
@@ -89,11 +92,11 @@ export default function RecordingDetailScreen() {
 
   const header = (
     <View style={styles.topBar}>
-      <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel="Voltar" style={styles.roundButton}>
+      <AppPressable onPress={goBack} accessibilityRole="button" accessibilityLabel={t('common.back')} style={styles.roundButton}>
         <MaterialCommunityIcons name="arrow-left" size={22} color={colors.onSurface} />
       </AppPressable>
       {recording ? (
-        <AppPressable onPress={confirmDelete} accessibilityRole="button" accessibilityLabel="Excluir gravação" style={styles.roundButton}>
+        <AppPressable onPress={confirmDelete} accessibilityRole="button" accessibilityLabel={t('diary.detail.deleteLabel')} style={styles.roundButton}>
           <MaterialCommunityIcons name="trash-can-outline" size={20} color={colors.primary} />
         </AppPressable>
       ) : null}
@@ -116,14 +119,14 @@ export default function RecordingDetailScreen() {
       <SafeAreaView style={styles.screen}>
         {header}
         <View style={styles.center}>
-          <Text style={styles.emptyTitle}>Gravação não encontrada</Text>
+          <Text style={styles.emptyTitle}>{t('diary.detail.notFound')}</Text>
         </View>
       </SafeAreaView>
     );
   }
 
   const { summary } = recording;
-  const meetingLabel = MEETING_TYPE_OPTIONS.find((option) => option.id === recording.meetingType)?.label;
+  const meetingLabel = recording.meetingType ? meetingTypeLabel(recording.meetingType) : undefined;
   const meta = [recording.preacher, recording.church, meetingLabel].filter(Boolean).join(' · ');
   const duration = playerStatus.duration > 0 ? playerStatus.duration : recording.durationSeconds;
   const progress = duration > 0 ? playerStatus.currentTime / duration : 0;
@@ -134,14 +137,14 @@ export default function RecordingDetailScreen() {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <Text style={styles.status}>{statusLabel(recording.status).toUpperCase()}</Text>
         <Text style={styles.title} accessibilityRole="header">
-          {summary?.title ?? 'Gravação'}
+          {summary?.title ?? t('diary.detail.defaultTitle')}
         </Text>
         {summary ? <Text style={styles.theme}>{summary.theme}</Text> : null}
         {meta ? <Text style={styles.meta}>{meta}</Text> : null}
 
         {recording.audioUrl ? (
           <View style={styles.player}>
-            <AppPressable haptic="medium" onPress={togglePlay} accessibilityRole="button" accessibilityLabel={playerStatus.playing ? 'Pausar áudio' : 'Ouvir áudio'} style={styles.playButton}>
+            <AppPressable haptic="medium" onPress={togglePlay} accessibilityRole="button" accessibilityLabel={playerStatus.playing ? t('diary.detail.pauseAudio') : t('diary.detail.play')} style={styles.playButton}>
               <MaterialCommunityIcons name={playerStatus.playing ? 'pause' : 'play'} size={26} color={colors.onPrimary} />
             </AppPressable>
             <View style={styles.playerBar}>
@@ -161,7 +164,7 @@ export default function RecordingDetailScreen() {
                 onPress={shareAudio}
                 disabled={preparingAudio}
                 accessibilityRole="button"
-                accessibilityLabel="Compartilhar áudio"
+                accessibilityLabel={t('diary.detail.shareAudio')}
                 accessibilityState={{ busy: preparingAudio }}
                 style={({ pressed }) => [styles.shareButton, pressed && { opacity: 0.85 }]}
               >
@@ -170,34 +173,34 @@ export default function RecordingDetailScreen() {
                 ) : (
                   <MaterialCommunityIcons name="share-variant" size={18} color={colors.primary} />
                 )}
-                <Text style={styles.shareButtonText}>{preparingAudio ? 'Preparando áudio…' : 'Compartilhar áudio'}</Text>
+                <Text style={styles.shareButtonText}>{preparingAudio ? t('diary.detail.preparingAudio') : t('diary.detail.shareAudio')}</Text>
               </AppPressable>
             ) : null}
             {summary ? (
               <AppPressable
                 onPress={shareSummary}
                 accessibilityRole="button"
-                accessibilityLabel="Compartilhar resumo"
+                accessibilityLabel={t('diary.detail.shareSummary')}
                 style={({ pressed }) => [styles.shareButton, pressed && { opacity: 0.85 }]}
               >
                 <MaterialCommunityIcons name="text-box-outline" size={18} color={colors.primary} />
-                <Text style={styles.shareButtonText}>Compartilhar resumo</Text>
+                <Text style={styles.shareButtonText}>{t('diary.detail.shareSummary')}</Text>
               </AppPressable>
             ) : null}
           </View>
         ) : null}
 
         {recording.status === 'failed' ? (
-          <Text style={styles.error}>{recording.error ?? 'Não foi possível resumir esta gravação.'}</Text>
+          <Text style={styles.error}>{recording.error ?? t('diary.detail.summaryFailed')}</Text>
         ) : null}
         {recording.status !== 'completed' && recording.status !== 'failed' ? (
-          <Text style={styles.body}>Seu resumo ainda está sendo preparado. Volte em instantes.</Text>
+          <Text style={styles.body}>{t('diary.detail.summaryPending')}</Text>
         ) : null}
 
         {summary ? (
           <>
             {summary.practicalTopics.length > 0 ? (
-              <Section title="Tópicos práticos">
+              <Section title={t('diary.detail.practicalTopics')}>
                 {summary.practicalTopics.map((topic, index) => (
                   <View key={index} style={styles.topic}>
                     <MaterialCommunityIcons name="check-circle-outline" size={18} color={colors.tertiary} />
@@ -210,7 +213,7 @@ export default function RecordingDetailScreen() {
             {summary.centralPoints.length > 0 ? (
               <View style={styles.section}>
                 <CollapsibleSection
-                  title="Pontos centrais"
+                  title={t('diary.detail.centralPoints')}
                   count={summary.centralPoints.length}
                   teaser={buildTeaser(
                     summary.centralPoints.map((point) => point.title),
@@ -230,7 +233,7 @@ export default function RecordingDetailScreen() {
             {summary.scripturesCited.length > 0 ? (
               <View style={styles.section}>
                 <CollapsibleSection
-                  title="Escrituras citadas"
+                  title={t('diary.detail.scriptures')}
                   count={summary.scripturesCited.length}
                   teaser={buildTeaser(summary.scripturesCited.map((scripture) => scripture.reference))}
                 >
@@ -245,8 +248,8 @@ export default function RecordingDetailScreen() {
             ) : null}
 
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Frase de Impacto</Text>
-              <Text style={styles.sectionSubtitle}>Para inspirar seus círculos de fé</Text>
+              <Text style={styles.sectionTitle}>{t('diary.detail.impactQuote')}</Text>
+              <Text style={styles.sectionSubtitle}>{t('diary.detail.impactSubtitle')}</Text>
               <QuoteCard
                 quote={summary.impactQuote}
                 attribution={recording.preacher}
@@ -254,10 +257,10 @@ export default function RecordingDetailScreen() {
                 style={quoteStyle}
                 width={screenWidth - spacing.xl * 2}
               />
-              <AppPressable onPress={() => setQuoteSheetOpen(true)} accessibilityRole="button" accessibilityLabel="Customizar arte e compartilhar">
+              <AppPressable onPress={() => setQuoteSheetOpen(true)} accessibilityRole="button" accessibilityLabel={t('diary.detail.customizeArt')}>
                 <LinearGradient colors={['#E8265E', '#7B3FA8', '#0051D4']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.quoteButton}>
                   <MaterialCommunityIcons name="palette-outline" size={18} color={colors.onPrimary} />
-                  <Text style={styles.quoteButtonText}>Customizar Arte & Compartilhar</Text>
+                  <Text style={styles.quoteButtonText}>{t('diary.detail.customizeArt')}</Text>
                 </LinearGradient>
               </AppPressable>
             </View>

@@ -6,8 +6,7 @@ export const DEFAULT_THEME_ID = 'alabaster';
 export const BIBLE_THEMES: readonly BibleTheme[] = [
   {
     id: 'alabaster',
-    name: 'Padrão / Alabastro',
-    description: 'Clássico, puro & sereno',
+    i18nKey: 'alabaster',
     isPremium: false,
     colors: ['#FFFFFF', '#EEF1FB', '#2B2B2B'],
     background: '#FFF8F6',
@@ -20,8 +19,7 @@ export const BIBLE_THEMES: readonly BibleTheme[] = [
   },
   {
     id: 'celestial-rose',
-    name: 'Rosa Celestial',
-    description: 'Amor divino & devoção matinal',
+    i18nKey: 'celestialRose',
     isPremium: true,
     colors: ['#FFE3EC', '#E8265E', '#9B1B5A'],
     background: '#FFEFF4',
@@ -34,8 +32,7 @@ export const BIBLE_THEMES: readonly BibleTheme[] = [
   },
   {
     id: 'divine-glory',
-    name: 'Glória Divina',
-    description: 'Ouro nobre & pergaminho sagrado',
+    i18nKey: 'divineGlory',
     isPremium: true,
     colors: ['#FFF3C4', '#F5B800', '#D97A00'],
     background: '#FBF1D6',
@@ -48,8 +45,7 @@ export const BIBLE_THEMES: readonly BibleTheme[] = [
   },
   {
     id: 'slate',
-    name: 'Modo Slate',
-    description: 'Foco moderno com azul profundo',
+    i18nKey: 'slate',
     isPremium: true,
     colors: ['#DCE8FF', '#2F6BE0', '#1A3F9E'],
     background: '#E9EEF8',
@@ -62,8 +58,7 @@ export const BIBLE_THEMES: readonly BibleTheme[] = [
   },
   {
     id: 'cosmic-light',
-    name: 'Luz Cósmica',
-    description: 'Noite etérea & oração profunda',
+    i18nKey: 'cosmicLight',
     isPremium: true,
     colors: ['#16163A', '#1FD66B', '#E83DBF'],
     background: '#0E0E26',
@@ -76,8 +71,7 @@ export const BIBLE_THEMES: readonly BibleTheme[] = [
   },
   {
     id: 'holy-green',
-    name: 'Santuário Verde',
-    description: 'Paz, pastos verdes e restauração',
+    i18nKey: 'holyGreen',
     isPremium: true,
     colors: ['#DDF3D6', '#3E9B4F', '#1E6B34'],
     background: '#EAF6E6',

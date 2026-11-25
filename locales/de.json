@@ -9,7 +9,8 @@
     "comingSoon": "Demnächst verfügbar",
     "tryAgain": "Bitte versuche es erneut.",
     "continue": "Weiter",
-    "share": "Teilen"
+    "share": "Teilen",
+    "availableSoon": "Bald verfügbar"
   },
   "tabs": {
     "home": "Start",
@@ -114,7 +115,41 @@
       "youth_service": "Jugendgottesdienst",
       "prayer": "Gebet",
       "fallback": "Gottesdienst"
-    }
+    },
+    "status": {
+      "recording": "Aufnahme läuft",
+      "paused": "Pausiert",
+      "starting": "Wird gestartet"
+    },
+    "caption": "Hochwertige Sprachaufnahme aktiv",
+    "pause": "Aufnahme pausieren",
+    "resume": "Aufnahme fortsetzen",
+    "helper": "Die Predigt wird aufgenommen. Danach werden die thematischen Zusammenfassungen, Predigtpunkte und Bibelstellen in deinem Tagebuch geordnet.",
+    "silent": {
+      "title": "Stummschaltung des Handys",
+      "body": "Benachrichtigungen und Klingeltöne während des Gottesdienstes stumm",
+      "label": "Stummschaltung des Handys",
+      "androidFailed": "Aktiviere „Nicht stören“ in den Einstellungen",
+      "ios": "Aktiviere einen Fokus („Nicht stören“) über das Kontrollzentrum"
+    },
+    "save": "Speichern und Predigt zusammenfassen",
+    "discard": "Aufnahme verwerfen",
+    "micRequired": {
+      "title": "Mikrofon erforderlich",
+      "body": "Erlaube den Mikrofonzugriff in den Einstellungen, um die Predigt aufzunehmen.",
+      "openSettings": "Einstellungen öffnen"
+    },
+    "startFailed": {
+      "title": "Aufnahme nicht möglich",
+      "body": "Prüfe das Mikrofon und versuche es erneut."
+    },
+    "discardConfirm": {
+      "title": "Aufnahme verwerfen?",
+      "body": "Die aktuelle Aufnahme wird gelöscht und kann nicht wiederhergestellt werden.",
+      "keep": "Weiter aufnehmen",
+      "discard": "Verwerfen"
+    },
+    "saveFailed": "Die Aufnahme konnte nicht gespeichert werden"
   },
   "widget": {
     "banner": {
@@ -131,6 +166,245 @@
     "rotation": {
       "today": "heute um {{time}}",
       "yesterday": "gestern um {{time}}"
+    }
+  },
+  "bible": {
+    "topBar": {
+      "version": "Bibelübersetzung: {{version}}",
+      "book": "Buch und Kapitel: {{book}}",
+      "themes": "Bibel-Designs"
+    },
+    "search": {
+      "placeholder": "Buch, Kapitel oder Vers eingeben (z. B. {{example}})",
+      "label": "Stelle suchen",
+      "voice": "Sprachsuche",
+      "voiceSoon": "Sprachsuche folgt bald",
+      "notFound": "Diese Stelle wurde nicht gefunden. Versuche \"{{first}}\" oder \"{{second}}\".",
+      "bookMissing": "Diese Übersetzung enthält dieses Buch nicht."
+    },
+    "quick": {
+      "label": "SCHNELL:"
+    },
+    "testament": {
+      "old": "ALTES TESTAMENT",
+      "new": "NEUES TESTAMENT"
+    },
+    "nav": {
+      "previousChapter": "Vorheriges Kapitel",
+      "previousBook": "Vorheriges Buch"
+    },
+    "verseLabel": "Vers {{number}}. {{text}}",
+    "selection": {
+      "selected": "V. {{verse}} ausgewählt",
+      "copy": "Vers kopieren",
+      "highlight": "Vers hervorheben",
+      "note": "Notiz hinzufügen",
+      "share": "Vers teilen"
+    },
+    "toast": {
+      "copyNeedsUpdate": "Kopieren erfordert die aktualisierte App (neuer Build)",
+      "copied": "Vers kopiert",
+      "copyFailed": "Kopieren ist gerade nicht möglich",
+      "highlightRemoved": "Hervorhebung entfernt",
+      "highlighted": "Vers hervorgehoben",
+      "notesSoon": "Notizen folgen bald",
+      "versionFailed": "Diese Übersetzung konnte nicht geladen werden"
+    },
+    "versionPicker": {
+      "title": "Bibelübersetzung",
+      "otOnly": "Nur Altes Testament",
+      "deuterocanon": "Enthält deuterokanonische Bücher",
+      "vulgate": "Psalmen in der Zählung der Vulgata"
+    },
+    "bookPicker": {
+      "title": "Bücher",
+      "back": "Zurück zu den Büchern",
+      "chapter": "{{book}} Kapitel {{chapter}}"
+    },
+    "themePicker": {
+      "title": "Bibel-Designs",
+      "subtitle": "Gestalte die Optik deiner Lesung",
+      "premiumTitle": "Premium-Funktion",
+      "premiumBody": "Abonnenten haben unbegrenzten Zugriff auf alle Designs und individuellen Stimmungen.",
+      "unlock": "Freischalten",
+      "section": "BIBLISCHE STIMMUNGEN",
+      "counter": "Verfügbare Stile: {{count}}",
+      "apply": "Ausgewähltes Design anwenden",
+      "trial": "✨ Premium 7 Tage kostenlos testen",
+      "free": "Kostenlos",
+      "premium": "Premium"
+    },
+    "themes": {
+      "alabaster": {
+        "name": "Standard / Alabaster",
+        "description": "Klassisch, rein & ruhig"
+      },
+      "celestialRose": {
+        "name": "Himmlische Rose",
+        "description": "Göttliche Liebe & Morgenandacht"
+      },
+      "divineGlory": {
+        "name": "Göttliche Herrlichkeit",
+        "description": "Edles Gold & heiliges Pergament"
+      },
+      "slate": {
+        "name": "Slate-Modus",
+        "description": "Moderner Fokus mit tiefem Blau"
+      },
+      "cosmicLight": {
+        "name": "Kosmisches Licht",
+        "description": "Ätherische Nacht & tiefes Gebet"
+      },
+      "holyGreen": {
+        "name": "Grünes Heiligtum",
+        "description": "Frieden, grüne Auen & Erneuerung"
+      }
+    },
+    "languages": {
+      "pt": "Portugiesisch",
+      "en": "Englisch",
+      "es": "Spanisch",
+      "fr": "Französisch",
+      "it": "Italienisch",
+      "de": "Deutsch",
+      "nb": "Norwegisch",
+      "ru": "Russisch",
+      "ar": "Arabisch"
+    }
+  },
+  "processing": {
+    "badge": "Digitales Heiligtum KI",
+    "title": "Deine Zusammenfassung wird vorbereitet",
+    "subtitle": "Unsere künstliche Intelligenz ordnet die Kernpunkte, Bibelverse und eindrucksvollen Sätze.",
+    "chipScriptures": "Bibelstellen werden erkannt",
+    "chipTopics_one": "{{count}} praktisches Thema",
+    "chipTopics_other": "{{count}} praktische Themen",
+    "formTitle": "Gottesdienstdaten ergänzen",
+    "optional": "Jetzt optional",
+    "fieldChurch": "GEMEINDE / DIENST",
+    "fieldPreacher": "PREDIGER(IN) / PASTOR(IN)",
+    "tapToAdd": "Zum Eintragen tippen",
+    "meetingType": "ART DES TREFFENS",
+    "retry": "Erneut versuchen",
+    "footnote": "Notizen und Zusammenfassung werden automatisch in Mein Tagebuch gespeichert, sobald die Transkription fertig ist.",
+    "churchTitle": "Gemeinde / Dienst",
+    "preacherTitle": "Prediger(in) / Pastor(in)",
+    "churchPlaceholder": "Name der Gemeinde",
+    "preacherPlaceholder": "Name des Predigers",
+    "uploadFailed": "Das Audio konnte nicht hochgeladen werden. Prüfe deine Verbindung und versuche es erneut.",
+    "failedGeneric": "Vorgang nicht abgeschlossen. Bitte versuche es erneut."
+  },
+  "recordingStatus": {
+    "uploading": "Wird hochgeladen",
+    "transcribing": "Wird transkribiert",
+    "summarizing": "Transkription abgeschlossen",
+    "completed": "KI-Zusammenfassung",
+    "failed": "Fehlgeschlagen"
+  },
+  "recordingProgress": {
+    "uploading": "Audio wird hochgeladen",
+    "transcribing": "Hochwertige Transkription",
+    "summarizing": "Bibelstellen werden erkannt",
+    "completed": "Zusammenfassung fertig",
+    "failed": "Nicht abgeschlossen"
+  },
+  "duration": {
+    "hoursMinutes": "{{hours}} Std. {{minutes}} Min.",
+    "minutes": "{{count}} Min.",
+    "seconds": "{{count}} Sek."
+  },
+  "diary": {
+    "eyebrow": "GEISTLICHES TAGEBUCH",
+    "stats": {
+      "services": "Gottesdienste",
+      "requests": "Anliegen",
+      "testimonies": "Zeugnisse"
+    },
+    "tabs": {
+      "recordings": "Meine Aufnahmen",
+      "wall": "Gebets- & Zeugniswand"
+    },
+    "list": {
+      "emptyTitle": "Noch keine Aufnahmen",
+      "emptyBody": "Tippe auf das Mikrofon, um eine Predigt aufzunehmen. Die Zusammenfassung erscheint hier.",
+      "untitled": "Aufnahme ohne Titel"
+    },
+    "detail": {
+      "notFound": "Aufnahme nicht gefunden",
+      "defaultTitle": "Aufnahme",
+      "deleteTitle": "Aufnahme löschen?",
+      "deleteBody": "Audio und Zusammenfassung werden endgültig gelöscht.",
+      "deleteLabel": "Aufnahme löschen",
+      "play": "Audio abspielen",
+      "pauseAudio": "Audio pausieren",
+      "shareAudio": "Audio teilen",
+      "preparingAudio": "Audio wird vorbereitet …",
+      "shareSummary": "Zusammenfassung teilen",
+      "needsUpdate": "Aktualisiere die App (neuer Build), um zu teilen",
+      "audioFailed": "Audio konnte nicht vorbereitet werden. Prüfe die Verbindung.",
+      "summaryFailed": "Diese Aufnahme konnte nicht zusammengefasst werden.",
+      "summaryPending": "Deine Zusammenfassung wird noch vorbereitet. Schau gleich noch einmal vorbei.",
+      "practicalTopics": "Praktische Themen",
+      "centralPoints": "Kernpunkte",
+      "scriptures": "Zitierte Bibelstellen",
+      "impactQuote": "Eindrucksvoller Satz",
+      "impactSubtitle": "Zur Inspiration für deine Glaubensgemeinschaft",
+      "customizeArt": "Grafik anpassen & teilen"
+    }
+  },
+  "collapsible": {
+    "readMore": "Mehr lesen",
+    "showLess": "Weniger anzeigen",
+    "collapse": "{{title}} einklappen",
+    "expand": "{{title}} ausklappen"
+  },
+  "shareText": {
+    "keyPoints": "Kernpunkte",
+    "scriptures": "Bibelstellen:",
+    "footer": "Zusammenfassung erstellt mit Biblewise"
+  },
+  "shareAudio": {
+    "largeTitle": "Große Audiodatei",
+    "largeBody": "Dieses Audio ist {{size}} MB groß. Manche Apps lehnen Dateien dieser Größe ab. Trotzdem teilen?"
+  },
+  "quote": {
+    "title": "Grafik anpassen",
+    "format": "FORMAT",
+    "background": "HINTERGRUND",
+    "font": "SCHRIFT",
+    "textSize": "TEXTGRÖSSE",
+    "backgroundLabel": "Hintergrund {{name}}",
+    "download": "Bild herunterladen",
+    "downloadShort": "Laden",
+    "updateNeeded": "Aktualisiere die App (neuer Build), um die Grafik zu teilen",
+    "shareUnavailable": "Teilen ist auf diesem Gerät nicht verfügbar",
+    "shareFailed": "Teilen ist gerade nicht möglich",
+    "shareDialog": "Zitat teilen",
+    "galleryPermission": "Erlaube den Galeriezugriff, um das Bild herunterzuladen",
+    "saved": "Bild in der Galerie gespeichert",
+    "saveFailed": "Das Bild konnte nicht gespeichert werden",
+    "backgrounds": {
+      "night": "Nacht",
+      "dawn": "Morgendämmerung",
+      "forest": "Wald",
+      "royal": "Königlich",
+      "parchment": "Pergament",
+      "rose": "Rose"
+    },
+    "fonts": {
+      "classic": "Klassisch",
+      "italic": "Kursiv",
+      "bold": "Fett",
+      "modern": "Modern"
+    },
+    "sizes": {
+      "small": "K",
+      "medium": "M",
+      "large": "G"
+    },
+    "formats": {
+      "card": "Karte",
+      "story": "Story"
     }
   }
 }

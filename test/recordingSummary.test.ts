@@ -1,4 +1,4 @@
-import { buildTeaser, extractJsonObject, formatClock, formatDuration, nextMilestone, parseSummary, progressLabel, statusLabel } from '../lib/recordingSummary';
+import { buildTeaser, extractJsonObject, formatClock, nextMilestone, parseSummary } from '../lib/recordingSummary';
 
 const VALID = {
   title: 'A fé que move montanhas',
@@ -43,16 +43,7 @@ describe('formatting helpers', () => {
     expect(formatClock(-4)).toBe('00:00:00');
   });
 
-  it('formats durations for cards', () => {
-    expect(formatDuration(45)).toBe('45 s');
-    expect(formatDuration(12 * 60)).toBe('12 min');
-    expect(formatDuration(3900)).toBe('1h 05min');
-  });
-
-  it('maps statuses to labels and milestones', () => {
-    expect(statusLabel('completed')).toBe('IA Resumido');
-    expect(statusLabel('summarizing')).toBe('Transcrição Concluída');
-    expect(progressLabel('transcribing')).toBe('Transcrevendo em alta fidelidade');
+  it('maps statuses to milestones', () => {
     expect(nextMilestone('transcribing')).toBe(60);
     expect(nextMilestone('summarizing')).toBe(90);
     expect(nextMilestone('completed')).toBe(100);

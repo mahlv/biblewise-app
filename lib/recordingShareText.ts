@@ -1,3 +1,4 @@
+import i18n from './i18n';
 import type { RecordingSummary } from './recordingSummary';
 
 interface ShareTextInput {
@@ -22,16 +23,16 @@ export function buildRecordingShareText({ summary, preacher, church }: ShareText
 
   const points = summary.centralPoints.slice(0, MAX_POINTS);
   if (points.length > 0) {
-    lines.push('', '*Pontos centrais*');
+    lines.push('', `*${i18n.t('shareText.keyPoints')}*`);
     points.forEach((point, index) => lines.push(`${index + 1}. ${point.title}`));
   }
 
   const references = summary.scripturesCited.map((item) => item.reference.trim()).filter(Boolean).slice(0, MAX_SCRIPTURES);
-  if (references.length > 0) lines.push('', `*Escrituras:* ${references.join(', ')}`);
+  if (references.length > 0) lines.push('', `*${i18n.t('shareText.scriptures')}* ${references.join(', ')}`);
 
   if (summary.impactQuote.trim()) lines.push('', `“${summary.impactQuote.trim()}”`);
 
-  lines.push('', 'Resumo feito com o Biblewise');
+  lines.push('', i18n.t('shareText.footer'));
   return lines.join('\n');
 }
 

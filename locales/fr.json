@@ -9,7 +9,8 @@
     "comingSoon": "Bientôt disponible",
     "tryAgain": "Veuillez réessayer.",
     "continue": "Continuer",
-    "share": "Partager"
+    "share": "Partager",
+    "availableSoon": "Bientôt disponible"
   },
   "tabs": {
     "home": "Accueil",
@@ -114,7 +115,41 @@
       "youth_service": "Culte des jeunes",
       "prayer": "Prière",
       "fallback": "Culte"
-    }
+    },
+    "status": {
+      "recording": "Enregistrement",
+      "paused": "En pause",
+      "starting": "Démarrage"
+    },
+    "caption": "Capture vocale haute fidélité active",
+    "pause": "Mettre l'enregistrement en pause",
+    "resume": "Reprendre l'enregistrement",
+    "helper": "Enregistrement du message pastoral. À la fin, les résumés thématiques, les points de la prédication et les références bibliques seront classés dans votre journal.",
+    "silent": {
+      "title": "Mode silencieux du téléphone",
+      "body": "Notifications et sonneries coupées pendant le culte",
+      "label": "Mode silencieux du téléphone",
+      "androidFailed": "Activez le mode Ne pas déranger dans les réglages",
+      "ios": "Activez un Concentration (Ne pas déranger) depuis le Centre de contrôle"
+    },
+    "save": "Enregistrer et résumer le message",
+    "discard": "Abandonner l'enregistrement",
+    "micRequired": {
+      "title": "Microphone requis",
+      "body": "Autorisez l'accès au microphone dans les réglages pour enregistrer le message.",
+      "openSettings": "Ouvrir les réglages"
+    },
+    "startFailed": {
+      "title": "Impossible d'enregistrer",
+      "body": "Vérifiez le microphone et réessayez."
+    },
+    "discardConfirm": {
+      "title": "Abandonner l'enregistrement ?",
+      "body": "L'enregistrement actuel sera supprimé et ne pourra pas être récupéré.",
+      "keep": "Continuer l'enregistrement",
+      "discard": "Abandonner"
+    },
+    "saveFailed": "Impossible d'enregistrer la capture"
   },
   "widget": {
     "banner": {
@@ -131,6 +166,245 @@
     "rotation": {
       "today": "aujourd'hui à {{time}}",
       "yesterday": "hier à {{time}}"
+    }
+  },
+  "bible": {
+    "topBar": {
+      "version": "Version de la Bible : {{version}}",
+      "book": "Livre et chapitre : {{book}}",
+      "themes": "Thèmes de la Bible"
+    },
+    "search": {
+      "placeholder": "Saisissez un livre, un chapitre ou un verset (ex. : {{example}})",
+      "label": "Rechercher un passage",
+      "voice": "Recherche vocale",
+      "voiceSoon": "Recherche vocale bientôt disponible",
+      "notFound": "Je n'ai pas trouvé ce passage. Essayez « {{first}} » ou « {{second}} ».",
+      "bookMissing": "Cette version ne contient pas ce livre."
+    },
+    "quick": {
+      "label": "RAPIDE :"
+    },
+    "testament": {
+      "old": "ANCIEN TESTAMENT",
+      "new": "NOUVEAU TESTAMENT"
+    },
+    "nav": {
+      "previousChapter": "Chapitre précédent",
+      "previousBook": "Livre précédent"
+    },
+    "verseLabel": "Verset {{number}}. {{text}}",
+    "selection": {
+      "selected": "v. {{verse}} sélectionné",
+      "copy": "Copier le verset",
+      "highlight": "Surligner le verset",
+      "note": "Ajouter une note",
+      "share": "Partager le verset"
+    },
+    "toast": {
+      "copyNeedsUpdate": "La copie nécessite l'app mise à jour (nouveau build)",
+      "copied": "Verset copié",
+      "copyFailed": "Impossible de copier pour le moment",
+      "highlightRemoved": "Surlignage retiré",
+      "highlighted": "Verset surligné",
+      "notesSoon": "Notes bientôt disponibles",
+      "versionFailed": "Impossible de charger cette version"
+    },
+    "versionPicker": {
+      "title": "Version de la Bible",
+      "otOnly": "Ancien Testament uniquement",
+      "deuterocanon": "Inclut les livres deutérocanoniques",
+      "vulgate": "Psaumes selon la numérotation de la Vulgate"
+    },
+    "bookPicker": {
+      "title": "Livres",
+      "back": "Retour aux livres",
+      "chapter": "{{book}} chapitre {{chapter}}"
+    },
+    "themePicker": {
+      "title": "Thèmes de la Bible",
+      "subtitle": "Personnalisez l'ambiance visuelle de votre lecture",
+      "premiumTitle": "Fonction Premium",
+      "premiumBody": "Les abonnés ont un accès illimité à tous les thèmes et ambiances personnalisées.",
+      "unlock": "Débloquer",
+      "section": "AMBIANCES BIBLIQUES",
+      "counter": "Styles disponibles : {{count}}",
+      "apply": "Appliquer le thème sélectionné",
+      "trial": "✨ Essayez Premium gratuitement pendant 7 jours",
+      "free": "Gratuit",
+      "premium": "Premium"
+    },
+    "themes": {
+      "alabaster": {
+        "name": "Par défaut / Albâtre",
+        "description": "Classique, pur et serein"
+      },
+      "celestialRose": {
+        "name": "Rose céleste",
+        "description": "Amour divin et dévotion matinale"
+      },
+      "divineGlory": {
+        "name": "Gloire divine",
+        "description": "Or noble et parchemin sacré"
+      },
+      "slate": {
+        "name": "Mode Ardoise",
+        "description": "Concentration moderne en bleu profond"
+      },
+      "cosmicLight": {
+        "name": "Lumière cosmique",
+        "description": "Nuit éthérée et prière profonde"
+      },
+      "holyGreen": {
+        "name": "Sanctuaire vert",
+        "description": "Paix, verts pâturages et restauration"
+      }
+    },
+    "languages": {
+      "pt": "Portugais",
+      "en": "Anglais",
+      "es": "Espagnol",
+      "fr": "Français",
+      "it": "Italien",
+      "de": "Allemand",
+      "nb": "Norvégien",
+      "ru": "Russe",
+      "ar": "Arabe"
+    }
+  },
+  "processing": {
+    "badge": "Sanctuaire numérique IA",
+    "title": "Préparation de votre résumé",
+    "subtitle": "Notre intelligence artificielle structure les points clés, les versets et les citations marquantes.",
+    "chipScriptures": "Détection des Écritures",
+    "chipTopics_one": "{{count}} sujet pratique",
+    "chipTopics_other": "{{count}} sujets pratiques",
+    "formTitle": "Complétez les informations du culte",
+    "optional": "Facultatif pour l'instant",
+    "fieldChurch": "ÉGLISE / MINISTÈRE",
+    "fieldPreacher": "PRÉDICATEUR / MINISTRE",
+    "tapToAdd": "Touchez pour renseigner",
+    "meetingType": "TYPE DE RÉUNION",
+    "retry": "Réessayer",
+    "footnote": "Les notes et le résumé seront enregistrés automatiquement dans Mon journal dès que la transcription sera terminée.",
+    "churchTitle": "Église / Ministère",
+    "preacherTitle": "Prédicateur / Ministre",
+    "churchPlaceholder": "Nom de l'église",
+    "preacherPlaceholder": "Nom du prédicateur",
+    "uploadFailed": "Impossible d'envoyer l'audio. Vérifiez votre connexion et réessayez.",
+    "failedGeneric": "Impossible de terminer. Réessayez."
+  },
+  "recordingStatus": {
+    "uploading": "Envoi",
+    "transcribing": "Transcription",
+    "summarizing": "Transcription terminée",
+    "completed": "Résumé par l'IA",
+    "failed": "Échec"
+  },
+  "recordingProgress": {
+    "uploading": "Envoi de l'audio",
+    "transcribing": "Transcription haute fidélité",
+    "summarizing": "Détection des Écritures",
+    "completed": "Résumé prêt",
+    "failed": "Impossible de terminer"
+  },
+  "duration": {
+    "hoursMinutes": "{{hours}} h {{minutes}} min",
+    "minutes": "{{count}} min",
+    "seconds": "{{count}} s"
+  },
+  "diary": {
+    "eyebrow": "MÉMORIAL SPIRITUEL",
+    "stats": {
+      "services": "Cultes",
+      "requests": "Demandes",
+      "testimonies": "Témoignages"
+    },
+    "tabs": {
+      "recordings": "Mes enregistrements",
+      "wall": "Mur de prière et de témoignages"
+    },
+    "list": {
+      "emptyTitle": "Aucun enregistrement pour l'instant",
+      "emptyBody": "Touchez le microphone pour enregistrer un message. Le résumé apparaîtra ici.",
+      "untitled": "Enregistrement sans titre"
+    },
+    "detail": {
+      "notFound": "Enregistrement introuvable",
+      "defaultTitle": "Enregistrement",
+      "deleteTitle": "Supprimer l'enregistrement ?",
+      "deleteBody": "L'audio et le résumé seront définitivement supprimés.",
+      "deleteLabel": "Supprimer l'enregistrement",
+      "play": "Écouter l'audio",
+      "pauseAudio": "Mettre l'audio en pause",
+      "shareAudio": "Partager l'audio",
+      "preparingAudio": "Préparation de l'audio…",
+      "shareSummary": "Partager le résumé",
+      "needsUpdate": "Mettez l'app à jour (nouveau build) pour partager",
+      "audioFailed": "Impossible de préparer l'audio. Vérifiez la connexion.",
+      "summaryFailed": "Impossible de résumer cet enregistrement.",
+      "summaryPending": "Votre résumé est encore en préparation. Revenez dans un instant.",
+      "practicalTopics": "Sujets pratiques",
+      "centralPoints": "Points centraux",
+      "scriptures": "Écritures citées",
+      "impactQuote": "Citation marquante",
+      "impactSubtitle": "Pour inspirer vos cercles de foi",
+      "customizeArt": "Personnaliser l'image et partager"
+    }
+  },
+  "collapsible": {
+    "readMore": "Lire la suite",
+    "showLess": "Afficher moins",
+    "collapse": "Réduire {{title}}",
+    "expand": "Développer {{title}}"
+  },
+  "shareText": {
+    "keyPoints": "Points centraux",
+    "scriptures": "Écritures :",
+    "footer": "Résumé réalisé avec Biblewise"
+  },
+  "shareAudio": {
+    "largeTitle": "Gros fichier audio",
+    "largeBody": "Cet audio fait {{size}} Mo. Certaines applications refusent les fichiers de cette taille. Partager quand même ?"
+  },
+  "quote": {
+    "title": "Personnaliser l'image",
+    "format": "FORMAT",
+    "background": "FOND",
+    "font": "POLICE",
+    "textSize": "TAILLE DU TEXTE",
+    "backgroundLabel": "Fond {{name}}",
+    "download": "Télécharger l'image",
+    "downloadShort": "Télécharger",
+    "updateNeeded": "Mettez l'app à jour (nouveau build) pour partager l'image",
+    "shareUnavailable": "Le partage n'est pas disponible sur cet appareil",
+    "shareFailed": "Impossible de partager pour le moment",
+    "shareDialog": "Partager la citation",
+    "galleryPermission": "Autorisez l'accès à la galerie pour télécharger l'image",
+    "saved": "Image enregistrée dans la galerie",
+    "saveFailed": "Impossible d'enregistrer l'image",
+    "backgrounds": {
+      "night": "Nuit",
+      "dawn": "Aube",
+      "forest": "Forêt",
+      "royal": "Royal",
+      "parchment": "Parchemin",
+      "rose": "Rose"
+    },
+    "fonts": {
+      "classic": "Classique",
+      "italic": "Italique",
+      "bold": "Gras",
+      "modern": "Moderne"
+    },
+    "sizes": {
+      "small": "S",
+      "medium": "M",
+      "large": "L"
+    },
+    "formats": {
+      "card": "Carte",
+      "story": "Story"
     }
   }
 }
